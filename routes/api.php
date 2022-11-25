@@ -33,13 +33,13 @@ Route::delete('user/delete/{id}',[UserController::class,'delete']);
 
 
 //days 
-Route::post('createDay/{source_id}',[DayController::class,'createDay']);
-Route::get('getOffDays/{source_id}/{type}',[DayController::class,'getOffDays']);
-Route::get('getonDays/{source_id}/{type}',[DayController::class,'getonDays']);
-Route::get('setonDay/{source_id}/{type}/{day}',[DayController::class,'setonDay']);
-Route::get('setOffDay/{source_id}/{type}/{day}',[DayController::class,'setOffDay']);
-//Route::delete('deleteDays/{source_id}/{type})',[DayController::class,'deleteDays']);
-Route::get('isOffDay/{source_id}/{type}/{day}',[DayController::class,'isOffDay']);
+// Route::post('createDay/{source_id}',[DayController::class,'createDay']);
+// Route::get('getOffDays/{source_id}/{type}',[DayController::class,'getOffDays']);
+// Route::get('getonDays/{source_id}/{type}',[DayController::class,'getonDays']);
+// Route::get('setonDay/{source_id}/{type}/{day}',[DayController::class,'setonDay']);
+// Route::get('setOffDay/{source_id}/{type}/{day}',[DayController::class,'setOffDay']);
+// //Route::delete('deleteDays/{source_id}/{type})',[DayController::class,'deleteDays']);
+// Route::get('isOffDay/{source_id}/{type}/{day}',[DayController::class,'isOffDay']);
 
 //times
 Route::post('createTime',[TimeController::class,'createTime']);
