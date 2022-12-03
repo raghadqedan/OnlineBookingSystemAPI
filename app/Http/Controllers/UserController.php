@@ -19,13 +19,7 @@ class UserController extends Controller
     function getDetails($id)
     {
      $user=User::find($id);
-     
-     if(Auth::user()->role->name=="admin" ){
-        return $next($request);
-    }else{
-        return redirect()->back();
-    }
-   
+     return $user;
        
     }
    
@@ -63,7 +57,7 @@ class UserController extends Controller
             ]);
         
         else{
-     return  "hhh";}  
+     return  ;}  
 
     }
 
@@ -84,7 +78,7 @@ class UserController extends Controller
     public function addUser(request $req)
     {
         $user= new User();
-        $user->id =$req->input('id');
+        //$user->id =$req->input('id');
         $user->name =$req->input('name');
         $user->email =$req->input('email');
         $user->password =Hash::make($req->input('password'));

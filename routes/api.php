@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\QueueController;
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\TimeController;
 /*
@@ -22,9 +23,15 @@ use App\Http\Controllers\TimeController;
  Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
      return $request->user();
  });
+//need testing
+Route::post('register',[CompanyController::class,'register']);//need test
+Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);
+Route::post('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//need test
+Route::delete('delete/{id}',[CompanyController::class,'delete']);
+Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
+
 
 Route::post('user/login',[UserController::class,'login'])->name('login');
-Route::post('user/register',[CompanyController::class,'register']);
 Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);
 Route::post('user/updateDetails/{id}',[UserController::class,'updateDetails']);
 Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
@@ -49,7 +56,6 @@ Route::post('setEndTime/{source_id}/{type}/{day}/{end_time}',[TimeController::cl
 Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);
 Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
 Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
-
 //services
 Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);
 Route::post('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);

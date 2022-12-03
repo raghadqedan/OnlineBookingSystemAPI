@@ -10,26 +10,35 @@ class TimeController extends Controller
 //to do set function 
 
     function createTime(Request $req)
-    {  $obj= new Time;
-        $obj->source_id =$req->input('source_id');
-        $obj->day =$req->input('day');
-         if($req-->input('type'==0)){
-        $obj->start_time =$req->input('start_time');
-        $obj->end_time =$req->input('end_time');
-        $obj->save();}
-        elseif($req-->input('type'==1)){
-        $obj->start_time =$req->input('start_time');
-        $obj->end_time =$req->input('end_time');  
-        }
-        elseif($req-->input('type'==2)){
-           $s=Queue::find('service_id')
-           ->where('id',$req->input('source_id'));
-           $serivce=Service::where('id',$s)->get(); 
-           $obj->start_time =$service->toQuery()->get('start_time');
-           $obj->end_time =$service->toQuery()->get('end_time');
-            }
-        return $obj;
-    }
+    // {  $obj= new Time;
+    //     $obj->source_id =$req->input('source_id');
+    //     $obj->day =$req->input('day');
+    //      if($req-->input('type'==0)){
+    //     $obj->start_time =$req->input('start_time');
+    //     $obj->end_time =$req->input('end_time');
+    //     $obj->save();}
+    //     elseif($req-->input('type'==1)){
+    //     $obj->start_time =$req->input('start_time');
+    //     $obj->end_time =$req->input('end_time');  
+    //     }
+    //     elseif($req-->input('type'==3)){
+    //        $s=Queue::find('service_id')
+    //        ->where('id',$req->input('source_id'));
+    //        $serivce=Service::where('id',$s)->get(); 
+    //        $obj->start_time =$service->toQuery()->get('start_time');
+    //        $obj->end_time =$service->toQuery()->get('end_time');
+    //         }
+    {$obj= new Time;
+        
+            $obj->source_id =$req->input('source_id');
+            $obj->day =$req->input('day');
+            $obj->type =$req->input('type');
+            $obj->start_time =$req->input('start_time');
+            $obj->end_time =$req->input('end_time');
+            $obj->save();
+           
+        return $obj;}
+    
     //createTime jsonfile
     //    {
     //     "source_id":"1",
@@ -81,6 +90,7 @@ class TimeController extends Controller
     
 
         function getEndTime($source_id,$type,$day)
+
         {
            // $obj= Time::where('source_id',$source_id)->where('$day',$day)->where('type',$type)->toQuery()->get();
             $obj= Time::selectRaw('end_time')
@@ -102,7 +112,12 @@ class TimeController extends Controller
 
 
 
-
+        function t($source_id)
+        {
+            
+        if($source_id.isNotEmpty())
+        return "ssss";
+        }
 
     
 }

@@ -15,7 +15,8 @@ class Admin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)  
+    
+    public function handle(Request $request, Closure $next)
     { if(Auth::user()->role->role_id==0 ){
         return $next($request);
     }else{
