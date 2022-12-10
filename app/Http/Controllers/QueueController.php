@@ -33,7 +33,7 @@ class QueueController extends Controller
               'validation_error'=>$validator->messages(),
           ]);}
        else{
-         $company_type=CompanyController::getCompanyType($req->input('id'));//من وين بجيب id_country??
+         $company_type=CompanyController::getCompanyType($req->input('id'));//id_country??
        
          $queue= new Queue();
         // //timeQueue

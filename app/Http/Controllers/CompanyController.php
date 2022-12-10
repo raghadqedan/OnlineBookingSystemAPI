@@ -22,14 +22,14 @@ class CompanyController extends Controller
           'email' =>'required|email|max:191|unique:users,email',
           'password' =>'required',
           'category_id'=>'required|exists:categories',
-        ]);
 
+
+        ]);
         if($validator->fails()){
             return response()->json([
                 'validation_error'=>$validator->messages(),
             ]);
-
-        }else{
+         }else{
         $company =new Company;
         $user =new User;
         $company->name =$req->input('name');
@@ -37,10 +37,9 @@ class CompanyController extends Controller
         $company->phone_number =$req->input('phone_number');
         $company->category_id=$req->input('category_id');
         $company->logo=$req->input('logo');
-        
         $company->description=$req->input('description');
         $company->type =$req->input('type');
-        $company->address_id= (int) (AddressController::createAddress($req->input('street'),$req->input('city'),$req->input('country')));
+        $company->address_id= (int) (AddressController::createAddress($req->input('street'),$req->input('city'),$req->input('country')));//error
         //$company->location=$req->input('location');
         $company->save();
         
@@ -49,7 +48,6 @@ class CompanyController extends Controller
         $user->role_id=$req->input('role_id');
         $user->email =$req->input('email');
         $user->password =Hash::make($req->input('password'));
-       
         $user->save();
         return  response()->json(['message'=>'Successfully Created user'],201);
 
@@ -96,7 +94,6 @@ class CompanyController extends Controller
         $address_id=AddressController::updateAddress($id,$req->input('street'),$req->input('city'),$req->input('country'));
         $company->address_id=(int)$address_id;
         $company->description=$req->input('description');
-
         $company->type=$req->input('type');
         $company->update();
         return $company;
