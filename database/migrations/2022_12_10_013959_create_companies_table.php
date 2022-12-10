@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->integer('address_id');
-            $table->integer('category_id');
+            $table->foreignId('address_id')->constrained('address');
+            $table->foreignId('category_id')->constrained('categories');
             $table->string('phone_number')->nullable();
             $table->string('logo')->nullable();
             $table->string('description')->nullable();

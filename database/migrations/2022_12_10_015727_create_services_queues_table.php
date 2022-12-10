@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('service_id')->constrained('services');
             $table->foreignId('queue_id')->constrained('queues');
-
         });
     }
 

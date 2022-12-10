@@ -12,7 +12,7 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    { 
+    {
         Schema::create('appoitments', function (Blueprint $table) {
             $table->id();
             $table->time('start_time');
@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('status')->default(0);
             $table->foreignId('time_id')->constrained('times');
             $table->timestamps();
+
         });
     }
 
