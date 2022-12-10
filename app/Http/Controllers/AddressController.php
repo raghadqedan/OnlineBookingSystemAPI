@@ -10,13 +10,16 @@ class AddressController extends Controller
     $address=Address::find($id);
      return $address;
     }
-   public function createAddress($city,$country,$street){
-    $address=new Address;
+    static function createAddress($city,$country,$street){
+  $address=new Address;
   $address->city=$city;
   $address->country=$country;
   $address->street=$street;
   $address->save();
-    return $address->toQuery()->get('id');
+   $address_id=Address::select('id')->where('city',$city)
+    ->where('country',$country)
+    ->where('street',$street)->orderBy('created_at', 'desc')->first();
+    return  $address_id;
    }
 //to do 
    //function to update the address with using the new location from map take location and the company_id as parameter
@@ -38,6 +41,11 @@ class AddressController extends Controller
     $address->city=$city;
     $address->country=$country;
     $address->street=$street;
-      return $address->toQuery()->get('id');
+    $address_id=Address::select('id')->where('city',$city)
+    ->where('country',$country)
+    ->where('street',$street)->orderBy('updated_at', 'desc')->first();
+    return $address->$id;//exist error to handel;
    }
-}
+    
+   }
+

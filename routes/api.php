@@ -10,6 +10,8 @@ use App\Http\Controllers\QueueController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\TimeController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\Service_QueueController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,10 +27,13 @@ use App\Http\Controllers\TimeController;
  });
 //need testing
 Route::post('register',[CompanyController::class,'register']);//need test
-Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);
+Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//active
 Route::post('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//need test
 Route::delete('delete/{id}',[CompanyController::class,'delete']);
-Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
+//Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
+
+
+
 
 
 Route::post('user/login',[UserController::class,'login'])->name('login');
@@ -39,14 +44,7 @@ Route::post('user/addUser',[UserController::class,'addUser']);
 Route::delete('user/delete/{id}',[UserController::class,'delete']);
 
 
-//days 
-// Route::post('createDay/{source_id}',[DayController::class,'createDay']);
-// Route::get('getOffDays/{source_id}/{type}',[DayController::class,'getOffDays']);
-// Route::get('getonDays/{source_id}/{type}',[DayController::class,'getonDays']);
-// Route::get('setonDay/{source_id}/{type}/{day}',[DayController::class,'setonDay']);
-// Route::get('setOffDay/{source_id}/{type}/{day}',[DayController::class,'setOffDay']);
-// //Route::delete('deleteDays/{source_id}/{type})',[DayController::class,'deleteDays']);
-// Route::get('isOffDay/{source_id}/{type}/{day}',[DayController::class,'isOffDay']);
+
 
 //times
 Route::post('createTime',[TimeController::class,'createTime']);
@@ -66,12 +64,14 @@ Route::delete('service/delete/{id}',[ServiceController::class,'delete']);
 //Queues
 Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);
 Route::post('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);
-Route::post('queue/addQueue',[QueueController::class,'addQueue']);
+Route::post('queue/add',[QueueController::class,'addQueue']);
 Route::delete('queue/delete/{id}',[QueueController::class,'delete']);
 
 
+Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);
 
-
+//Customer
+Route::post('signUp',[CustomerController::class,'signUp']);//valid
 
 
  //Route::group(['middleware'=>['auth','Admin']],function(){
@@ -92,3 +92,30 @@ Route::delete('queue/delete/{id}',[QueueController::class,'delete']);
 
 
 // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//days 
+// Route::post('createDay/{source_id}',[DayController::class,'createDay']);
+// Route::get('getOffDays/{source_id}/{type}',[DayController::class,'getOffDays']);
+// Route::get('getonDays/{source_id}/{type}',[DayController::class,'getonDays']);
+// Route::get('setonDay/{source_id}/{type}/{day}',[DayController::class,'setonDay']);
+// Route::get('setOffDay/{source_id}/{type}/{day}',[DayController::class,'setOffDay']);
+// //Route::delete('deleteDays/{source_id}/{type})',[DayController::class,'deleteDays']);
+// Route::get('isOffDay/{source_id}/{type}/{day}',[DayController::class,'isOffDay']);

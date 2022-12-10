@@ -35,9 +35,12 @@ class TimeController extends Controller
             $obj->type =$req->input('type');
             $obj->start_time =$req->input('start_time');
             $obj->end_time =$req->input('end_time');
-            $obj->save();
-           
-        return $obj;}
+            $result=$obj->save();
+            if($result=1&$req->input('source_id')==2&(CompanyController::getCompanyType($company_id))==0){
+             AppoitmentController::createAppoitment($obj->id,$req->input('source_id')==2,$req->input('start_time'),$req->input('end_time'));}
+            else{
+                return ["message"=>"Operation faild"];
+            }}
     
     //createTime jsonfile
     //    {
@@ -48,14 +51,14 @@ class TimeController extends Controller
     //     }
 
 //method to update start time and end time .
-        public function updateTime($source_id,$type,$day,Request $req)
-    {
-        $time= Time::where('source_id',$source_id)
-        ->where('type',$type)
-        ->where('day',$day)
-        ->get();
-        $time->toQuery()->update(['start_time'=>$req->input('start_time'),'end_time'=>$req->input('end_time'),]);
-        }
+    // public function updateTime($source_id,$type,$day,Request $req)
+    // {
+    //     $time= Time::where('source_id',$source_id)
+    //     ->where('type',$type)
+    //     ->where('day',$day)
+    //     ->get();
+    //     $time->toQuery()->update(['start_time'=>$req->input('start_time'),'end_time'=>$req->input('end_time')]);
+    //     }
 
 
     function getscheduleTime($source_id,$type)
@@ -78,14 +81,14 @@ class TimeController extends Controller
     return $obj;
     }
 
-        function setStartTime($source_id, $type ,$day , $start_time)
-    {
-        $obj= Time::where('source_id',$source_id)
-        ->where('type',$type)
-        ->where('day',$day)
-        ->get();
-        $obj->toQuery()->update(['start_time'=>$start_time,]);
-    }
+    //     function setStartTime($source_id, $type ,$day , $start_time)
+    // {
+    //     $obj= Time::where('source_id',$source_id)
+    //     ->where('type',$type)
+    //     ->where('day',$day)
+    //     ->get();
+    //     $obj->toQuery()->update(['start_time'=>$start_time,]);
+    // }
 
     
 
@@ -102,22 +105,13 @@ class TimeController extends Controller
         }
 
 
-        function setEndTime($source_id ,$type,$day ,$end_time)
-        {
-            $obj=Time::where('source_id',$source_id)->where('type',$type)->where('day',$day)->get();
+        // function setEndTime($source_id ,$type,$day ,$end_time)
+        // {
+        //     $obj=Time::where('source_id',$source_id)->where('type',$type)->where('day',$day)->get();
             
-            $obj->toQuery()->update(['end_time'=>$end_time,]);
+        //     $obj->toQuery()->update(['end_time'=>$end_time,]);
            
-        }
-
-
-
-        function t($source_id)
-        {
-            
-        if($source_id.isNotEmpty())
-        return "ssss";
-        }
+        // }
 
     
-}
+    }
