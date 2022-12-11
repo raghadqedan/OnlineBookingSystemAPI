@@ -18,6 +18,8 @@ class User extends Authenticatable
         'company_id',
         'phone_number',
     ];
+    protected $table = 'users';
+    //protected $guarded =['updated_at,created_at'];
     protected $hidden = [
         'password',
         'remember_token',

@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Queue extends Model
 {
     use HasFactory;
-    public $timestamps=false;
+    protected $guarded =[];
+    protected $table = 'queues';
 }

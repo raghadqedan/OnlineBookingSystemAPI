@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+//use Illuminate\Http\Respons;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Models\Company;
 use App\Models\Category;
 use App\Models\Role;
@@ -13,58 +15,63 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 
 class CompanyController extends Controller
-        {
+    {
         function register(Request $req)
         {
-        $validator=Validator::make($req->all(),[
-            'name' =>'required|max:200',
-            'email' =>'required|email|max:191|unique:users,email',
-            'password' =>'required',
-            'category_id'=>'required|exists:categories',
-        ]);
+            $validator=Validator::make($req->all(),[
+                'name' =>'required|max:200',
+                'email' =>'required|email|max:191|unique:users,email',
+                'password' =>'required',
+                'category_id'=>'required',
+            ]);
 
 
-        
+
         if($validator->fails()){
+
             return response()->json([
                 'validation_error'=>$validator->messages(),
             ]);
-            }else{
-        $company =Company::create([
-            $address=AddressController::createAddress($req->street,$req->city,$req->country),
-            'name'=> $req->name,
-            'email'=>$req->email,
-            'phone_number'=>$req->phone_number,
-            'category_id'=>$category->id,
-            'logo'=>$req->logo,
-            'description'=>$req->description,
-            'type'=>$req->type,
-            'address_id'=>$address->id//error
-        ]);
-        $user =User::create([
-            $role=Role::where('name','admin')->first(),
-            'name'=>$req->name,
-            'email'=>$req->email,
-            'company_id'=>Company::selectRaw(id)->where('email',$req->email),
-            'role_id'=>$role->id,
-            'password'=>Hash::make($req->password),
 
-        ]); 
+
+            }else{
+                
+                $address=AddressController::createAddress($req->street,$req->city,$req->country);
+                $company =Company::create([
+                'name'=>$req->name,
+                'phone_number'=>$req->phone_number,
+                'category_id'=>$req->category_id,
+                'logo'=>$req->logo,
+                'description'=>$req->description,
+                'type'=>$req->type,
+                'address_id'=>$address->id,//error
+                 ]);
+                $user =User::create([
+                $role=Role::where('name','admin')->first(),
+                'role_id'=>$role->id,
+                'name'=>$req->name,
+                'email'=>$req->email,
+                'company_id'=>$company->id, 
+                 'password'=>Hash::make($req->password),
+                
+                ]); 
+                return "ssss";
         
         }
     
     }
 
 
-
+ 
     // {
     //     "name":"beauty77",
+    //     "company_id":"1",
     //     "category_id":"1",
     //     "role_id":"1",
     //     "street":"qwe122",
     //     "city":"jenin",
     //     "country":"palestine",
-    //     "email":"aghmaaaamaa@yahoo.com",
+    //     "email":"aghmaaaaaaa@yahoo.com",
     //     "password":"123456",
     //     "phone_number":"0599932123",
     //     "description":"qqqqqq",
@@ -72,38 +79,47 @@ class CompanyController extends Controller
     //     "type":"0",
     //     "address_id":"1"
     //         }
-        
+
     
 
 
 
         function getDetails($id)
-        {
-        $company=Company::find($id);
+            {
+                $company=Company::find($id);
 
-        $id=Company::where('id', $id)->get('address_id');
+                $id=Company::where('id', $id)->get('address_id');
 
-        $address=AddressController::getAddress($id);
+                $address=AddressController::getAddress($id);
 
-        return [$company,$address];
-        }
+                return response()->json([
+                    $company,$address
+                    ]);
+            }
 
         //to do  //need testing
         function updateDetails(Request $req, $id)
         { $company=Company::find($id);
-        $company->name =$req->input('name');
-        $company->email =$req->input('email');
-        $company->phone_number =$req->input('phone_number');
-        $company->category_id =$req->input('category_id');
-        $company->logo=$req->input('logo');
-        $address_id=AddressController::updateAddress($id,$req->input('street'),$req->input('city'),$req->input('country'));
-        $company->address_id=(int)$address_id;
-        $company->description=$req->input('description');
-        $company->type=$req->input('type');
-        $company->update();
-        return $company;
+            
+        
+        $address=AddressController::updateAddress($company->address_id,$req->street,$req->city,$req->country);
+       
+        $company->update([
+            'name' =>$req->name,
+            'email'=>$req->email,
+            'phone_number'=>$req->phone_number,
+            'category_id'=>$req->category_id,
+            'logo'=>$req->logo,
+            'description'=>$req->description,
+            'type'=>$req->type,
+            'address_id'=>$address->id,
+           
 
-        }
+         ]); 
+        return response()->json([$company,$address]);
+    }
+
+        
         // {
         //     "name":"beauty77",
         //     "company_id":"1",

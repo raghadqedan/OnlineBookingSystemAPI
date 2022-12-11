@@ -1,6 +1,9 @@
 <?php
 
+
 namespace App\Http\Controllers;
+ use Illuminate\Http\Response;
+ use Illuminate\Http\JsonResponse;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CompanyController;
@@ -10,22 +13,16 @@ class AddressController extends Controller
     $address=Address::find($id);
      return $address;
     }
+
     static function createAddress($city,$country,$street){
-  $address=new Address;
-  $address->city=$city;
-  $address->country=$country;
-  $address->street=$street;
-  $address->save();
-  $address_id=Address::select('id')->where('city',$city)
-    ->where('country',$country)
-    ->where('street',$street)->orderBy('created_at', 'desc')->first();
-    return  response()->json([
-      $address
-  ]);
+      $address=Address::create([
+        'city'=>$city,
+        'country'=>$country,
+        'street'=>$street,
+      ]);
 
+      return $address;}
 
-
-   }
 //to do 
    //function to update the address with using the new location from map take location and the company_id as parameter
 //   public function resetAddressFromLocation($id,Request $req){
@@ -46,11 +43,9 @@ class AddressController extends Controller
     $address->city=$city;
     $address->country=$country;
     $address->street=$street;
-    $address_id=Address::select('id')->where('city',$city)
-    ->where('country',$country)
-    ->where('street',$street)->orderBy('updated_at', 'desc')->first();
-    return $address->$id;//exist error to handel;
+    return $address;
+   
+
    }
     
    }
-

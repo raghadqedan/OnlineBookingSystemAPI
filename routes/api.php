@@ -36,12 +36,12 @@ Route::delete('delete/{id}',[CompanyController::class,'delete']);
 
 
 
-Route::post('user/login',[UserController::class,'login'])->name('login');
-Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);
-Route::post('user/updateDetails/{id}',[UserController::class,'updateDetails']);
+Route::post('user/login',[UserController::class,'login'])->name('login');//valid
+Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
+Route::post('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
 Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
-Route::post('user/addUser',[UserController::class,'addUser']);
-Route::delete('user/delete/{id}',[UserController::class,'delete']);
+Route::post('user/addUser',[UserController::class,'addUser']);//valid
+Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
 
 
 

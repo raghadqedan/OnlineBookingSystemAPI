@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            //$table->string('email')->unique();
             $table->foreignId('address_id')->constrained('address');
             $table->foreignId('category_id')->constrained('categories');
-            $table->string('phone_number')->nullable();
+           // $table->string('phone_number')->nullable();
             $table->string('logo')->nullable();
             $table->string('description')->nullable();
             $table->integer('type');

@@ -38,7 +38,7 @@ class UserController extends Controller
     }
 
     //   {
-    //    "name":"ahmad",
+    //    "name":"rama",
     //     "roleID":"2",
     //     "email":"qqqqqqq@yahoo.com",
     //     "password":"18888887890",
@@ -57,7 +57,11 @@ class UserController extends Controller
             ]);
         
         else{
-     return  ;}  
+     return  response()->json([
+        'status'=>200,
+        'message'=>'valid Credentials'
+
+    ]);}  
 
     }
 
