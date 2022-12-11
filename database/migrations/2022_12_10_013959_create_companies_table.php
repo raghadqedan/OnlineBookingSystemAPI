@@ -25,6 +25,8 @@ return new class extends Migration
             $table->integer('type');
             $table->timestamps();
         });
+
+       
     }
 
     /**

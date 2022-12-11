@@ -24,7 +24,7 @@ class CompanyController extends Controller
         ]);
 
 
-
+        
         if($validator->fails()){
             return response()->json([
                 'validation_error'=>$validator->messages(),
@@ -54,6 +54,8 @@ class CompanyController extends Controller
         }
     
     }
+
+
 
     // {
     //     "name":"beauty77",
