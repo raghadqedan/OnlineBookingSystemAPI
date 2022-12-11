@@ -23,6 +23,8 @@ class AddressController extends Controller
       $address
   ]);
 
+
+
    }
 //to do 
    //function to update the address with using the new location from map take location and the company_id as parameter
