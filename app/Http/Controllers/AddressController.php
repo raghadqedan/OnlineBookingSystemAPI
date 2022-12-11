@@ -16,10 +16,10 @@ class AddressController extends Controller
   $address->country=$country;
   $address->street=$street;
   $address->save();
-   $address_id=Address::select('id')->where('city',$city)
+  $address_id=Address::select('id')->where('city',$city)
     ->where('country',$country)
     ->where('street',$street)->orderBy('created_at', 'desc')->first();
-    return  $address_id;
+    return  $address;
    }
 //to do 
    //function to update the address with using the new location from map take location and the company_id as parameter

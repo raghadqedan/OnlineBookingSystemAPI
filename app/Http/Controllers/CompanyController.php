@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Category;
+use App\Models\Role;
 use App\Http\Controllers\AddressController;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -11,64 +13,65 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 
 class CompanyController extends Controller
-
-     
-
-{ //NEED TESTING
-    function register(Request $req)
-    {
+        {
+        function register(Request $req)
+        {
         $validator=Validator::make($req->all(),[
-          'name' =>'required|max:200',
-          'email' =>'required|email|max:191|unique:users,email',
-          'password' =>'required',
-          'category_id'=>'required|exists:categories',
-
-
+            'name' =>'required|max:200',
+            'email' =>'required|email|max:191|unique:users,email',
+            'password' =>'required',
+            'category_id'=>'required|exists:categories',
         ]);
+
+
+
         if($validator->fails()){
             return response()->json([
                 'validation_error'=>$validator->messages(),
             ]);
-         }else{
-        $company =new Company;
-        $user =new User;
-        $company->name =$req->input('name');
-        $company->email =$req->input('email');
-        $company->phone_number =$req->input('phone_number');
-        $company->category_id=$req->input('category_id');
-        $company->logo=$req->input('logo');
-        $company->description=$req->input('description');
-        $company->type =$req->input('type');
-        $company->address_id= (int) (AddressController::createAddress($req->input('street'),$req->input('city'),$req->input('country')));//error
-        //$company->location=$req->input('location');
-        $company->save();
+            }else{
+        $company =Company::create([
+            $address=AddressController::createAddress($req->street,$req->city,$req->country),
+            'name'=> $req->name,
+            'email'=>$req->email,
+            'phone_number'=>$req->phone_number,
+            'category_id'=>$category->id,
+            'logo'=>$req->logo,
+            'description'=>$req->description,
+            'type'=>$req->type,
+            'address_id'=>$address->id//error
+        ]);
+        $user =User::create([
+            $role=Role::where('name','admin')->first(),
+            'name'=>$req->name,
+            'email'=>$req->email,
+            'company_id'=>Company::selectRaw(id)->where('email',$req->email),
+            'role_id'=>$role->id,
+            'password'=>Hash::make($req->password),
+
+        ]); 
         
-        $user->name=$req->input('name');
-        $user->company_id=Company::selectRaw('id')->where('email',$email);
-        $user->role_id=$req->input('role_id');
-        $user->email =$req->input('email');
-        $user->password =Hash::make($req->input('password'));
-        $user->save();
-        return  response()->json(['message'=>'Successfully Created user'],201);
+        }
+    
+    }
 
+    // {
+    //     "name":"beauty77",
+    //     "category_id":"1",
+    //     "role_id":"1",
+    //     "street":"qwe122",
+    //     "city":"jenin",
+    //     "country":"palestine",
+    //     "email":"aghmaaaamaa@yahoo.com",
+    //     "password":"123456",
+    //     "phone_number":"0599932123",
+    //     "description":"qqqqqq",
+    //     "logo":"image",
+    //     "type":"0",
+    //     "address_id":"1"
+    //         }
         
-     }}
-
-        // register json 
-        // {
-        //     "name":"beauty1",
-        //     "companyID":"1",
-        //     "categoryID":"1",
-        //     "roleID":"1",
-        //     "street":"qwe122",
-        //     "city":"tulkarem",
-        //     "country":"palestine",
-        //     "email":"aghmaaaaaa@yahoo.com",
-        //     "password":"123456",
-        //     "phoneNumber":"0599932123"
-        //     "description": "qqqqqq"
-        //      }
-
+    
 
 
 
