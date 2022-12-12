@@ -57,11 +57,11 @@ class UserController extends Controller
             ]);
         
         else{
-     return  response()->json([
-        'status'=>200,
-        'message'=>'valid Credentials'
+            return  response()->json([
+               'status'=>200,
+              'message'=>'valid Credentials'
 
-    ]);}  
+           ]);}  
 
     }
 

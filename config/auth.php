@@ -42,6 +42,15 @@ return [
         ],
     ],
 
+
+    
+    // 'guards' => [
+    //     'customer' => [
+    //         'driver' => 'session',
+    //         'provider' => 'customers',
+    //     ],
+    // ],
+
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -64,6 +73,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'Customer',
+            'hash' => false,
+        ],
+        
 
         // 'users' => [
         //     'driver' => 'database',

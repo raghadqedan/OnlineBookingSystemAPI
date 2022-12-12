@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 //use Illuminate\Http\Respons;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Models\Company;
 use App\Models\Category;
@@ -19,7 +20,7 @@ class CompanyController extends Controller
         function register(Request $req)
         {
             $validator=Validator::make($req->all(),[
-                'name' =>'required|max:200',
+                'name' =>'required|string|max:200',
                 'email' =>'required|email|max:191|unique:users,email',
                 'password' =>'required',
                 'category_id'=>'required',
@@ -55,7 +56,15 @@ class CompanyController extends Controller
                  'password'=>Hash::make($req->password),
                 
                 ]); 
-                return "ssss";
+
+                $token=$user->createToken('myapptoken')->plainTextToken;
+                $response=[
+                    'user'=>$user,
+                    'token'=>$token,
+                ];
+
+                return $response;
+                
         
         }
     
