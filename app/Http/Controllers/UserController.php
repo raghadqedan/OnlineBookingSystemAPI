@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Auth;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
@@ -57,13 +58,14 @@ class UserController extends Controller
             ]);
         
         else{
-            return  response()->json([
-               'status'=>200,
-              'message'=>'valid Credentials'
-
-           ]);}  
-
-    }
+            $token=$user->createToken('myapptoken')->plainTextToken;
+            $response=[
+                'status'=>200,
+                'message'=>'valid Credentials',
+                'user'=>$user,
+                'token'=>$token,
+              ]; }
+        return $response;}
 
 
      function deleteSelected(ArrayList $id)
