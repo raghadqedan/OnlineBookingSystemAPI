@@ -13,6 +13,7 @@ use App\Http\Controllers\TimeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Service_QueueController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,23 +28,17 @@ use App\Http\Controllers\Service_QueueController;
             Route::post('register',[CompanyController::class,'register']);//valid
             Route::post('user/login',[UserController::class,'login'])->name('login');//valid
 
+            Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails'])->middleware('admin');//valid
 
-
- Route::group(['middleware'=>['auth:sanctum','Admin']],function () {
+ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
       
-            Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//valid
+           
             Route::put('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//valid
             Route::delete('delete/{id}',[CompanyController::class,'delete']);
             //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
 
  });
 
-Route::group(['middleware'=>['auth:sanctum','Employee']],function () {
-
-
-
-
-});
 
 Route::group(['middleware'=>['auth:sanctum']],function () {
 
@@ -54,10 +49,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
             Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
 
     });
-
-
-
-
 
 
 //times
@@ -92,6 +83,12 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 // // Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);
 
+// Route::group(['middleware'=>['auth:sanctum','employee']],function () {
+
+
+
+
+// });
 
 
 

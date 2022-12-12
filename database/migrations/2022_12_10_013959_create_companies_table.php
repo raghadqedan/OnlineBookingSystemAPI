@@ -20,10 +20,13 @@ return new class extends Migration
             $table->foreignId('address_id')->constrained('address');
             $table->foreignId('category_id')->constrained('categories');
            // $table->string('phone_number')->nullable();
+           // $table->foreignId('role_id')->constrained('roles');
             $table->string('logo')->nullable();
             $table->string('description')->nullable();
             $table->integer('type');
             $table->timestamps();
+            $table->enum('role_id', array('1','2'))->default('0');
+            $table->foreign('role_id')->references('id')->on('roles');
         });
 
        

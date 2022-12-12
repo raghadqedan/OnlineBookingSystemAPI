@@ -45,15 +45,16 @@ class CompanyController extends Controller
                 'logo'=>$req->logo,
                 'description'=>$req->description,
                 'type'=>$req->type,
-                'address_id'=>$address->id,//error
+                'address_id'=>$address->id,
                  ]);
+                $role=Role::where('name','admin')->first();
+                
                 $user =User::create([
-                $role=Role::where('name','admin')->first(),
                 'role_id'=>$role->id,
                 'name'=>$req->name,
                 'email'=>$req->email,
                 'company_id'=>$company->id, 
-                 'password'=>Hash::make($req->password),
+                'password'=>Hash::make($req->password),
                 
                 ]); 
 
@@ -63,7 +64,7 @@ class CompanyController extends Controller
                     'token'=>$token,
                 ];
 
-                return $response;
+                 return $response;
                 
         
         }

@@ -17,6 +17,7 @@ class Company extends Model
         'logo',
         'description',
         'type',
+        'role_id',
         
     ];
     public $timestamps=false;
