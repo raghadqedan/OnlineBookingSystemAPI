@@ -16,7 +16,7 @@ class employee
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->role_id== 2){
+        if(auth()->check()&&$request->user()->role_id == 2 ){
             return $next($request);
         }else{
             return redirect()->back();

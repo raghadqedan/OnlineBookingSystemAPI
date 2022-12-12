@@ -17,7 +17,8 @@ class admin
      */
     
     public function handle(Request $request, Closure $next)
-    { if(auth()->user()->role_id == 1 ){
+    { 
+        if(auth()->check()&&$request->user()->role_id == 1 ){
         return $next($request);
     }else{
         return redirect()->back();

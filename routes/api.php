@@ -28,11 +28,11 @@ use App\Http\Controllers\Service_QueueController;
             Route::post('register',[CompanyController::class,'register']);//valid
             Route::post('user/login',[UserController::class,'login'])->name('login');//valid
 
-            Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails'])->middleware('admin');//valid
+           
 
  Route::group(['middleware'=>['auth:sanctum','admin']],function () {
       
-           
+            Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//valid
             Route::put('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//valid
             Route::delete('delete/{id}',[CompanyController::class,'delete']);
             //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
@@ -73,8 +73,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
         Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);
         Route::post('queue/add',[QueueController::class,'addQueue']);
         Route::delete('queue/delete/{id}',[QueueController::class,'delete']);
-
-
+        
         //Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);
 
 //Customer
