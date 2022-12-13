@@ -47,10 +47,10 @@ class CompanyController extends Controller
                 'type'=>$req->type,
                 'address_id'=>$address->id,
                  ]);
-                //$role=Role::where('name','admin')->first();
+                $role=Role::where('name','admin')->first();
                 
                 $user =User::create([
-               // 'role_id'=>$role->id,
+                'role_id'=>$role->id,
                'role_id'=>$req->role_id,
                 'name'=>$req->name,
                 'email'=>$req->email,

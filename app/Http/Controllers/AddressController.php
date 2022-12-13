@@ -38,12 +38,15 @@ class AddressController extends Controller
    //need testing
 //function take the address id and the new value of address as parammater to update this id with this value
    static function updateAddress($id,$city,$country,$street){
-    
-    $address=Address::find($id);
-    $address->city=$city;
-    $address->country=$country;
-    $address->street=$street;
-    return $address;
+      
+      $address=Address::find($id);
+      $address=update([ 
+         'city'=>$city,
+         'country'=>$country,
+         'street'=>$street,
+      ]);
+      
+      return $address;
    
 
    }
