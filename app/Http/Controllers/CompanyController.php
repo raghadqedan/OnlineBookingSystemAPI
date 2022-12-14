@@ -26,6 +26,7 @@ class CompanyController extends Controller
                 'email' =>'required|email|max:191|unique:users,email',
                 'password' =>'required',
                 'category_id'=>'required',
+                'type'=>'required',
             ]);
 
 
