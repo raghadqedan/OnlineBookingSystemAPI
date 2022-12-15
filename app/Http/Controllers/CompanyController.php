@@ -11,14 +11,14 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Http\Controllers\AddressController;
 use App\Models\User;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-
-class CompanyController extends Controller
-    { 
-        
+use Illuminate\Support\Facades\Log;
+class CompanyController 
+    {
+       
         function register(Request $req)
         { 
             $validator=Validator::make($req->all(),[
@@ -30,7 +30,7 @@ class CompanyController extends Controller
             ]);
 
 
-
+          
             if($validator->fails()){
 
                 return response()->json([
@@ -40,9 +40,9 @@ class CompanyController extends Controller
 
             }else{
 
-                $lock=1;
-                DB::beginTransaction();
-                  try{
+                //$lock=1;
+               // DB::beginTransaction();
+                 // try{
                         $address=AddressController::createAddress($req->street,$req->city,$req->country);
                         $company =Company::create([
                         'name'=>$req->name,
@@ -55,17 +55,17 @@ class CompanyController extends Controller
                         ]);
                         DB::commit();
 
-                }catch (Exception $e) {
+               // }catch (Exception $e) {
 
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);
                         $lock=0;
-                }
+               // }
 
 
-                if($lock){
-                 try{
+                //if($lock){
+                // try{
                         $role=Role::where('name','admin')->first();
                         
                         $user =User::create([
@@ -75,20 +75,20 @@ class CompanyController extends Controller
                         'password'=>Hash::make($req->password),
                         'company_id'=> $company->id,
                         ]); 
-                    }
-                catch (Exception $e) {
-                        DB::rollBack();
+                //    }
+               // catch (Exception $e) {
+                       // DB::rollBack();
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);
 
-                        $lock=0;
-                    }}
+                    //    $lock=0;
+                  //  }}
 
 
-                   if($lock){
-                    try{
-                        $token=$user->createToken('myapptoken')->plainTextToken;
+                //    if($lock){
+                //     try{
+                //         $token=$user->createToken('myapptoken')->plainTextToken;
                         $response=[
                            
                         ];
@@ -100,14 +100,14 @@ class CompanyController extends Controller
                             "company"=>$company,
                             ]);
                        
-                    }catch(Exception $e){
+                  //  }catch(Exception $e){
 
                         DB::rollBack();
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);}
         
-        }}}
+        }
     
     
 

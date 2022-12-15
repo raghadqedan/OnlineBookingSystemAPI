@@ -35,7 +35,9 @@ class AddressController extends Controller
 //   $address->update();
 //     return $address;
 //    } 
-   //need testing
+ 
+
+
 //function take the address id and the new value of address as parammater to update this id with this value
    static function updateAddress($id,$city,$country,$street){
       

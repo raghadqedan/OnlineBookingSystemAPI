@@ -17,7 +17,6 @@ class Company extends Model
         'logo',
         'description',
         'type',
-        'role_id',
        
         
     ];
