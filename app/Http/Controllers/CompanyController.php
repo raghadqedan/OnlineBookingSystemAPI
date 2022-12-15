@@ -40,9 +40,9 @@ class CompanyController
 
             }else{
 
-                //$lock=1;
-               // DB::beginTransaction();
-                 // try{
+                $lock=1;
+                DB::beginTransaction();
+                 try{
                         $address=AddressController::createAddress($req->street,$req->city,$req->country);
                         $company =Company::create([
                         'name'=>$req->name,
@@ -55,17 +55,17 @@ class CompanyController
                         ]);
                         DB::commit();
 
-               // }catch (Exception $e) {
+                }catch (Exception $e) {
 
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);
                         $lock=0;
-               // }
+                }
 
 
-                //if($lock){
-                // try{
+                if($lock){
+                 try{
                         $role=Role::where('name','admin')->first();
                         
                         $user =User::create([
@@ -75,39 +75,37 @@ class CompanyController
                         'password'=>Hash::make($req->password),
                         'company_id'=> $company->id,
                         ]); 
-                //    }
-               // catch (Exception $e) {
-                       // DB::rollBack();
+                    }
+                 catch (Exception $e) {
+                        DB::rollBack();
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);
 
-                    //    $lock=0;
-                  //  }}
+                         $lock=0;
+                        }}
 
 
-                //    if($lock){
-                //     try{
-                //         $token=$user->createToken('myapptoken')->plainTextToken;
-                        $response=[
-                           
-                        ];
+                       if($lock){
+                   try{
+                       $token=$user->createToken('myapptoken')->plainTextToken;
                         DB::commit();
                         return  response()->json([
                             "result"=>"company account created successfully",
                             "token"=>$token,
                             "user"=>$user,
                             "company"=>$company,
+                         
                             ]);
                        
-                  //  }catch(Exception $e){
+                    }catch(Exception $e){
 
                         DB::rollBack();
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);}
         
-        }
+        }}}
     
     
 
@@ -187,7 +185,7 @@ class CompanyController
 
 
         public function delete($id)
-        {   
+        { 
         $result= Company::where('id', $id)->delete();
         if ($result) {
         return ["result"=>"Company account has been delete"];

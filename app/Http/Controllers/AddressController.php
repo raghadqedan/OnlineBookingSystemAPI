@@ -42,7 +42,7 @@ class AddressController extends Controller
    static function updateAddress($id,$city,$country,$street){
       
       $address=Address::find($id);
-      $address=update([ 
+      $address->update([ 
          'city'=>$city,
          'country'=>$country,
          'street'=>$street,

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('address_id')->constrained('address');
-            $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('address_id')->constrained('address')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade')->onUpdate('cascade');
             $table->string('logo')->nullable();
             $table->string('description')->nullable();
             $table->integer('type');

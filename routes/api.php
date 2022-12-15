@@ -34,7 +34,7 @@ use App\Http\Controllers\Service_QueueController;
       
             Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//valid
             Route::put('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//valid
-            Route::delete('delete/{id}',[CompanyController::class,'delete']);
+            Route::delete('delete/{id}',[CompanyController::class,'delete']);//valid
             //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
 
  });
