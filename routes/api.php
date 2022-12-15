@@ -27,29 +27,55 @@ use App\Http\Controllers\Service_QueueController;
 
             Route::post('register',[CompanyController::class,'register']);//valid
             Route::post('user/login',[UserController::class,'login'])->name('login');//valid
-
+            Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
            
 
- Route::group(['middleware'=>['auth:sanctum','admin']],function () {
-      
-            Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//valid
-            Route::put('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//valid
-            Route::delete('delete/{id}',[CompanyController::class,'delete']);//valid
-            //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
+Route::group(['middleware'=>['auth:sanctum','admin']],function () {
+   //companies   
+        Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//valid
+        Route::put('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//valid
+        Route::delete('delete/{id}',[CompanyController::class,'delete']);//valid
+        //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
+
+
+
+   //services
+        Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);//valid
+        Route::put('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
+        Route::post('service/addService',[ServiceController::class,'addService']);//valid
+        Route::delete('service/delete/{id}',[ServiceController::class,'delete']);//valid
+  
+  //users
+        Route::post('user/addUser',[UserController::class,'addUser']);//valid
+        Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
+
+
+  //Queues
+
+        Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
+        Route::post('queue/add',[QueueController::class,'addQueue']);//valid
+        Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
+        Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
+       
+
 
  });
 
 
 Route::group(['middleware'=>['auth:sanctum']],function () {
 
-            Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
-            Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
-            //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
-            Route::post('user/addUser',[UserController::class,'addUser']);//valid
-            Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
+        //users
+
+                Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
+                Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
+                //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
+                
+                
 
     });
 
+
+    
 
 //times
         Route::post('createTime',[TimeController::class,'createTime']);
@@ -60,21 +86,16 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
         Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
         Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
 
-//services
-        Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);
-        Route::put('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);
-        Route::post('service/addService',[ServiceController::class,'addService']);
-        Route::delete('service/delete/{id}',[ServiceController::class,'delete']);
-
 
 //Queues
 
-        Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);
-        Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);
-        Route::post('queue/add',[QueueController::class,'addQueue']);
-        Route::delete('queue/delete/{id}',[QueueController::class,'delete']);
-        
-        //Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);
+        Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
+        Route::post('queue/add',[QueueController::class,'addQueue']);//valid
+        Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
+        Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
+        Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
+
+
 
 //Customer
 

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('booking', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')->constrained('customers');
-            $table->foreignId('appoitment_id')->constrained("appoitments");
+            $table->foreignId('appointment_id')->constrained("appointments");
             $table->integer('status')->default(0);
             $table->time('delay_time')->default(0);
             $table->integer('number')->nullable();

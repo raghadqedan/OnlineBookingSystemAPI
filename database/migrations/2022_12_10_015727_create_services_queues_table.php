@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('services_queues', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('service_id')->constrained('services');
-            $table->foreignId('queue_id')->constrained('queues');
+            $table->foreignId('service_id')->constrained('services')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('queue_id')->constrained('queues')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

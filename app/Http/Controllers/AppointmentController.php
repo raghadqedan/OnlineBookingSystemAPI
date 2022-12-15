@@ -6,7 +6,7 @@ use App\Http\Controllers\ServiceControllerController;
 use Illuminate\Http\Request;
 use App\Models\Appoitment;
 
-class AppoitmentController extends Controller
+class AppointmentController extends Controller
 {
     static function createAppoitment($time_id,$queue_id,$start_time,$end_time){
 
@@ -17,7 +17,7 @@ class AppoitmentController extends Controller
         //else only delete it . for serch($appoitmnt_id) this method must but in booking table.
         while($start_time!=$end_time){
             //continue
-        $obj= new Appoitment();
+        $obj= new Appointment();
         $obj=$time_id;//error without testing 
         $obj->start_time=$start_time;
         $obj->end_time=$start_time+$duration_time;
@@ -30,7 +30,7 @@ class AppoitmentController extends Controller
     $duration_time=ServiceController::getServiceDurationTime($service_id);
     while($start_time!=$end_time){
         //continue
-    $obj= new Appoitment();
+    $obj= new Appointment();
     $obj=$time_id;//error without testing 
     $obj->start_time=$start_time;
     $obj->end_time=$start_time+$duration_time;

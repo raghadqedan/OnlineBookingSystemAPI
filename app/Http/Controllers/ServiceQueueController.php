@@ -8,39 +8,49 @@ use App\Http\Controllers\Controller;
 
 class ServiceQueueController extends Controller
 {
-    static function createServiceQueue($id,$service_id){
-        $obj= new ServiceQueue;
-        
-            $queue_id=$id;
-            $obj->queue_id =$queue_id;
-            $obj->service_id=$service_id;
-           $result= $obj->save();
-           return $result;
-        
-
+    static function createServiceQueue($id,$services){
+       
+        for( $i=0;$i<count($services);$i++){
+          $obj=ServiceQueue::create([
+           'queue_id' =>$id,
+           'service_id'=>$services[$i],
+          
+        ]);}
+    
     }
+
+
+
+
+
+
     static function getService($queue_id){
-$services=ServicesQueues::selectRaw('service_id')->where('queue_id',$queue_id)->get();
-return $services;
+            $services=ServiceQueue::selectRaw('service_id')->where('queue_id',$queue_id)->get();
+            return $services;
 
 
     }
-    static function updateService($queue_id,$service){
-        $services=ServiceQueue::selectRaw('service_id')->where('queue_id',$queue_id)->get();
-        return $services;
-        
-        
-            }
-
-    static  public function delete($id)
-    {
-        $result=ServiceQueue::where('queue_id', $id)->delete();
-        if ($result) {
-            return 1;
-        } else {
-            return 0;
-        }
+    static function updateService($queue_id,$services){
+            $service=ServiceQueue::selectRaw('service_id')->where('queue_id',$queue_id)->delete();
+                
+                for( $i=0;$i<count($services);$i++){
+                    $obj=ServiceQueue::create([
+                    'queue_id' =>$queue_id,
+                    'service_id'=>$services[$i],
+                    
+                ]);}
     }
+
+    
+    // static  public function delete($id)
+    // {
+    //     $result=ServiceQueue::selectRaw('id')->where('queue_id', $id)->delete();
+    //     if ($result) {
+    //         return 1;
+    //     } else {
+    //         return 0;
+    //     }
+    // }
     
 
 

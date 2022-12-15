@@ -44,7 +44,7 @@ class CompanyController
                 DB::beginTransaction();
                  try{
                         $address=AddressController::createAddress($req->street,$req->city,$req->country);
-                        $company =Company::create([
+                        $company=Company::create([
                         'name'=>$req->name,
                         'phone_number'=>$req->phone_number,
                         'category_id'=>$req->category_id,
@@ -104,6 +104,9 @@ class CompanyController
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);}
+
+          
+            
         
         }}}
     
@@ -115,7 +118,7 @@ class CompanyController
     //     "name":"beauty77",
     //     "category_id":"1",
     //     "street":"qwe122",
-    //     "city":"jenin",
+    //     "city":"tulkarm",
     //     "country":"palestine",
     //     "email":"aghmaaaaaaa@yahoo.com",
     //     "password":"123456",
@@ -168,7 +171,6 @@ class CompanyController
         // {
         //     "name":"beauty77"
         //     "category_id":"1",
-        //     "role_id":"1",
         //     "street":"qwe122",
         //     "city":"jenin",
         //     "country":"palestine",
