@@ -24,14 +24,14 @@ class CustomerController extends Controller
                     'validation_error'=>$validator->messages(),
             ]);
             
-        }else{
+             }else{
                     $customer =Customer::create([
                     'first_name'=>$req->first_name,
                     'last_name'=>$req->last_name,
                     'email'=>$req->email,
                     'password'=>Hash::make($req->password),
             ]);
-                  return $customer;}
+                  return response()->json([$customer]);}
     }
 
 
@@ -47,21 +47,21 @@ class CustomerController extends Controller
 
             ]);
         }
-        return $customer;
+            return response()->json([
+            'status'=>200,
+            'message'=>'valid Credentials'
+          ]);
+    }
         
-        // return response()->json([
-        //     'status'=>200,
-        //     'message'=>'Successfully',
-        // ]);
-        }
+    
         //show customer info
-function getCustomer($id)
+   function getCustomer($id)
     {
         $customer= Customer::find($id);
         return $customer;
     }
     //edit,update customer info 
-    function editProfile(Request $req,$id)
+    function updateProfile(Request $req,$id)
     {
     $customer= Customer::find($id);
     $customer->first_name =$req->input('first_name');
@@ -76,27 +76,23 @@ function getCustomer($id)
   //$req will contain old_password, new_password, confirm_password, customer_id
   function editPassword(Request $req,$id)
   {
-  $customer= customer::find($id);
-  if(!$customer|| !Hash::check($req->old_password,$customer->password))
-        {  
-            return response()->json([
-                'status'=>401,
-                'message'=>'Invalid Credentials'
+        $customer= customer::find($id);
+        if(!$customer|| !Hash::check($req->old_password,$customer->password))
+                {  
+                    return response()->json([
+                        'status'=>401,
+                        'message'=>'Invalid Credentials'
 
-            ]);
+                    ]);
         }
-    if($req->new_password&$req->confirm_password){
-        $customer->password =$req->input('password');
-        $customer->update();
-        return response()->json([
-            'status'=>200,
-            'message'=>' password changed Successfully'
+        if($req->new_password&$req->confirm_password){
+            $customer->password =$req->input('password');
+            $customer->update();
+            return response()->json([
+                'status'=>200,
+                'message'=>' password changed Successfully'
 
-        ]);;
-    }
- 
-
-}
-
-
+            ]);;
+        }
+ }
 }

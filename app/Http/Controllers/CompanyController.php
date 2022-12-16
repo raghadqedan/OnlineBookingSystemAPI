@@ -169,7 +169,7 @@ class CompanyController
 
         
         // {
-        //     "name":"beauty77"
+        //     "name":"beauty77",
         //     "category_id":"1",
         //     "street":"qwe122",
         //     "city":"jenin",

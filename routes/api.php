@@ -31,6 +31,7 @@ use App\Http\Controllers\Service_QueueController;
         
 
 Route::group(['middleware'=>['auth:sanctum','admin']],function () {
+
    //companies   
         Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//valid
         Route::put('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//valid
@@ -65,20 +66,20 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
 Route::group(['middleware'=>['auth:sanctum']],function () {
 
-        //users
+   //users
 
-                Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
-                Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
-                //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
-                
-                
+        Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
+        Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
+        //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
+        
+        
 
     });
 
 
 
 
-//times
+   //times
         Route::post('createTime',[TimeController::class,'createTime']);
         Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']);
         Route::put('updateTime/{source_id}/{type}/{day}',[TimeController::class,'updateTime']);
@@ -90,11 +91,10 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
-//Customer
+   //Customer
 
         Route::post('signUp',[CustomerController::class,'signUp']);//valid
-
-// // Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);
+        Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
 
 // Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
