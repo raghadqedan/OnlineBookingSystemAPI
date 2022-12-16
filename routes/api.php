@@ -25,10 +25,10 @@ use App\Http\Controllers\Service_QueueController;
 |
 */
 
-            Route::post('register',[CompanyController::class,'register']);//valid
-            Route::post('user/login',[UserController::class,'login'])->name('login');//valid
-            //Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
-           
+        Route::post('register',[CompanyController::class,'register']);//valid
+        Route::post('user/login',[UserController::class,'login'])->name('login');//valid
+        //Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
+        
 
 Route::group(['middleware'=>['auth:sanctum','admin']],function () {
    //companies   
@@ -56,7 +56,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         Route::post('queue/add',[QueueController::class,'addQueue']);//valid
         Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
         Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
-        Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
+        Route::post('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
 
 
 
