@@ -198,12 +198,13 @@ class CompanyController
 
         }
 
-        // static function getCompanyType()
-        // {  
-        // return  auth()->user()->company_id;
-
-        // }
-
+        static public function getCompanyType()
+        {
+         $type=Company::selectRaw('type')->where('id',auth()->user()->company_id)->get();
+         return $type;
+           
+        }
+       
 
         }
 
