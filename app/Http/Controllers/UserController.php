@@ -45,7 +45,7 @@ class UserController extends Controller
     //     "role_id":"2",
     //     "email":"qqqqqqq@yahoo.com",
     //     "password":"18888887890",
-    //     " phone_number":"222222222",
+    //     "phone_number":"222222222",
     //     }
 
 
@@ -100,7 +100,6 @@ class UserController extends Controller
 
       else{
         $user= new User();
-        //$user->id =$req->input('id');
         $user->name =$req->input('name');
         $user->email =$req->input('email');
         $user->password =Hash::make($req->input('password'));
