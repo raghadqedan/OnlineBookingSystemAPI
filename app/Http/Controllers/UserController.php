@@ -6,6 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
 use Nette\Utils\ArrayList;
@@ -32,6 +33,7 @@ class UserController extends Controller
         $user->password=Hash::make($req->input('password'));
         $user->phone_number=$req->input('phone_number');
         $user->role_id=$req->input('role_id');
+        
         $user->update();
         
         return $user;
@@ -40,7 +42,7 @@ class UserController extends Controller
 
     //   {
     //    "name":"rama",
-    //     "roleID":"2",
+    //     "role_id":"2",
     //     "email":"qqqqqqq@yahoo.com",
     //     "password":"18888887890",
     //     " phone_number":"222222222",
@@ -83,18 +85,32 @@ class UserController extends Controller
 
     public function addUser(request $req)
     {
+        $validator=Validator::make($req->all(),[
+        'name' =>'required',
+        'email' =>'required|email|max:191|unique:users,email',
+        'password' =>'required',
+        'role_id' =>'required',
+        'phone_number'=>'required',
+       ]);
+
+      if($validator->fails()){
+          return response()->json([
+              'validation_error'=>$validator->messages(),
+          ]);}
+
+      else{
         $user= new User();
         //$user->id =$req->input('id');
         $user->name =$req->input('name');
         $user->email =$req->input('email');
         $user->password =Hash::make($req->input('password'));
         $user->role_id =$req->input('role_id');
-        $user->company_id =$req->input('company_id');
+        $user->company_id =auth()->user()->company_id;
         $user->phone_number =$req->input('phone_number');
         $user->save();
   
         return $user;
-    }
+    }}
   
   
   
@@ -107,8 +123,18 @@ class UserController extends Controller
           return ["result"=>"Operation faild"];
       }
   }
-  
-  
+ 
+
+
+
+ 
+  static function getCompanyType()
+  {  
+  return  auth()->user()->company_id;
+
+  }
+
+
 
   }
 
