@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Queue;
 use App\Models\Company;
+use App\Models\User;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\TrustProxies as MiddleWare;
@@ -20,11 +21,9 @@ class QueueController extends Controller
        return$queue;
     }
 
-//8|5aYmgqymjdPSTSJ13iEStRBB1B2wdJ28TJsxG9M7
-
  
     public function addQueue(request $req)
-    {
+    { 
         $validator=Validator::make($req->all(),[
           'services' =>'required',
           'name' =>'required',
@@ -38,7 +37,7 @@ class QueueController extends Controller
                 'validation_error'=>$validator->messages(),
             ]);}
 
-        else{  dd(auth()->user()->company_id);
+        else{ dd(Company::selectRaw('type')->where('id',auth()->user()->company_id)->get());
               // $company_type=Company::selectRaw('type')->where('id',auth()->user()->company_id)->get();
               // return $company_type;
             
@@ -110,7 +109,13 @@ class QueueController extends Controller
   }
 
     
-    
+  static public function getCompanyType()
+  {
+   $user=Company::selectRaw('type')->where('id',auth()->user()->company_id)->get();
+   return $user;
+     
+  }
+ 
 
 
 }

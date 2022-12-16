@@ -27,7 +27,7 @@ use App\Http\Controllers\Service_QueueController;
 
             Route::post('register',[CompanyController::class,'register']);//valid
             Route::post('user/login',[UserController::class,'login'])->name('login');//valid
-            Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
+            //Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
            
 
 Route::group(['middleware'=>['auth:sanctum','admin']],function () {
@@ -48,8 +48,8 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
   //users
         Route::post('user/addUser',[UserController::class,'addUser']);//valid
         Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
-
-
+        Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
+        Route::get('getCompanyType',[QueueController::class,'getCompanyType']);
   //Queues
 
         Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
@@ -75,7 +75,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
     });
 
 
-    
+
 
 //times
         Route::post('createTime',[TimeController::class,'createTime']);
