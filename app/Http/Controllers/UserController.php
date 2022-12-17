@@ -6,6 +6,8 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Time;
+use App\Http\Controllers\TimeController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
@@ -107,7 +109,23 @@ class UserController extends Controller
         $user->company_id =auth()->user()->company_id;
         $user->phone_number =$req->input('phone_number');
         $user->save();
-  
+          //create   default scheduleTimes for the user default start,end times  value from companytimes.
+         
+          for($i=0;$i<7;$i++){  
+            $company=Time::where('source_id', $user->company_id)->where('day',$i)->where('type',"0")->first();
+          
+                    
+         $request = new Request([
+             'day'=>$i,
+             'type'=>"1",
+             'source_id'=>$user->id,
+             'start_time'=>$company->start_time,
+             'end_time'=>$company->end_time
+         ]);
+         
+         TimeController::createTime( $request);
+          }
+
         return $user;
     }}
   

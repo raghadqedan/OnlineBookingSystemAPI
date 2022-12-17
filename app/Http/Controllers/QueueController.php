@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Queue;
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Time;
 use Auth;
+use App\Http\Controllers\TimeController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\TrustProxies as MiddleWare;
 use App\Http\Controllers\CompanyController;
@@ -45,7 +47,7 @@ class QueueController extends Controller
                 $company_type=CompanyController::getCompanyType();
             
                   //timeQueue 
-                if(company_type&&(count($req->services)>1))
+                if($company_type&&(count($req->services)>1))
                     return response()->json(['message'=>'select only one service Becaus your company system type is time']);
                   else{
                         $queue=Queue::create([
@@ -57,11 +59,28 @@ class QueueController extends Controller
 
                         $id=$queue->id;
                         ServiceQueueController::createServiceQueue($id,$req->services);
-                        return  response()->json([
-                            "result"=>"Queue created successfully",
-                            "queue"=>$queue,
-                            "services"=>ServiceQueueController::getService($queue->id),
-                          ]);  
+                         
+                      //create  queues default scheduleTimes for the queue wuth  user start,end times  value.
+                      for($i=0;$i<7;$i++){  
+                        $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();      
+                        $request = new Request([
+                            'day'=>$i,
+                            'type'=>"2",
+                            'source_id'=>$queue->id,
+                            'start_time'=> $obj->start_time,
+                            'end_time'=> $obj->end_time,
+                        ]);
+                        TimeController::createTime( $request);
+                         }
+
+                         return  response()->json([
+                          "result"=>"Queue created successfully",
+                          "queue"=>$queue,
+                          "services"=>ServiceQueueController::getService($queue->id),
+                        ]); 
+
+
+
                     }
                 
                     

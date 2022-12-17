@@ -88,6 +88,22 @@ class CompanyController
 
                        if($lock){
                    try{
+                     //create  company scheduleTimes for the company wuth  default start,end times  value.
+                      for($i=0;$i<7;$i++){  
+                            
+                                $request = new Request([
+                                    'day'=>$i,
+                                    'type'=>"0",
+                                    'source_id'=>$company->id,
+                                    'start_time'=>"08:00:00",
+                                    'end_time'=>"14:00:00"
+                                ]);
+                                TimeController::createTime( $request);
+                        }
+                    
+                    
+                    
+                   
                        $token=$user->createToken('myapptoken')->plainTextToken;
                         DB::commit();
                         return  response()->json([
@@ -125,7 +141,7 @@ class CompanyController
     //     "phone_number":"0599932123",
     //     "description":"qqqqqq",
     //     "logo":"image",
-    //     "type":"0",
+    //     "type":"0"
     //         }
 
     
