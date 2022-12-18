@@ -20,10 +20,6 @@ class ServiceQueueController extends Controller
     }
 
 
-
-
-
-
     static function getService($queue_id){
             $services=ServiceQueue::selectRaw('service_id')->where('queue_id',$queue_id)->get();
             return $services;

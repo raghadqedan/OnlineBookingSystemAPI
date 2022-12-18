@@ -27,7 +27,6 @@ class UserController extends Controller
        
     }
    
-   
     function updateDetails(Request $req, $id)
         { $user= User::find($id);
         $user->name=$req->input('name');

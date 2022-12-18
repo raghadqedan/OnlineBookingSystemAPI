@@ -27,7 +27,7 @@ use App\Http\Controllers\Service_QueueController;
 
         Route::post('register',[CompanyController::class,'register']);//valid
         Route::post('user/login',[UserController::class,'login'])->name('login');//valid
-        //Route::post('getCompanyType/{id}',[CompanyController::class,'getCompanyType']);//valid
+       
         
 
 Route::group(['middleware'=>['auth:sanctum','admin']],function () {
@@ -50,7 +50,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         Route::post('user/addUser',[UserController::class,'addUser']);//valid
         Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
         Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
-        Route::get('getCompanyType',[QueueController::class,'getCompanyType']);
+        Route::get('getCompanyType',[QueueController::class,'getCompanyType']);//valid
   //Queues
 
         Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
@@ -81,13 +81,16 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
    //times
         Route::post('createTime',[TimeController::class,'createTime']);
-        Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']);
-        Route::put('updateTime/{source_id}/{type}/{day}',[TimeController::class,'updateTime']);
-        Route::post('setEndTime/{source_id}/{type}/{day}/{end_time}',[TimeController::class,'setEndTime']);
-        Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);
-        Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
-        Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
-
+        Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //get schedule times for the source_id (return array )
+        Route::get('updateQueueTime',[TimeController::class,'updateQueueTime']);
+        Route::get('updateUserTime',[TimeController::class,'updateUserTime']);
+        Route::get('updateCompanyTime',[TimeController::class,'updateCompanyTime']);
+     //    Route::put('updateTime/{source_id}/{type}/{day}',[TimeController::class,'updateTime']);
+     //    Route::post('setEndTime/{source_id}/{type}/{day}/{end_time}',[TimeController::class,'setEndTime']);
+     //    Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);
+     //    Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
+     //    Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
+           
 
 
 
