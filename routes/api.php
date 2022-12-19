@@ -80,11 +80,11 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
    //times
-        Route::post('createTime',[TimeController::class,'createTime']);
-        Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //get schedule times for the source_id (return array )
-        Route::get('updateQueueTime',[TimeController::class,'updateQueueTime']);
-        Route::get('updateUserTime',[TimeController::class,'updateUserTime']);
-        Route::get('updateCompanyTime',[TimeController::class,'updateCompanyTime']);
+        Route::post('createTime',[TimeController::class,'createTime']);//not valid 
+        Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //get schedule times for the source_id (return array )
+        Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);//not valid 
+        Route::put('updateUserTime',[TimeController::class,'updateUserTime']);//not valid 
+        Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);//not valid 
      //    Route::put('updateTime/{source_id}/{type}/{day}',[TimeController::class,'updateTime']);
      //    Route::post('setEndTime/{source_id}/{type}/{day}/{end_time}',[TimeController::class,'setEndTime']);
      //    Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);

@@ -54,29 +54,32 @@ class CustomerController extends Controller
     }
         
     
-        //show customer info
+        //show customer info(profile)
    function getCustomer($id)
     {
         $customer= Customer::find($id);
         return $customer;
     }
+
     //edit,update customer info 
     function updateProfile(Request $req,$id)
     {
     $customer= Customer::find($id);
-    $customer->first_name =$req->input('first_name');
-    $customer->last_name =$req->input('last_name');
-    $customer->email =$req->input('email');
-    $customer->phone =$req->input('phone');
-    $customer->phone =$request->photo->store('image');
-    $customer->update();
-    return $customer;
+    $customer->create([
+        'first_name' =>$req->first_name,
+        'last_name' =>$req->last_name,
+        'email' =>$req->email,
+        'phone' =>$req->phone,
+        'phone' =>$req->image
+     ]);
+ 
+    return response()->json([$customer]);
 
   }
-  //$req will contain old_password, new_password, confirm_password, customer_id
+  //  change password $req will contain old_password, new_password, confirm_password, customer_id
   function editPassword(Request $req,$id)
   {
-        $customer= customer::find($id);
+        $customer= Customer::find($id);
         if(!$customer|| !Hash::check($req->old_password,$customer->password))
                 {  
                     return response()->json([
@@ -85,9 +88,8 @@ class CustomerController extends Controller
 
                     ]);
         }
-        if($req->new_password&$req->confirm_password){
-            $customer->password =$req->input('password');
-            $customer->update();
+        if($req->new_password==$req->confirm_password){
+           $customer->update(['password'=>$req->password]);
             return response()->json([
                 'status'=>200,
                 'message'=>' password changed Successfully'
