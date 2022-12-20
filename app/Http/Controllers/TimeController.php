@@ -29,7 +29,7 @@ class TimeController extends Controller
                 $obj=Time::selectRaw('start_time,end_time')
                 ->where('source_id',$source_id)
                 ->where('type',$type)
-                ->first();
+                ->get();
                 
                 return response()->json([$obj]);
             }
@@ -38,13 +38,12 @@ class TimeController extends Controller
         //return the start and end time for one obj
         static function getTimes($source_id,$type,$day)
             {
-                $obj=Time::selectRaw('start_time,end_time')
-                ->where('source_id',$source_id)
+                $obj=Time::where('source_id',$source_id)
                 ->where('type',$type)
                 ->where('day',$day)
                 ->first();
                 
-                return response()->json([$obj]);
+                return $obj;
             }
 
 
@@ -80,125 +79,147 @@ class TimeController extends Controller
             
             // }
 
-
-        public function updateQueueTime(Request $req)
+//valid
+       static  public function updateQueueTime(Request $req)
         {
-            $request = new Request([
-                'type'=>"2",
-                'source_id'=>Queue::selectRaw('user_id')->where('id',$req->source_id)->first(),//return the user_id who control this queue
-                'array'=>$req
-            ]);
-            $result=TimeController::updateTime($request);
-            if($result==1)
-            {// todo update the children  appoitments in this queue 
+            
+                $parent_type="1";
+                $parent_source_id=Queue::selectRaw('user_id')->where('id',$req->source_id)->first();//return the user_id who control this queue  
+                // 'source_id'=>$req->source_id,
+                // 'type'=>$req->type,//put by default 
+                // 'start_time'=>$req->start_time,
+                // 'end_time'=>$req->end_time,
+                // 'day'=>$req->day
+          
+            
+            $times=Time::where('source_id',$parent_source_id->user_id)
+            ->where('type',$parent_type)
+            ->where('day',$req->day)
+            ->first();
+        
+          if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time))
+            { 
+                $obj= Time::where('source_id',$req->source_id)->where('type',$req->type)->where('day',$req->day)->first();  
+              
+                $obj->update([
+                    'source_id'=>$req->source_id,
+                    'day'=>$req->day,
+                    'type'=>$req->type,
+                    'start_time'=>$req->start_time,
+                    'end_time'=>$req->end_time
+                ]);
+                    
+            // todo update the children  appoitments in this queue 
              // todo  may need to delete customersbooking and  send notification to them , message"sorry,your booking canceled" if the updated time effect in them booking 
             
-                return response()->json([
-                "message"=>"Queue updated successfully "]);
+
+            return response()->json([
+                "message"=>"Queue updated successfully ",
+            "b"=>"1"]);
             }
-            else return response()->json([
-                "message"=>"Operation faild"]);
+            else{
+            return response()->json([
+                "message"=>"Operation faild",
+                "b"=>"0"]);
+            }
+       }
+    
 
-        }
 
 
 
-        public function updateUserTime(Request $req)
+
+       static  public function updateUserTime(Request $req)
         {
-            $request = new Request([
-                'type'=>"0",
-                'source_id'=>auth()->user()->company_id,//return the company_id  for this user 
-                'array'=>$req
-            ]);
-            $result=TimeController::updateTime($request);
-            if($result==1)
-                {// if the usertimes updated successfully parent user is updated so the children queues must update   
-                    $queues=Queue::where('user_id',$req->source_id)->get();
-                    for($i=0;$i<count($queues);$i++)
-                    {   $request = new Request([
-                            'type'=>"1",
-                            'source_id'=>auth()->user()->company_id,//return the company_id  for this user 
-                            'day'=>$req
-                        ]);
-                            $result=TimeController::updateQueueTime($request);
-                            if( $result==0){
-                                return response()->json([
-                                    "message"=>"Operation faild"]);
-                                }
-                            
-                    }
-                    return response()->json([
-                        "message"=>"user updated successfully "]);
-                    }
-                    else{
-                        return response()->json([
-                            "message"=>"Operation faild beacause company schedule times can not updated" ]);
-                        };
-
-        }
-                    
-
-                
-
-
-        public function updateCompanyTime(Request $req)
-        {
-
-            $obj->update([
-                'source_id'=>$req->source_id,
-                'day'=>$req->day,
-                'type'=>$req->type,
-                'start_time'=>$req->start_time,
-                'end_time'=>$req->end_time]);
-
-            $result=TimeController::updateUserTime();
+                $parent_type="0";
+                $parent_source_id=auth()->user()->company_id;//return the company_id  for this user
+               
+          
             
-            if($result==1)
-                {// if the usertimes updated successfully parent user is updated so the children queues must update   
-                    $queues=Queue::where('user_id',$req->source_id)->get();
-                    for($i=0;$i<count($queues);$i++)
-                    {   $request = new Request([
-                            'type'=>"1",
-                            'source_id'=>auth()->user()->company_id,//return the company_id  for this user 
-                            'day'=>$req->day
-                        ]);
-                            $result=TimeController::updateTime($request);
-                            if( $result==0){
-                                return response()->json([
-                                    "message"=>"Operation faild"]);
-                                }
-                            
-                    }
-                }else{
+            $times=Time::where('source_id',$parent_source_id)
+            ->where('type',$parent_type)
+            ->where('day',$req->day)
+            ->first();
+        
+          if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time))
+            { 
+                $obj= Time::where('source_id',$req->source_id)->where('type',$req->type)->where('day',$req->day)->first();  
+              
+                $obj->update([
+                    'source_id'=>$req->source_id,
+                    'day'=>$req->day,
+                    'type'=>$req->type,
+                    'start_time'=>$req->start_time,
+                    'end_time'=>$req->end_time
+                ]);
+                    
+                $queues=Queue::where('user_id',$req->source_id)->get();
+                for($i=0;$i<count($queues);$i++)
+                {   $request = new Request([
+                        'type'=>"2",
+                        'source_id'=>$queues[$i]->id,//return the company_id  for this user 
+                        'start_time'=>$req->start_time,
+                        'end_time'=>$req->end_time,
+                        'day'=>$req->day
+
+                    ]); 
+                         $result=TimeController::updateQueueTime($request);
+                    
+                }
                 return response()->json([
-                    "message"=>"Operation faild beacause user schedule times can not updated" ]);
-                };
+                    "message"=>"user updated successfully "]);
+                }
+                else{
+                    return response()->json([
+                        "message"=>"Operation faild beacause company schedule times can not updated" ]);
+                }}
 
+        
 
-        }
-                
-
-
-
-        public function updateTime(Request $request)
-        {  
-                $Times=TimeController::getTimes( $request->source_id,$request->type,$request->array['day']);
-            if($request->array['start_time']>=$Times->start_time||$request->array['end_time']<=$Times->end_time)
-                { $obj= Time::where('source_id',$request->array['source_id'])->where('type',$request->array['type'])->where('day',$request->array['day'],)->first();  
-
-                    $obj->update([
-                        'source_id'=>$request->array['source_id'],
-                        'day'=>$request->array['day'],
-                        'type'=>$request->array['type'],
-                        'start_time'=>$request->array['start_time'],
-                        'end_time'=>$request->array['end_time']]);
+                static  public function updateCompanyTime(Request $req)
+                {
                         
-                    return 1;
-            }else{
-                    return 0;
-                    }  
+                            $obj->update([
+                                'source_id'=>$req->source_id,
+                                'day'=>$req->day,
+                                'type'=>$req->type,
+                                'start_time'=>$req->start_time,
+                                'end_time'=>$req->end_time]);
+
+                     
+                                $request = new Request([
+                                    'type'=>"1",
+                                    'source_id'=>$queues[$i]->id,//return the company_id  for this user 
+                                    'start_time'=>$req->start_time,
+                                    'end_time'=>$req->end_time,
+                                    'day'=>$req->day
+            
+                                ]); 
+
+                                $users=User::where('company_id',$req->auth()->user()->company_id)->first();
+                                for($i=0;$i<count($users);$i++)
+                                {   $request = new Request([
+                                        'type'=>"1",
+                                        'source_id'=>$users[$i]->id,//return the company_id  for this user 
+                                        'start_time'=>$req->start_time,
+                                        'end_time'=>$req->end_time,
+                                        'day'=>$req->day
+                
+                                    ]); 
+                                        $result=TimeController::updateQueueTime($request);
+                                    
+                                }
+                                return response()->json([
+                                    "message"=>"compamy updated successfully "]);
+                                
+                                
+                                    return response()->json([
+                                        "message"=>"Operation faild beacause company schedule times can not updated" ]);
+                                }
 
         }
+    
+  
 
 
  //createTime or update Queue,user,company times send this  jsonfile $req
@@ -222,7 +243,7 @@ class TimeController extends Controller
 
 
 
-}
+
 
 
  
@@ -245,4 +266,3 @@ class TimeController extends Controller
     //     ->where('day',$day)
     //     ->get();
     //     $time->toQuery()->update(['start_time'=>$req->input('start_time'),'end_time'=>$req->input('end_time')]);
-    //     }

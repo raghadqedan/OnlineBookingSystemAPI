@@ -30,6 +30,7 @@ class CustomerController extends Controller
                     'last_name'=>$req->last_name,
                     'email'=>$req->email,
                     'password'=>Hash::make($req->password),
+                    'phone_number'=>Hash::make($req->password),
             ]);
                   return response()->json([$customer]);}
     }
@@ -65,22 +66,24 @@ class CustomerController extends Controller
     function updateProfile(Request $req,$id)
     {
     $customer= Customer::find($id);
-    $customer->create([
+    $customer->update([
         'first_name' =>$req->first_name,
         'last_name' =>$req->last_name,
         'email' =>$req->email,
-        'phone' =>$req->phone,
-        'phone' =>$req->image
+        'phone_number' =>$req->image
      ]);
  
-    return response()->json([$customer]);
+    return response()->json(["customer"=>$customer]);
 
   }
+
+
+  //not valid 
   //  change password $req will contain old_password, new_password, confirm_password, customer_id
   function editPassword(Request $req,$id)
   {
         $customer= Customer::find($id);
-        if(!$customer|| !Hash::check($req->old_password,$customer->password))
+        if($customer|| !Hash::check($req->old_password,$customer->password))
                 {  
                     return response()->json([
                         'status'=>401,
