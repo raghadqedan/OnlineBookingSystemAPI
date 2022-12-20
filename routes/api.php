@@ -13,7 +13,6 @@ use App\Http\Controllers\TimeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Service_QueueController;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -59,18 +58,17 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
         Route::post('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
 
-        Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);//not valid 
-        Route::put('updateUserTime',[TimeController::class,'updateUserTime']);//not valid 
-        Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);//not valid 
+        
 
+  //Times
+     Route::post('createTime',[TimeController::class,'createTime']);// valid 
+     Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid 
+     Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid 
+     Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid 
+     // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
+     Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
 
- //testing 
-
-       Route::put('getTimes',[TimeController::class,'getTimes']);//not valid 
-
-       Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);//not valid 
-       Route::put('updateUserTime',[TimeController::class,'updateUserTime']);//not valid 
-
+     
 
 
 
@@ -98,10 +96,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
    //times
-        Route::post('createTime',[TimeController::class,'createTime']);//not valid 
-        Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //get schedule times for the source_id (return array )
-        
-        Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);//not valid 
+       
      //    Route::put('updateTime/{source_id}/{type}/{day}',[TimeController::class,'updateTime']);
      //    Route::post('setEndTime/{source_id}/{type}/{day}/{end_time}',[TimeController::class,'setEndTime']);
      //   Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);
@@ -111,10 +106,11 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
-   //Customer
+   //Customer mobile
 
         Route::post('customer/signUp',[CustomerController::class,'signUp']);//valid
         Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
+        Route::get('customer/getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid 
         Route::post('customer/login',[CustomerController::class,'login']);//valid
         Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
         Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid

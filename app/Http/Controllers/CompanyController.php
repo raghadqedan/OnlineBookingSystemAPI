@@ -75,6 +75,13 @@ class CompanyController
                         'password'=>Hash::make($req->password),
                         'company_id'=> $company->id,
                         ]); 
+                        
+                        
+
+
+
+
+
                     }
                  catch (Exception $e) {
                         DB::rollBack();
@@ -91,14 +98,22 @@ class CompanyController
                      //create  company scheduleTimes for the company wuth  default start,end times  value.
                       for($i=0;$i<7;$i++){  
                             
-                                $request = new Request([
+                                $request1 = new Request([
                                     'day'=>$i,
                                     'type'=>"0",
                                     'source_id'=>$company->id,
                                     'start_time'=>"08:00:00",
                                     'end_time'=>"14:00:00"
                                 ]);
-                                TimeController::createTime( $request);
+                                TimeController::createTime( $request1);
+                                $request2 = new Request([
+                                    'day'=>$i,
+                                    'type'=>"1",
+                                    'source_id'=>$user->id,
+                                    'start_time'=>"08:00:00",
+                                    'end_time'=>"14:00:00"
+                                ]);
+                                TimeController::createTime( $request2);
                         }
                     
                     

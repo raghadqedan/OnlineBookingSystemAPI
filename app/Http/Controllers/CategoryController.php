@@ -12,5 +12,13 @@ class CategoryController extends Controller
  }
 
 
+ function getLimitCategories(){
+    return Category::take(6)->get();
+}
+
+
+
+
+
 
 }
