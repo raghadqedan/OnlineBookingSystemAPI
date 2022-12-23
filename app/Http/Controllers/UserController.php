@@ -19,14 +19,14 @@ class UserController extends Controller
 {
 
 
-    
+
     function getDetails($id)
     {
      $user=User::find($id);
      return $user;
-       
+
     }
-   
+
     function updateDetails(Request $req, $id)
         { $user= User::find($id);
         $user->name=$req->input('name');
@@ -34,11 +34,11 @@ class UserController extends Controller
         $user->password=Hash::make($req->input('password'));
         $user->phone_number=$req->input('phone_number');
         $user->role_id=$req->input('role_id');
-        
+
         $user->update();
-        
+
         return $user;
-    
+
     }
 
     //   {
@@ -59,7 +59,7 @@ class UserController extends Controller
                 'message'=>'Invalid Credentials'
 
             ]);
-        
+
         else{
             $token=$user->createToken('myapptoken')->plainTextToken;
             $response=[
@@ -109,11 +109,11 @@ class UserController extends Controller
         $user->phone_number =$req->input('phone_number');
         $user->save();
           //create   default scheduleTimes for the user default start,end times  value from companytimes.
-         
-          for($i=0;$i<7;$i++){  
+
+          for($i=0;$i<7;$i++){
             $company=Time::where('source_id', $user->company_id)->where('day',$i)->where('type',"0")->first();
-          
-                    
+
+
          $request = new Request([
              'day'=>$i,
              'type'=>"1",
@@ -121,15 +121,15 @@ class UserController extends Controller
              'start_time'=>$company->start_time,
              'end_time'=>$company->end_time
          ]);
-         
+
          TimeController::createTime( $request);
           }
 
         return $user;
     }}
-  
-  
-  
+
+
+
   public function delete($id)
   {
       $result= User::where('id', $id)->delete();
@@ -139,30 +139,30 @@ class UserController extends Controller
           return ["result"=>"Operation faild"];
       }
   }
- 
 
 
 
- 
+
+
   static function getCompanyType()
-  {  
+  {
   return  auth()->user()->company_id;
 
   }
 
 
 
-  
+
 
 
   public function getUsers()
   {
    $user=User::where('id',auth()->user()->company_id)->get();
    return $user;
-     
+
   }
- 
- 
+
+
 
 
 
@@ -187,4 +187,4 @@ class UserController extends Controller
     //     "email":"rrr@yahoo.com",
     //     "password":"1234567890",
     //     "phone_number":"0599932123"}
-  
+

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 
                 public function addService(request $req)
-                { 
+                {
                         $validator=Validator::make($req->all(),[
                         'name' =>'required|string|max:200',
                         'duration_time' =>'required',
@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Validator;
                                 ]);
 
 
-                        
+
                         if($validator->fails()){
 
                                 return response()->json([
@@ -50,8 +50,8 @@ use Illuminate\Support\Facades\Validator;
                 //         "duration_time":"1",
                 //         "logo":"image"
                 //  }
-                
-        
+
+
 
 
 
@@ -63,11 +63,11 @@ use Illuminate\Support\Facades\Validator;
                         'name' =>$req->name,
                         'logo'=>$req->logo,
                         'duration_time'=>$req->duration_time,
-                         ]); 
+                         ]);
                         return response()->json([$service]);
                 }
-                
-    
+
+
 
 
 

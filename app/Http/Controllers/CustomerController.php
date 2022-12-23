@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 class CustomerController extends Controller
 {
-    
+
     function signUp(Request $req)
     {
             $validator= Validator::make($req->all(),[
@@ -18,12 +18,12 @@ class CustomerController extends Controller
                 'password' =>'required',
 
             ]);
-                
+
             if($validator->fails()){
                     return response()->json([
                     'validation_error'=>$validator->messages(),
             ]);
-            
+
              }else{
                     $customer =Customer::create([
                     'first_name'=>$req->first_name,
@@ -41,7 +41,7 @@ class CustomerController extends Controller
     function login(Request $req){
         $customer=Customer::where('email',$req->email)->first();
         if(!$customer|| !Hash::check($req->password,$customer->password))
-        {  
+        {
             return response()->json([
                 'status'=>401,
                 'message'=>'Invalid Credentials'
@@ -53,8 +53,8 @@ class CustomerController extends Controller
             'message'=>'valid Credentials'
           ]);
     }
-        
-    
+
+
         //show customer info(profile)
    function getCustomer($id)
     {
@@ -62,7 +62,7 @@ class CustomerController extends Controller
         return $customer;
     }
 
-    //edit,update customer info 
+    //edit,update customer info
     function updateProfile(Request $req,$id)
     {
     $customer= Customer::find($id);
@@ -72,19 +72,19 @@ class CustomerController extends Controller
         'email' =>$req->email,
         'phone_number' =>$req->image
      ]);
- 
+
     return response()->json(["customer"=>$customer]);
 
   }
 
 
-  //not valid 
+  //not valid
   //  change password $req will contain old_password, new_password, confirm_password, customer_id
   function editPassword(Request $req,$id)
   {
         $customer= Customer::find($id);
         if($customer|| !Hash::check($req->old_password,$customer->password))
-                {  
+                {
                     return response()->json([
                         'status'=>401,
                         'message'=>'Invalid Credentials'
@@ -100,4 +100,38 @@ class CustomerController extends Controller
             ]);;
         }
  }
+
+
+
+public function filter1(Request $req){
+ $name=$phone_number=$email="";
+        $name = $req->name;
+        $phone_number = $req->phone_number;
+        $email = $req->email;
+
+    if (!empty($email)) {
+        $customer= Customer::where('email', $email)
+        ->get();
+
+    } elseif (!empty($name)&&!empty($phone_number)) {
+        $customer= Customer::where('phone_number', $phone_number)
+        ->where('first_name','like','%', $name)->orwhere('last_name','like','%'. $name.'%')
+        ->orWhereRaw("concat(first_name,' ',last_name) like '%?%'",$name)
+        ->get();
+
+
+    }
+
+     // elseif ($req->has([empty($name)&&isset($phone_number)&& isset($email)])) {
+    //     $customer= Customer::where('phone_number', $phone_number)
+    //     ->where('email', $email)
+    //     ->get();
+
+
+    // }
+   // return response()->json(['customer'=>$customer]);
+
+}
+
+
 }

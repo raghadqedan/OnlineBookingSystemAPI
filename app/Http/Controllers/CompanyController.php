@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-class CompanyController 
+class CompanyController
     {
-       
+
         function register(Request $req)
-        { 
+        {
             $validator=Validator::make($req->all(),[
                 'name' =>'required|string|max:200',
                 'email' =>'required|email|max:191|unique:users,email',
@@ -30,7 +30,7 @@ class CompanyController
             ]);
 
 
-          
+
             if($validator->fails()){
 
                 return response()->json([
@@ -67,16 +67,16 @@ class CompanyController
                 if($lock){
                  try{
                         $role=Role::where('name','admin')->first();
-                        
+
                         $user =User::create([
                         'role_id'=>$role->id,
                         'name'=>$req->name,
-                        'email'=>$req->email, 
+                        'email'=>$req->email,
                         'password'=>Hash::make($req->password),
                         'company_id'=> $company->id,
-                        ]); 
-                        
-                        
+                        ]);
+
+
 
 
 
@@ -96,8 +96,8 @@ class CompanyController
                        if($lock){
                    try{
                      //create  company scheduleTimes for the company wuth  default start,end times  value.
-                      for($i=0;$i<7;$i++){  
-                            
+                      for($i=0;$i<7;$i++){
+
                                 $request1 = new Request([
                                     'day'=>$i,
                                     'type'=>"0",
@@ -115,10 +115,10 @@ class CompanyController
                                 ]);
                                 TimeController::createTime( $request2);
                         }
-                    
-                    
-                    
-                   
+
+
+
+
                        $token=$user->createToken('myapptoken')->plainTextToken;
                         DB::commit();
                         return  response()->json([
@@ -126,9 +126,9 @@ class CompanyController
                             "token"=>$token,
                             "user"=>$user,
                             "company"=>$company,
-                         
+
                             ]);
-                       
+
                     }catch(Exception $e){
 
                         DB::rollBack();
@@ -136,15 +136,15 @@ class CompanyController
                             "result"=>"Operation faild"
                             ]);}
 
-          
-            
-        
+
+
+
         }}}
-    
-    
 
 
- 
+
+
+
     // {
     //     "name":"beauty77",
     //     "category_id":"1",
@@ -159,7 +159,7 @@ class CompanyController
     //     "type":"0"
     //         }
 
-    
+
 
 
 
@@ -176,13 +176,13 @@ class CompanyController
                     ]);
             }
 
-       
+
         function updateDetails(Request $req, $id)
         { $company=Company::find($id);
-            
-        
+
+
         $address=AddressController::updateAddress($company->address_id,$req->street,$req->city,$req->country);
-       
+
         $company->update([
             'name' =>$req->name,
             'email'=>$req->email,
@@ -192,13 +192,13 @@ class CompanyController
             'description'=>$req->description,
             'type'=>$req->type,
             'address_id'=>$address->id,
-           
 
-         ]); 
+
+         ]);
         return response()->json([$company,$address]);
     }
 
-        
+
         // {
         //     "name":"beauty77",
         //     "category_id":"1",
@@ -213,12 +213,12 @@ class CompanyController
         //     "type":"0",
         //     "address_id":"1"
         //         }
-            
+
 
 
 
         public function delete($id)
-        { 
+        {
         $result= Company::where('id', $id)->delete();
         if ($result) {
         return ["result"=>"Company account has been delete"];
@@ -233,16 +233,11 @@ class CompanyController
         {
          $type=Company::selectRaw('type')->where('id',auth()->user()->company_id)->get();
          return $type;
-           
-        }
-       
 
         }
 
 
-
- 
-
+        }
 
 
 
@@ -256,4 +251,8 @@ class CompanyController
 
 
 
-    
+
+
+
+
+

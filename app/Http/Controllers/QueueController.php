@@ -18,17 +18,17 @@ use App\Http\Controllers\ServiceQueueController;
 
 class QueueController extends Controller
 {
-    
+
       function getDetails($id)
       {
       $queue=Queue::find($id);
-    
+
         return$queue;
       }
 
-  
+
       public function addQueue(request $req)
-      { 
+      {
           $validator=Validator::make($req->all(),[
             'services' =>'required',
             'name' =>'required',
@@ -41,12 +41,12 @@ class QueueController extends Controller
               return response()->json([
                   'validation_error'=>$validator->messages(),
               ]);}
-                  
+
           else{
-                
+
                 $company_type=CompanyController::getCompanyType();
-            
-                  //timeQueue 
+
+                  //timeQueue
                 if($company_type&&(count($req->services)>1))
                     return response()->json(['message'=>'select only one service Becaus your company system type is time']);
                   else{
@@ -59,10 +59,10 @@ class QueueController extends Controller
 
                         $id=$queue->id;
                         ServiceQueueController::createServiceQueue($id,$req->services);
-                         
+
                       //create  queues default scheduleTimes for the queue wuth  user start,end times  value.
-                      for($i=0;$i<7;$i++){  
-                        $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();      
+                      for($i=0;$i<7;$i++){
+                        $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();
                         $request = new Request([
                             'day'=>$i,
                             'type'=>"2",
@@ -77,29 +77,29 @@ class QueueController extends Controller
                           "result"=>"Queue created successfully",
                           "queue"=>$queue,
                           "services"=>ServiceQueueController::getService($queue->id),
-                        ]); 
+                        ]);
 
 
 
                     }
-                
-                    
+
+
               }
     }
 
 
-      // {
-      //   "services":[1,2],
-      //   "name":"Q1",
-      //   "start_regesteration":"2022-12-06 16:00:39",
-      //   "repeats":"1",
-      //   "user_id":"7"
-      //   }
-        
-    
+    //   {
+    //     "services":[1,2],
+    //     "name":"Q1",
+    //     "start_regesteration":"2022-12-06 16:00:39",
+    //     "repeats":"1",
+    //     "user_id":"7"
+    //     }
+
+
 
       function updateDetails(Request $req, $id)
-      {    
+      {
             $queue= Queue::find($id);
             $queue->update([
               'name'=>$req->name,
@@ -121,7 +121,7 @@ class QueueController extends Controller
 
 
 
-  
+
     public function delete($id)
     {
           $r1=Queue::where('id', $id)->delete();
@@ -132,7 +132,7 @@ class QueueController extends Controller
           }
     }
 
-      
+
 
 
 

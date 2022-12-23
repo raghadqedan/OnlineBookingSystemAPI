@@ -14,18 +14,28 @@ class TimeController extends Controller
 {
 
         static function createTime(Request $req)
-            { 
+            {
                 $obj= Time::create([
                 'source_id'=>$req->source_id,
                 'day'=>$req->day,
                 'type'=>$req->type,
                 'start_time'=>$req->start_time,
                 'end_time'=>$req->end_time, ]);
-
+                // if($obj){
+                //     if($obj->type=="2"){
+                       //  if()
+                //     $result=createAppoitment(response()->json(['time'=>$obj]));
+                //     if($result=="1") {
+                //         return response()->json(['b'=>'1']);
+                //     }
+                //  return response()->json(['b'=>'0']);
+               // }
+            }
             // todo createAppoitments if type ==2
-            
-                return 0;}
-        
+
+                // return  response()->json(['b'=>'0']);
+           // }
+
         //get schedule times for the source_id (return array )
             function getscheduleTime($source_id,$type)
             {
@@ -33,7 +43,7 @@ class TimeController extends Controller
                 ->where('source_id',$source_id)
                 ->where('type',$type)
                 ->get();
-                
+
                 return response()->json([$obj]);
             }
 
@@ -45,12 +55,12 @@ class TimeController extends Controller
                 ->where('type',$type)
                 ->where('day',$day)
                 ->first();
-                
+
                 return $obj;
             }
 
 
-            //return only start time for only one obj 
+            //return only start time for only one obj
         static function getStartTime($source_id ,$type,$day )
             {
                 $obj= Time::selectRaw('start_time')
@@ -61,8 +71,8 @@ class TimeController extends Controller
             return $obj;
             }
 
-        
-    //return only endtime for only one obj 
+
+    //return only endtime for only one obj
         static function getEndTime($source_id,$type,$day)
         {   $obj= Time::selectRaw('end_time')
                     ->where('source_id',$source_id)
@@ -72,46 +82,46 @@ class TimeController extends Controller
                 return $obj;
         }
 
-            
+
 
             // function setEndTime($source_id ,$type,$day ,$end_time)
             // {
             //     $obj=Time::where('source_id',$source_id)->where('type',$type)->where('day',$day)->get();
-                
+
             //     $obj->toQuery()->update(['end_time'=>$end_time,]);
-            
+
             // }
 
 //valid
        static  public function updateQueueTime(Request $req)
-        { 
-            
+        {
+
                 $parent_type="1";
-                $parent_source_id=Queue::selectRaw('user_id')->where('id',$req->source_id)->first();//return the user_id who control this queue  
+                $parent_source_id=Queue::selectRaw('user_id')->where('id',$req->source_id)->first();//return the user_id who control this queue
                 // 'source_id'=>$req->source_id,
-                // 'type'=>$req->type,//put by default 
+                // 'type'=>$req->type,//put by default
                 // 'start_time'=>$req->start_time,
                 // 'end_time'=>$req->end_time,
                 // 'day'=>$req->day
-          
-            
+
+
             $times=Time::where('source_id',$parent_source_id->user_id)
             ->where('type',$parent_type)
             ->where('day',$req->day)
             ->first();
-        
+
           if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
-            { 
-                $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->first();  
-              
+            {
+                $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->first();
+
                 $obj->update([
                     'start_time'=>$req->start_time,
                     'end_time'=>$req->end_time
                 ]);
-                    
-            // todo update the children  appoitments in this queue 
-             // todo  may need to delete customersbooking and  send notification to them , message"sorry,your booking canceled" if the updated time effect in them booking 
-            
+
+            // todo update the children  appoitments in this queue
+             // todo  may need to delete customersbooking and  send notification to them , message"sorry,your booking canceled" if the updated time effect in them booking
+
 
             return response()->json([
                 'message'=>'Queue updated successfully',
@@ -123,7 +133,7 @@ class TimeController extends Controller
                 'b'=>'0']);
             }
        }
-    
+
 
 
 
@@ -134,26 +144,26 @@ class TimeController extends Controller
             ->where('type',$parent_type)
             ->where('day',$req->day)
             ->first();
-           
+
           if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
-            { 
-                $obj= Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->first();  
-                
+            {
+                $obj= Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->first();
+
                 $obj->update([
                     'start_time'=>$req->start_time,
                     'end_time'=>$req->end_time
                 ]);
-                  
+
                 $queues=Queue::where('user_id',$req->source_id)->get();
                 for($i=0;$i<count($queues);$i++)
                 {   $request = new Request([
-                        'source_id'=>$queues[$i]->id,//return the company_id  for this user 
+                        'source_id'=>$queues[$i]->id,//return the company_id  for this user
                         'start_time'=>$req->start_time,
                         'end_time'=>$req->end_time,
-                        'day'=>$req->day ]); 
+                        'day'=>$req->day ]);
                          $result=TimeController::updateQueueTime($request);
                      }
-                   
+
                 return response()->json([
                     'message'=>'user updated successfully',
                     'b'=>'1']);
@@ -161,33 +171,33 @@ class TimeController extends Controller
             else{
                 return response()->json([
                     'message'=>'Operation faild ',
-                    'b'=>'1']); 
+                    'b'=>'1']);
                 }}
 
-        
+
 
                 static public function updateCompanyTime(Request $req)
-                { 
+                {
                     $companyTime=Time::where('source_id',auth()->user()->company_id)->where('type',"0")->where('day',$req->day)->first();
-                    
+
                     $companyTime->update([
                         'start_time'=>$req->start_time,
                         'end_time'=>$req->end_time
                     ]);
-                     
+
                     $users=User::where('company_id',auth()->user()->company_id)->get();
-                    
-                
-                    for($i=0;$i<sizeof($users);$i++){   
+
+
+                    for($i=0;$i<sizeof($users);$i++){
                         $request=new Request([
-                            'source_id'=>$users[$i]->id,//return the company_id  for this user 
+                            'source_id'=>$users[$i]->id,//return the company_id  for this user
                             'start_time'=>$req->start_time,
                             'end_time'=>$req->end_time,
                             'day'=>$req->day
-                        ]); 
-                    
+                        ]);
+
                         $result = json_decode(TimeController::updateUserTime($request)->getContent(), true);
-                           
+
                         if($result['b']=="0"){
                             return response()->json([
                                 'message'=>'Operation faild '
@@ -196,7 +206,7 @@ class TimeController extends Controller
                         }
                     return response()->json([
                         'message'=>' company updated successfully' ]);
-                
+
 
                 }
 
@@ -224,7 +234,7 @@ class TimeController extends Controller
 
 
 
- 
+
 //     function setStartTime($source_id, $type ,$day , $start_time)
     // {
     //     $obj= Time::where('source_id',$source_id)
@@ -234,7 +244,7 @@ class TimeController extends Controller
     //     $obj->toQuery()->update(['start_time'=>$start_time,]);
     // }
 
-    
+
 
 //method to update start time and end time .
     // public function updateTime($source_id,$type,$day,Request $req)
