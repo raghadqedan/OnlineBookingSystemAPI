@@ -63,7 +63,7 @@ use Illuminate\Support\Facades\Validator;
                         'name' =>$req->name,
                         'logo'=>$req->logo,
                         'duration_time'=>$req->duration_time,
-                         ]);
+                        ]);
                         return response()->json([$service]);
                 }
 

@@ -8,12 +8,12 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
     function getAllCategories(){
-       return Category::all();
- }
+        return Category::all();
+}
 
 
- function getLimitCategories(){
-    return Category::take(6)->get();
+    function getLimitCategories(){
+        return Category::take(6)->get();
 }
 
 

@@ -24,15 +24,15 @@ class CustomerController extends Controller
                     'validation_error'=>$validator->messages(),
             ]);
 
-             }else{
+            }else{
                     $customer =Customer::create([
                     'first_name'=>$req->first_name,
                     'last_name'=>$req->last_name,
                     'email'=>$req->email,
                     'password'=>Hash::make($req->password),
-                    'phone_number'=>Hash::make($req->password),
+
             ]);
-                  return response()->json([$customer]);}
+                    return response()->json([$customer]);}
     }
 
 
@@ -51,12 +51,12 @@ class CustomerController extends Controller
             return response()->json([
             'status'=>200,
             'message'=>'valid Credentials'
-          ]);
+        ]);
     }
 
 
         //show customer info(profile)
-   function getCustomer($id)
+    function getCustomer($id)
     {
         $customer= Customer::find($id);
         return $customer;
@@ -71,17 +71,17 @@ class CustomerController extends Controller
         'last_name' =>$req->last_name,
         'email' =>$req->email,
         'phone_number' =>$req->image
-     ]);
+    ]);
 
     return response()->json(["customer"=>$customer]);
 
-  }
+}
 
 
   //not valid
   //  change password $req will contain old_password, new_password, confirm_password, customer_id
-  function editPassword(Request $req,$id)
-  {
+function editPassword(Request $req,$id)
+{
         $customer= Customer::find($id);
         if($customer|| !Hash::check($req->old_password,$customer->password))
                 {
@@ -92,46 +92,59 @@ class CustomerController extends Controller
                     ]);
         }
         if($req->new_password==$req->confirm_password){
-           $customer->update(['password'=>$req->password]);
+            $customer->update(['password'=>$req->password]);
             return response()->json([
                 'status'=>200,
                 'message'=>' password changed Successfully'
 
             ]);;
         }
- }
+}
 
 
 
 public function filter1(Request $req){
- $name=$phone_number=$email="";
-        $name = $req->name;
-        $phone_number = $req->phone_number;
-        $email = $req->email;
-
-    if (!empty($email)) {
-        $customer= Customer::where('email', $email)
-        ->get();
-
-    } elseif (!empty($name)&&!empty($phone_number)) {
-        $customer= Customer::where('phone_number', $phone_number)
-        ->where('first_name','like','%', $name)->orwhere('last_name','like','%'. $name.'%')
-        ->orWhereRaw("concat(first_name,' ',last_name) like '%?%'",$name)
-        ->get();
+$name=$phone_number=$email="";
+$name =$req->name;
+$phone_number = $req->phone_number;
+$email = $req->email;
 
 
-    }
 
-     // elseif ($req->has([empty($name)&&isset($phone_number)&& isset($email)])) {
-    //     $customer= Customer::where('phone_number', $phone_number)
-    //     ->where('email', $email)
-    //     ->get();
+if (!empty($email)) {
+    $customer= Customer::where('email', $email)
+    ->get();}
 
 
-    // }
-   // return response()->json(['customer'=>$customer]);
+elseif(!empty($name)&&!empty($phone_number)){
+    $customer=Customer::where('first_name', 'LIKE', "%{$name}%")
+    ->orwhere('last_name', 'LIKE', "%{$name}%")
+    ->orWhereRaw("concat(first_name,' ', last_name) like '%" . $name . "%' ")
+    ->get();}
+
+    return response()->json(['customer'=>$customer]);
+
+
+
+
+
+
+}
 
 }
 
 
-}
+// // } else
+// if (!empty($name)&&!empty($phone_number)) {
+
+// $customer= Customer::where('phone_number', $phone_number)
+// ->where(function($query) use ($name) {
+//     $query->whereIn('first_name', $name);
+//     $query->orWhere(function($query) use ($name) {
+//         $query->whereIn('last_name', $name);
+//     });
+// });
+
+// return  response()->json(['customer'=>$customer]);
+
+// }

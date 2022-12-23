@@ -32,9 +32,10 @@ Route::post('filter1',[CustomerController::class,'filter1']);
 Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
    //companies
-        Route::get('getcompanyprofile/{id}',[CompanyController::class,'getDetails']);//valid
-        Route::put('updatecompanyprofile/{id}',[CompanyController::class,'updateDetails']);//valid
-        Route::delete('delete/{id}',[CompanyController::class,'delete']);//valid
+        Route::get('company/getProfile/{id}',[CompanyController::class,'getDetails']);//valid
+        Route::put('company/updateProfile',[CompanyController::class,'updateDetails']);//valid
+        Route::delete('company/delete',[CompanyController::class,'delete']);//valid
+        Route::get('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
         //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
 
 
@@ -42,42 +43,33 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
    //services
         Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);//valid
         Route::put('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
-        Route::post('service/addService',[ServiceController::class,'addService']);//valid
+        Route::post('service/add',[ServiceController::class,'addService']);//valid
         Route::delete('service/delete/{id}',[ServiceController::class,'delete']);//valid
 
   //users
-        Route::post('user/addUser',[UserController::class,'addUser']);//valid
+        Route::post('user/add',[UserController::class,'addUser']);//valid
         Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
         Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
-        Route::get('getCompanyType',[QueueController::class,'getCompanyType']);//valid
+
   //Queues
 
         Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
         Route::post('queue/add',[QueueController::class,'addQueue']);//valid
         Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
         Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
-        Route::post('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
+
 
 
 
   //Times
-     Route::post('createTime',[TimeController::class,'createTime']);// valid
-     Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
-     Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
-     Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
+        Route::post('createTime',[TimeController::class,'createTime']);// valid
+        Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
+        Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
+        Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
      // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
-     Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
-
-
-
-
-     Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
-
-
-
-
-
- });
+        Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
+        Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
+    });
 
 
 Route::group(['middleware'=>['auth:sanctum']],function () {
@@ -87,9 +79,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
         Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
         Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
         //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
-
-
-
     });
 
 
@@ -110,7 +99,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
         Route::post('customer/signUp',[CustomerController::class,'signUp']);//valid
         Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
-        Route::get('customer/getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid
+        Route::get('getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid
         Route::post('customer/login',[CustomerController::class,'login']);//valid
         Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
         Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid

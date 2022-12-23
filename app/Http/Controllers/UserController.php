@@ -22,8 +22,8 @@ class UserController extends Controller
 
     function getDetails($id)
     {
-     $user=User::find($id);
-     return $user;
+        $user=User::find($id);
+        return $user;
 
     }
 
@@ -54,11 +54,11 @@ class UserController extends Controller
     function login(Request $req){
         $user= User::where('email',$req->email)->first();
         if(!$user||!Hash::check($req->password,$user->password))
-              return response()->json([
-                'status'=>401,
-                'message'=>'Invalid Credentials'
+            return response()->json([
+            'status'=>401,
+            'message'=>'Invalid Credentials'
 
-            ]);
+        ]);
 
         else{
             $token=$user->createToken('myapptoken')->plainTextToken;
@@ -67,12 +67,12 @@ class UserController extends Controller
                 'message'=>'valid Credentials',
                 'user'=>$user,
                 'token'=>$token,
-              ]; }
+                ]; }
         return $response;}
 
 
-     function deleteSelected(ArrayList $id)
-    {
+    function deleteSelected(ArrayList $id){
+
         for($i=0;$i<sizeof($id);$i++)
             $result= User::where('id', $id[$i])->delete();
             if ($result){
@@ -92,14 +92,14 @@ class UserController extends Controller
         'password' =>'required',
         'role_id' =>'required',
         'phone_number'=>'required',
-       ]);
+        ]);
 
-      if($validator->fails()){
-          return response()->json([
-              'validation_error'=>$validator->messages(),
-          ]);}
+        if($validator->fails()){
+            return response()->json([
+                'validation_error'=>$validator->messages(),
+            ]);}
 
-      else{
+        else{
         $user= new User();
         $user->name =$req->input('name');
         $user->email =$req->input('email');
@@ -110,45 +110,45 @@ class UserController extends Controller
         $user->save();
           //create   default scheduleTimes for the user default start,end times  value from companytimes.
 
-          for($i=0;$i<7;$i++){
+            for($i=0;$i<7;$i++){
             $company=Time::where('source_id', $user->company_id)->where('day',$i)->where('type',"0")->first();
 
 
-         $request = new Request([
-             'day'=>$i,
-             'type'=>"1",
-             'source_id'=>$user->id,
-             'start_time'=>$company->start_time,
-             'end_time'=>$company->end_time
-         ]);
+            $request = new Request([
+                'day'=>$i,
+                'type'=>"1",
+                'source_id'=>$user->id,
+                'start_time'=>$company->start_time,
+                'end_time'=>$company->end_time
+            ]);
 
-         TimeController::createTime( $request);
-          }
+            TimeController::createTime( $request);
+            }
 
         return $user;
     }}
 
 
 
-  public function delete($id)
-  {
-      $result= User::where('id', $id)->delete();
-      if ($result) {
-          return ["result"=>"user has been delete"];
-      } else {
-          return ["result"=>"Operation faild"];
-      }
-  }
+    public function delete($id)
+    {
+        $result= User::where('id', $id)->delete();
+        if ($result) {
+            return ["result"=>"user has been delete"];
+        } else {
+            return ["result"=>"Operation faild"];
+        }
+    }
 
 
 
 
 
-  static function getCompanyType()
-  {
-  return  auth()->user()->company_id;
+    static function getCompanyType()
+    {
+            return  auth()->user()->company_id;
 
-  }
+    }
 
 
 

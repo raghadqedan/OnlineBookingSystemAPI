@@ -42,7 +42,7 @@ class CompanyController
 
                 $lock=1;
                 DB::beginTransaction();
-                 try{
+                    try{
                         $address=AddressController::createAddress($req->street,$req->city,$req->country);
                         $company=Company::create([
                         'name'=>$req->name,
@@ -55,7 +55,7 @@ class CompanyController
                         ]);
                         DB::commit();
 
-                }catch (Exception $e) {
+                        }catch (Exception $e) {
 
                         return response()->json([
                             "result"=>"Operation faild"
@@ -65,7 +65,7 @@ class CompanyController
 
 
                 if($lock){
-                 try{
+                    try{
                         $role=Role::where('name','admin')->first();
 
                         $user =User::create([
@@ -83,20 +83,20 @@ class CompanyController
 
 
                     }
-                 catch (Exception $e) {
+                    catch (Exception $e) {
                         DB::rollBack();
                         return response()->json([
                             "result"=>"Operation faild"
                             ]);
 
-                         $lock=0;
+                            $lock=0;
                         }}
 
 
-                       if($lock){
-                   try{
+                if($lock){
+                    try{
                      //create  company scheduleTimes for the company wuth  default start,end times  value.
-                      for($i=0;$i<7;$i++){
+                        for($i=0;$i<7;$i++){
 
                                 $request1 = new Request([
                                     'day'=>$i,
@@ -119,7 +119,7 @@ class CompanyController
 
 
 
-                       $token=$user->createToken('myapptoken')->plainTextToken;
+                        $token=$user->createToken('myapptoken')->plainTextToken;
                         DB::commit();
                         return  response()->json([
                             "result"=>"company account created successfully",
@@ -177,24 +177,24 @@ class CompanyController
             }
 
 
-        function updateDetails(Request $req, $id)
-        { $company=Company::find($id);
+        function updateDetails(Request $req)
+        {
+            $company=Company::where('id',auth()->user()->company_id)->first();
+
+            $address=AddressController::updateAddress($company->address_id,$req->street,$req->city,$req->country);
+
+            $company->update([
+                'name' =>$req->name,
+                'email'=>$req->email,
+                'phone_number'=>$req->phone_number,
+                'category_id'=>$req->category_id,
+                'logo'=>$req->logo,
+                'description'=>$req->description,
+                'type'=>$req->type,
+                'address_id'=>$address->id,
 
 
-        $address=AddressController::updateAddress($company->address_id,$req->street,$req->city,$req->country);
-
-        $company->update([
-            'name' =>$req->name,
-            'email'=>$req->email,
-            'phone_number'=>$req->phone_number,
-            'category_id'=>$req->category_id,
-            'logo'=>$req->logo,
-            'description'=>$req->description,
-            'type'=>$req->type,
-            'address_id'=>$address->id,
-
-
-         ]);
+            ]);
         return response()->json([$company,$address]);
     }
 
@@ -217,9 +217,9 @@ class CompanyController
 
 
 
-        public function delete($id)
+        public function delete()
         {
-        $result= Company::where('id', $id)->delete();
+        $result= Company::where('id', auth()-user()->company_id)->delete();
         if ($result) {
         return ["result"=>"Company account has been delete"];
         } else {
@@ -231,8 +231,8 @@ class CompanyController
 
         static public function getCompanyType()
         {
-         $type=Company::selectRaw('type')->where('id',auth()->user()->company_id)->get();
-         return $type;
+            $type=Company::selectRaw('type')->where('id',auth()->user()->company_id)->get();
+            return $type;
 
         }
 

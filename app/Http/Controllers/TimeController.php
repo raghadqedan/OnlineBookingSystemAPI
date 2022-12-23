@@ -93,7 +93,7 @@ class TimeController extends Controller
             // }
 
 //valid
-       static  public function updateQueueTime(Request $req)
+    static  public function updateQueueTime(Request $req)
         {
 
                 $parent_type="1";
@@ -110,42 +110,42 @@ class TimeController extends Controller
             ->where('day',$req->day)
             ->first();
 
-          if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
-            {
-                $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->first();
+            if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
+                {
+                    $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->first();
 
-                $obj->update([
-                    'start_time'=>$req->start_time,
-                    'end_time'=>$req->end_time
-                ]);
+                    $obj->update([
+                        'start_time'=>$req->start_time,
+                        'end_time'=>$req->end_time
+                    ]);
 
             // todo update the children  appoitments in this queue
              // todo  may need to delete customersbooking and  send notification to them , message"sorry,your booking canceled" if the updated time effect in them booking
 
 
-            return response()->json([
-                'message'=>'Queue updated successfully',
-            'b'=>'1']);
-            }
+                    return response()->json([
+                            'message'=>'Queue updated successfully',
+                            'b'=>'1']);
+                }
             else{
             return response()->json([
                 'message'=>'Operation faild',
                 'b'=>'0']);
             }
-       }
+    }
 
 
 
 
-       static  public function updateUserTime(Request $req)
+        static  public function updateUserTime(Request $req)
         {   $parent_type="0";
-             $parent_source_id=auth()->user()->company_id;//return the company_id  for this user
+            $parent_source_id=auth()->user()->company_id;//return the company_id  for this user
             $times=Time::where('source_id',$parent_source_id)
             ->where('type',$parent_type)
             ->where('day',$req->day)
             ->first();
 
-          if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
+            if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
             {
                 $obj= Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->first();
 
@@ -161,8 +161,8 @@ class TimeController extends Controller
                         'start_time'=>$req->start_time,
                         'end_time'=>$req->end_time,
                         'day'=>$req->day ]);
-                         $result=TimeController::updateQueueTime($request);
-                     }
+                        $result=TimeController::updateQueueTime($request);
+                }
 
                 return response()->json([
                     'message'=>'user updated successfully',

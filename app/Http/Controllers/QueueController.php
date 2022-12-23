@@ -19,49 +19,49 @@ use App\Http\Controllers\ServiceQueueController;
 class QueueController extends Controller
 {
 
-      function getDetails($id)
-      {
-      $queue=Queue::find($id);
+    function getDetails($id)
+    {
+    $queue=Queue::find($id);
 
         return$queue;
-      }
+    }
 
 
-      public function addQueue(request $req)
-      {
-          $validator=Validator::make($req->all(),[
+    public function addQueue(request $req)
+    {
+            $validator=Validator::make($req->all(),[
             'services' =>'required',
             'name' =>'required',
             'start_regesteration' =>'required',
             'repeats' =>'required',
             'user_id'=>'required',
-          ]);
+            ]);
 
-          if($validator->fails()){
-              return response()->json([
-                  'validation_error'=>$validator->messages(),
-              ]);}
+        if($validator->fails()){
+                return response()->json([
+                    'validation_error'=>$validator->messages(),
+            ]);}
 
-          else{
+            else{
 
                 $company_type=CompanyController::getCompanyType();
 
                   //timeQueue
                 if($company_type&&(count($req->services)>1))
                     return response()->json(['message'=>'select only one service Becaus your company system type is time']);
-                  else{
+                    else{
                         $queue=Queue::create([
-                          'name'=>$req->name,
-                          'start_regesteration'=>$req->start_regesteration,
-                          'repeats'=>$req->repeats,
-                          'user_id'=>$req->user_id,
+                            'name'=>$req->name,
+                            'start_regesteration'=>$req->start_regesteration,
+                            'repeats'=>$req->repeats,
+                            'user_id'=>$req->user_id,
                         ]);
 
                         $id=$queue->id;
                         ServiceQueueController::createServiceQueue($id,$req->services);
 
                       //create  queues default scheduleTimes for the queue wuth  user start,end times  value.
-                      for($i=0;$i<7;$i++){
+                        for($i=0;$i<7;$i++){
                         $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();
                         $request = new Request([
                             'day'=>$i,
@@ -71,12 +71,12 @@ class QueueController extends Controller
                             'end_time'=> $obj->end_time,
                         ]);
                         TimeController::createTime( $request);
-                         }
+                        }
 
-                         return  response()->json([
-                          "result"=>"Queue created successfully",
-                          "queue"=>$queue,
-                          "services"=>ServiceQueueController::getService($queue->id),
+                            return  response()->json([
+                                "result"=>"Queue created successfully",
+                                "queue"=>$queue,
+                                "services"=>ServiceQueueController::getService($queue->id),
                         ]);
 
 
@@ -84,7 +84,7 @@ class QueueController extends Controller
                     }
 
 
-              }
+        }
     }
 
 
@@ -98,24 +98,24 @@ class QueueController extends Controller
 
 
 
-      function updateDetails(Request $req, $id)
-      {
+    function updateDetails(Request $req, $id)
+    {
             $queue= Queue::find($id);
             $queue->update([
-              'name'=>$req->name,
-              'start_regesteration'=>$req->start_regesteration,
-              'repeats'=>$req->repeats,
-              'user_id'=>$req->user_id,
+                'name'=>$req->name,
+                'start_regesteration'=>$req->start_regesteration,
+                'repeats'=>$req->repeats,
+                'user_id'=>$req->user_id,
             ]);
 
             $id=$queue->id;
             ServiceQueueController::updateService($id,$req->services);
 
             return  response()->json([
-              "result"=>"Queue updated successfully",
-              "queue"=>$queue,
-              "services"=>ServiceQueueController::getService($queue->id),]);
-          }
+                "result"=>"Queue updated successfully",
+                "queue"=>$queue,
+                "services"=>ServiceQueueController::getService($queue->id),]);
+    }
 
 
 
@@ -124,12 +124,12 @@ class QueueController extends Controller
 
     public function delete($id)
     {
-          $r1=Queue::where('id', $id)->delete();
-          if ($r1) {
-              return ["result"=>"Queue deleted"];
-          } else {
-              return ["result"=>"Operation faild"];
-          }
+            $r1=Queue::where('id', $id)->delete();
+            if ($r1) {
+                return ["result"=>"Queue deleted"];
+            } else {
+                return ["result"=>"Operation faild"];
+            }
     }
 
 
