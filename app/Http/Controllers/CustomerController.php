@@ -12,8 +12,8 @@ class CustomerController extends Controller
     function signUp(Request $req)
     {
             $validator= Validator::make($req->all(),[
-                'first_name' =>'required|max:191',
-                'last_name' =>'required|max:191',
+                'name' =>'required|max:191',
+                'phone_number'=>'required',
                 'email' =>'required|email|max:191|unique:users,email',
                 'password' =>'required',
 
@@ -26,8 +26,8 @@ class CustomerController extends Controller
 
             }else{
                     $customer =Customer::create([
-                    'first_name'=>$req->first_name,
-                    'last_name'=>$req->last_name,
+                    'name'=>$req->name,
+                    'phone_number'=>$req->phone_number,
                     'email'=>$req->email,
                     'password'=>Hash::make($req->password),
 
