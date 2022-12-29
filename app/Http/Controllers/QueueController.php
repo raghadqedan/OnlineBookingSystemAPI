@@ -62,15 +62,20 @@ class QueueController extends Controller
 
                       //create  queues default scheduleTimes for the queue wuth  user start,end times  value.
                         for($i=0;$i<7;$i++){
-                        $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();
-                        $request = new Request([
-                            'day'=>$i,
-                            'type'=>"2",
-                            'source_id'=>$queue->id,
-                            'start_time'=> $obj->start_time,
-                            'end_time'=> $obj->end_time,
-                        ]);
-                        TimeController::createTime( $request);
+                            $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();
+                            $request = new Request([
+                                'day'=>$i,
+                                'type'=>"2",
+                                'source_id'=>$queue->id,
+                                'start_time'=> $obj->start_time,
+                                'end_time'=> $obj->end_time,
+                            ]);
+                            $result=TimeController::createTime( $request);
+                            if($result=="0"){
+                                return  response()->json([
+                                    "result"=>"Operation faild",]
+                                );
+                            }
                         }
 
                             return  response()->json([
@@ -104,7 +109,8 @@ class QueueController extends Controller
             $queue->update([
                 'name'=>$req->name,
                 'start_regesteration'=>$req->start_regesteration,
-                'repeats'=>$req->repeats,
+                're
+                peats'=>$req->repeats,
                 'user_id'=>$req->user_id,
             ]);
 
@@ -131,6 +137,28 @@ class QueueController extends Controller
                 return ["result"=>"Operation faild"];
             }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

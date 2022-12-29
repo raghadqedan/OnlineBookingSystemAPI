@@ -15,13 +15,13 @@ class admin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    
+
     public function handle(Request $request, Closure $next)
-    { 
+    {
         if(auth()->check()&&$request->user()->role_id == 1 ){
         return $next($request);
     }else{
         return redirect()->back();
     }
-  }
+    }
 }

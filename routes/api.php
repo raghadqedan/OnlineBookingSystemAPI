@@ -66,10 +66,18 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
         Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
         Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
-     // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
+        // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
         Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
         Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
+        Route::post('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//valid
+        Route::post('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//valid
     });
+
+
+
+
+
+
 
 
 Route::group(['middleware'=>['auth:sanctum']],function () {
@@ -91,7 +99,11 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
      //   Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);
       //  Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
      //    Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
-        Route::get('getTimes/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
+
+
+
+
+
 
 
 

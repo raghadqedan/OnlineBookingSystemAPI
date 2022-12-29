@@ -13,14 +13,15 @@ use Illuminate\Http\Response;
 
 class AppointmentController extends Controller
 {
-            static function createAppointment($time_id){
-                $time=Time::where('id',$time_id)->first();
-                $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$time->source_id)->first();
-                $duration_time="00:00:15";//error in $service_id because it is null
-                //Service::selectRaw('duration_time')->where('id',$service_id)->first();
-            // $repeats=Queue::selectRaw('repeats')->where('id',$time->source_id)->first();
-            // return $repeats;
-        //while($current_date<=date("Y-m-d", strtotime('+'.$repeats.'week', strtotime($active_date))))
+    static function createAppointment($time){
+
+            $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$time->source_id)->first();
+
+            $duration_time="00:15:00";
+            //Service::selectRaw('duration_time')->where('id',$service_id)->first();//error in $service_id because it is null
+                //$repeats=Queue::selectRaw('repeats')->where('id',$time->source_id)->first();
+                   // return $repeats;
+       // while($current_date<=date("Y-m-d", strtotime('+'.$repeats.'week', strtotime($active_date))))
             //  todo   $active_time=queue active time,then add date column  date = date("Y-m-d", strtotime('+'.$day.'day', strtotime($active_date))) to apply active date idea
             // create appoitment operation can applly if currentdate<date("Y-m-d", strtotime('+'.$repeats.'week', strtotime($active_date))) to apply repeats idea
 
@@ -58,7 +59,7 @@ class AppointmentController extends Controller
             }
 
 
-        }
+    }
 
 
 
@@ -68,8 +69,8 @@ class AppointmentController extends Controller
 
 
 
-
-            static function updateAppoitment($time_id,$queue_id,$start_time,$end_time){
+  //??????
+        static function updateAppoitment($time_id,$queue_id,$start_time,$end_time){
 
             $service_id=ServiceQueueController::getService($queue_id);
             $duration_time=ServiceController::getServiceDurationTime($service_id);
@@ -90,13 +91,9 @@ class AppointmentController extends Controller
 
 
 
-        //TODO: get appoitment function by day and company id
-        //Todo,get them in We arrange them in ascending order start_time , and if there is a similarity between them, we return the date of the least-roomed q
-
-
-
-
-
+       /* //TODO: get appoitment function by day and company id
+        get them in We arrange them in ascending order start_time  and return them in array , and if there is a similarity between them give them priority and   we return the appoitment from  the  least-Booking queue
+*/
 
 
 
@@ -122,12 +119,9 @@ class AppointmentController extends Controller
 //     $time=Time::where('id',$time_id)->first();
 //     $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$time->source_id)->first();
 //     $duration_time="00:00:15";//error in $service_id because it is null
-//     //Service::selectRaw('duration_time')->where('id',$service_id)->first();
-//    // $repeats=Queue::selectRaw('repeats')->where('id',$time->source_id)->first();
-//    // return $repeats;
-// //while($current_date<=date("Y-m-d", strtotime('+'.$repeats.'week', strtotime($active_date))))
-// //  todo   $active_time=queue active time,then add date column  date = date("Y-m-d", strtotime('+'.$day.'day', strtotime($active_date))) to apply active date idea
-// // create appoitment operation can applly if currentdate<date("Y-m-d", strtotime('+'.$repeats.'week', strtotime($active_date))) to apply repeats idea
+//    // Service::selectRaw('duration_time')->where('id',$service_id)->first();
+
+
 
 // $start_time=$time->start_time;
 // $end_time=$time->end_time;

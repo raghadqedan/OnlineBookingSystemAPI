@@ -18,8 +18,8 @@ class CustomerController extends Controller
                 'password' =>'required',
 
             ]);
-
-            if($validator->fails()){
+              return $validator->fails();
+              if($validator->fails()){
                     return response()->json([
                     'validation_error'=>$validator->messages(),
             ]);
@@ -97,7 +97,7 @@ function editPassword(Request $req,$id)
                 'status'=>200,
                 'message'=>' password changed Successfully'
 
-            ]);;
+            ]);
         }
 }
 

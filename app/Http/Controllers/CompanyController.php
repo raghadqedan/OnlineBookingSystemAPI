@@ -200,10 +200,10 @@ class CompanyController
 
 
         // {
-        //     "name":"beauty77",
+        //     "name":"beautysalon",
         //     "category_id":"1",
         //     "street":"qwe122",
-        //     "city":"jenin",
+        //     "city":"tulkarm",
         //     "country":"palestine",
         //     "email":"aghmaaaaaa@yahoo.com",
         //     "password":"123456",

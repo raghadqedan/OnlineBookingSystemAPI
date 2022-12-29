@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->integer('status')->default(0);
-            $table->foreignId('time_id')->constrained('times');
+            $table->foreignId('time_id')->constrained('times')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
 
         });
