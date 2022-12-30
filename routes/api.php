@@ -66,10 +66,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
         Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
         Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
-        // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
         Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
-        Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
-
         Route::post('setUserOffDay',[TimeController::class,'setUserOffDay']);//valid
         Route::post('setUserOnDay',[TimeController::class,'setUserOnDay']);//valid
         Route::post('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
@@ -78,6 +75,8 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         Route::post('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
 
 
+        // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
+       // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
     });
 
 
