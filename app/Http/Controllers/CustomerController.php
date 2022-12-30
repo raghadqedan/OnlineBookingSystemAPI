@@ -18,8 +18,8 @@ class CustomerController extends Controller
                 'password' =>'required',
 
             ]);
-              return $validator->fails();
-              if($validator->fails()){
+
+                if($validator->fails()){
                     return response()->json([
                     'validation_error'=>$validator->messages(),
             ]);

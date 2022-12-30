@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('type');
             $table->integer('source_id');
             $table->integer('day');
+            $table->integer('status')->default('1');//1=>onday,0=>offday
             $table->timestamps();
         });
     }

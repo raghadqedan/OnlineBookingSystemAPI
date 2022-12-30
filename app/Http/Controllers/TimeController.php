@@ -29,10 +29,9 @@ class TimeController extends Controller
                     if($obj->type=="2"){
 
                     $result=AppointmentController::createAppointment($obj);
-                    return $result;
                     if($result=="1") {
                         return response()->json(['b'=>'1',
-                                                 'time'=>$obj]);
+                                            'time'=>$obj]);
                     }
                 return response()->json(['b'=>'0']);
 
@@ -125,7 +124,7 @@ class TimeController extends Controller
                         'start_time'=>$req->start_time,
                         'end_time'=>$req->end_time
                     ]);
-
+               //todo:check all child appointment end time and start time ,any appointment has end_time<newstart_time+duration_time or start_time>=newend_time-duration_time this appoitment must cancel
             // todo update the children  appoitments in this queue
              // todo  may need to delete customersbooking and  send notification to them , message"sorry,your booking canceled" if the updated time effect in them booking
 
@@ -222,32 +221,35 @@ class TimeController extends Controller
 //need testing
     function setQueueOffDay(Request $req)
     {
-        $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->first();
+        $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
 
         if($obj){
-        $appointments=Appointment::where('time_id',$obj->id)->get();
+        $appointments=Appointment::where('time_id',$obj->id)->where('status',0)->orwhere('status',1)->get();
+
             if($appointments){
-            for($i=0;$i<sizeOf($appointments);$i++){
 
-                    $bookings=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
-                    //status=0 mean the confirmed booking status =1 mean the turned booking status=2 checkedout booking status=3 mean canceled boooking
-                    if($bookings){
-                        //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
-                        //TODO:set status in the booking==3 canceled
-                        //email   "your booking cancelled please book anew book in another time";
 
-                    }
+                for($i=0;$i<sizeOf($appointments);$i++){
+                            $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
+                            //status=0 mean the confirmed booking status =1 mean the turned booking status=2 canceled booking status=3 mean checkedout boooking
+                            if($booking){
+                                $booking->update(['status'=>3]);
+                                //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
+                                //email   "your booking cancelled please book anew book in another time";
+                            }
 
-                    $appointments[$i]->delete();
-            }
+                            $appointments[$i]->update(['status'=>10,]); //status=0 mean the appointment is available status =1 mean the appointment is booked status =10 mean the appointment  offstatus =-1 mean the appointment  deleted
+
+                        }
         }
-        $obj->delete();
-        return  response()->json([ 'message'=>'set as off day successfully',
-                                    'b'=>'1' ]);
+
+            $obj->update(['status'=>0]);//status=0 mean this time is off day ,status=1 mean this time is on day
+            return  response()->json([ 'message'=>'set as off day successfully',
+                                        'b'=>'1' ]);
 
         }else{
-        return  response()->json([ 'message'=>'opration failed',
-                                'b'=>'0' ]);
+        return  response()->json([ 'message'=>'opration failed  beacause this day is already off',
+                                'b'=>'1' ]);
         }
 }
 
@@ -260,10 +262,11 @@ class TimeController extends Controller
 
 //need testing
         function setUserOffDay(Request $req){
-            $obj=Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->first();
+            $obj=Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->where('status',1)->first();
 
             if($obj){
-            $queues=Queue::where('user_id',$obj->id)->get();
+            $queues=Queue::where('user_id',$req->source_id)->get();
+
                 if($queues){
                 for($i=0;$i<sizeOf($queues);$i++){
                     $request=new Request([
@@ -271,7 +274,7 @@ class TimeController extends Controller
                         'day'=>$req->day
                     ]);
 
-                    $result = json_decode($this->setQueueOffDay()->getContent(), true);
+                    $result = json_decode($this->setQueueOffDay( $request)->getContent(), true);
 
                     if($result['b']=="0"){
                         return response()->json([
@@ -279,10 +282,10 @@ class TimeController extends Controller
                         ]);
                         }
                     }
-                    $r=$obj->delete();
+                    $r= $obj->update(['status'=>0]);
                     if($r){
                         return response()->json([
-                            'message'=>'set as useroff day successfully',
+                            'message'=>'set as user offday successfully',
                             'b'=>'1' ]);
 
                     }
@@ -292,16 +295,19 @@ class TimeController extends Controller
                             'b'=>'0' ]);
                     }
                 }
+            }else {
+                return response()->json([
+                    'message'=>'operation faild beacause this day is already off',
+                    'b'=>'1' ]);
             }
 
     }
 
-//need testing
     function setCompanyOffDay(Request $req){
-        $obj=Time::where('source_id',$req->source_id)->where('type',"0")->where('day',$req->day)->first();
+        $obj=Time::where('source_id',$req->source_id)->where('type',"0")->where('status',1)->where('day',$req->day)->first();
 
         if($obj){
-        $users=User::where('company_id',$obj->id)->get();
+            $users=User::where('company_id',$req->source_id)->get();
             if($users){
             for($i=0;$i<sizeOf($users);$i++){
                 $request=new Request([
@@ -309,28 +315,33 @@ class TimeController extends Controller
                     'day'=>$req->day
                 ]);
 
-                $result = json_decode($this->setUserOffDay->getContent(), true);
-
+                $result = json_decode($this->setUserOffDay($request)->getContent(), true);
                 if($result['b']=="0"){
                     return response()->json([
                         'message'=>'Operation faild '
                     ]);
                     }
                 }
-                $r=$obj->delete();
+
+                $r= $obj->update(['status'=>0]);
                 if($r){
                     return response()->json([
-                        'message'=>'set as companyoff day successfully',
+                        'message'=>'set as company offday successfully',
                         'b'=>'1' ]);
 
                 }
                 else {
                     return response()->json([
-                        'message'=>'operation faild',
+                        'message'=>'operation faild  beacause this day is already off',
                         'b'=>'0' ]);
                 }
             }
+        }else {
+            return response()->json([
+                'message'=>'operation faild beacause this day is already off',
+                'b'=>'0' ]);
         }
+
 
 }
 
@@ -338,122 +349,121 @@ class TimeController extends Controller
 //TODO
         function setQueueOnDay(Request $req)
         {
-            $request=new Request([
-                'source_id'=>$req->source_id,//return the company_id  for this user
-                'start_time'=>"08:00:00",//todo :must put as theuser  parent times
-                'end_time'=>"14:00:00",
-                'day'=>$req->day,
-                'type'=>"2"
+            $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',0)->first();
 
-            ]);
+        if($obj){
+             $appointments=Appointment::where('time_id',$obj->id)->where('status',10)->get();
 
+            if($appointments){
 
-            $result = json_decode(TimeController::createTime($request)->getContent(), true);
-
-            if($result['b']=="1")
-            {return response()->json([ 'message'=>'set as off day successfully',
-                    'queue'=>$result['time'] ]);
-
-            }else{
-                return response()->json(['message'=>' opration faild' ]);
+            for($i=0;$i<sizeOf($appointments);$i++){
+                    $appointments[$i]->update(['status'=>0]); //make the appoiintment is available
+                }
             }
+
+        $obj->update(['status'=>1]);//status=0 mean this time is off day ,status=1 mean this time is on day
+        return  response()->json([ 'message'=>'Set as on day successfully',
+                                    'b'=>'1' ]);
+
+        }else{
+        return  response()->json([ 'message'=>'opration failed  beacause this day is already on',
+                                'b'=>'1' ]);
+        }
 }
 
-function setUserOnDay(Request $req)
+
+
+
+
+        function setUserOnDay(Request $req)
         {
-            $request=new Request([
-                'source_id'=>$req->source_id,//return the company_id  for this user
-                'start_time'=>"08:00:00",
-                'end_time'=>"14:00:00",
-                'day'=>$req->day,
-                'type'=>"1"
+            $obj=Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->where('status',0)->first();
 
-            ]);
+            if($obj){
+            $queues=Queue::where('user_id',$req->source_id)->get();
 
-
-            $result = json_decode(TimeController::createTime($request)->getContent(), true);
-
-            if($result['b']=="1")
-            { $queues=Queue::where('user_id',$request->id)->get();
                 if($queues){
                 for($i=0;$i<sizeOf($queues);$i++){
-                    $r=new Request([
-                        'source_id'=>$req->source_id,//return the company_id  for this user
-                        'start_time'=>"08:00:00",//todo :must put as the  company parent times
-                        'end_time'=>"14:00:00",
-                        'day'=>$req->day,
-                        'type'=>"2"
-
-                    ]);
-                    $result = json_decode($this->setQueueODay()->getContent(), true);
-                    if($ressult){
-                            return response()->json([ 'message'=>'set as on userday successfully',
-                                                    'user'=>$result['time'] ]);}
-                        else{
-                            return response()->json(['message'=>' opration faild' ]);
-                            }
-                }
-                }
-            }
-}
-
-
-//need testing
-function setCompanyOnDay(Request $req)
-        {
-            $request=new Request([
-                'source_id'=>$req->source_id,//return the company_id  for this user
-                'start_time'=>"08:00:00",
-                'end_time'=>"14:00:00",
-                'day'=>$req->day,
-                'type'=>"0"
-
-            ]);
-
-
-            $result = json_decode(TimeController::createTime($request)->getContent(), true);
-
-            if($result['b']=="1")
-            { $users=User::where('company_id',$request->id)->get();
-                if($users){
-                for($i=0;$i<sizeOf($users);$i++){
                     $request=new Request([
-                        'source_id'=>$users[$i]->id,
-                        'start_time'=>"08:00:00",
-                        'end_time'=>"14:00:00",
-                        'day'=>$req->day,
-                        'type'=>"1"
+                        'source_id'=>$queues[$i]->id,
+                        'day'=>$req->day
                     ]);
 
-                    $result = json_decode($this->setUserOnDay->getContent(), true);
+                    $result = json_decode($this->setQueueOnDay( $request)->getContent(), true);
 
                     if($result['b']=="0"){
                         return response()->json([
                             'message'=>'Operation faild '
                         ]);
+                        }
                     }
+                    $r= $obj->update(['status'=>1]);
+                    if($r){
+                        return response()->json([
+                            'message'=>'set as user on day successfully',
+                            'b'=>'1' ]);
 
-                }
-
-                    return response()->json([ 'message'=>'set as on companyday successfully',
-                                                'company'=>$result['time'] ]);}
-
-
-
-                }
-                else{
-                    return response()->json(['message'=>' opration faild' ]);
                     }
-
-
-
-
+                    else {
+                        return response()->json([
+                            'message'=>'operation faild',
+                            'b'=>'0' ]);
+                    }
+                }
+            }else {
+                return response()->json([
+                    'message'=>'operation faild beacause this day is already on',
+                    'b'=>'1' ]);
             }
 
+}
+
+
+//need testing
+        function setCompanyOnDay(Request $req)
+        {
+            $obj=Time::where('source_id',$req->source_id)->where('type',0)->where('status',0)->where('day',$req->day)->first();
+
+            if($obj){
+            $users=User::where('company_id',$req->source_id)->get();
+
+                if($users){
+                for($i=0;$i<sizeOf($users);$i++){
+                    $request=new Request([
+                        'source_id'=>$users[$i]->id,
+                        'day'=>$req->day
+                    ]);
+
+                    $result = json_decode($this->setUserOnDay($request)->getContent(), true);
+
+                    if($result['b']=="0"){
+                        return response()->json([
+                            'message'=>'Operation faild '
+                        ]);
+                        }
+                    }
+                    $r= $obj->update(['status'=>1]);
+                    if($r){
+                        return response()->json([
+                            'message'=>'set as company on day successfully',
+                            'b'=>'1' ]);
+
+                    }
+                    else {
+                        return response()->json([
+                            'message'=>'operation faild  beacause this day is already on',
+                            'b'=>'0' ]);
+                    }
+                }
+            }else {
+                return response()->json([
+                    'message'=>'operation faild beacause this day is already on',
+                    'b'=>'0' ]);
+            }
         }
 
 
-
+    }
 
 
 
