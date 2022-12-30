@@ -224,33 +224,32 @@ class TimeController extends Controller
         $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
 
         if($obj){
-        $appointments=Appointment::where('time_id',$obj->id)->where('status',0)->orwhere('status',1)->get();
+                $appointments=Appointment::where('time_id',$obj->id)->where('status',1)->orwhere('status',0)->get();
 
             if($appointments){
 
+            for($i=0;$i<sizeOf($appointments);$i++){
+                $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
 
-                for($i=0;$i<sizeOf($appointments);$i++){
-                            $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
-                            //status=0 mean the confirmed booking status =1 mean the turned booking status=2 canceled booking status=3 mean checkedout boooking
-                            if($booking){
+                                 //status=0 mean the confirmed booking status =1 mean the turned booking status=2 canceled booking status=3 mean checkedout boooking
+                        if($booking){
                                 $booking->update(['status'=>3]);
-                                //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
-                                //email   "your booking cancelled please book anew book in another time";
-                            }
-
-                            $appointments[$i]->update(['status'=>10,]); //status=0 mean the appointment is available status =1 mean the appointment is booked status =10 mean the appointment  offstatus =-1 mean the appointment  deleted
-
+                            //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
+                            //email   "your booking cancelled please book anew book in another time";
                         }
-        }
+                    $appointments[$i]->update(['status'=>10]); //make the appointment is available
+                }
+            }
 
-            $obj->update(['status'=>0]);//status=0 mean this time is off day ,status=1 mean this time is on day
-            return  response()->json([ 'message'=>'set as off day successfully',
-                                        'b'=>'1' ]);
+        $obj->update(['status'=>0]);//status=0 mean this time is off day ,status=1 mean this time is on day
+        return  response()->json([ 'message'=>'Set as off day successfully',
+                                    'b'=>'1' ]);
 
         }else{
         return  response()->json([ 'message'=>'opration failed  beacause this day is already off',
                                 'b'=>'1' ]);
         }
+
 }
 
 
@@ -389,7 +388,7 @@ class TimeController extends Controller
                         'day'=>$req->day
                     ]);
 
-                    $result = json_decode($this->setQueueOnDay( $request)->getContent(), true);
+                    $result = json_decode($this->setQueueOnDay($request)->getContent(), true);
 
                     if($result['b']=="0"){
                         return response()->json([
@@ -593,3 +592,44 @@ class TimeController extends Controller
     //     ->where('day',$day)
     //     ->get();
     //     $time->toQuery()->update(['start_time'=>$req->input('start_time'),'end_time'=>$req->input('end_time')]);
+
+
+
+
+
+
+
+
+
+
+
+    // $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
+
+    // if($obj){
+    // $appointments=Appointment::where('time_id',$obj->id)->where('status',0)->orwhere('status',1)->get();
+
+    //     if($appointments){
+    //         for($i=0;$i<sizeOf($appointments);$i++){
+    //                     $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
+
+    //                     //status=0 mean the confirmed booking status =1 mean the turned booking status=2 canceled booking status=3 mean checkedout boooking
+    //                     if($booking){
+    //                         $booking->update(['status'=>3]);
+    //                         //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
+    //                         //email   "your booking cancelled please book anew book in another time";
+    //                     }
+
+    //                     $appointments[$i]->update(['status'=>10,]); //status=0 mean the appointment is available status =1 mean the appointment is booked status =10 mean the appointment  offstatus =-1 mean the appointment  deleted
+
+
+    //                 }
+    // }
+
+    //     $obj->update(['status'=>0]);//status=0 mean this time is off day ,status=1 mean this time is on day
+    //     return  response()->json([ 'message'=>'set as off day successfully',
+    //                                 'b'=>'1' ]);
+
+    // }else{
+    // return  response()->json([ 'message'=>'opration failed  beacause this day is already off',
+    //                         'b'=>'1' ]);
+    // }

@@ -23,7 +23,7 @@ use App\Http\Controllers\AppointmentController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-       Route::post('filter1',[CustomerController::class,'filter1']);
+        Route::post('filter1',[CustomerController::class,'filter1']);
         Route::post('register',[CompanyController::class,'register']);//valid
         Route::post('user/login',[UserController::class,'login'])->name('login');//valid
 
@@ -69,12 +69,14 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
         Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
         Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
-        Route::post('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//valid
+
         Route::post('setUserOffDay',[TimeController::class,'setUserOffDay']);//valid
+        Route::post('setUserOnDay',[TimeController::class,'setUserOnDay']);//valid
         Route::post('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
-        Route::post('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//
-        Route::post('setUserOnDay',[TimeController::class,'setUserOnDay']);//
-        Route::post('setCompanyOnDay',[TimeController::class,'setCompanyOnDay']);//
+        Route::post('setCompanyOnDay',[TimeController::class,'setCompanyOnDay']);//valid
+        Route::post('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//valid
+        Route::post('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
+
 
     });
 
