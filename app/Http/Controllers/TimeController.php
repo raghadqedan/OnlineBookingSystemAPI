@@ -104,182 +104,185 @@ class TimeController extends Controller
             // }
 
 //valid
-    static  public function updateQueueTime(Request $req)
-        {
+        static  public function updateQueueTime(Request $req){
 
-                $parent_type="1";
-                $parent_source_id=Queue::selectRaw('user_id')->where('id',$req->source_id)->first();//return the user_id who control this queue
-                // 'source_id'=>$req->source_id,
-                // 'type'=>$req->type,//put by default
-                // 'start_time'=>$req->start_time,
-                // 'end_time'=>$req->end_time,
-                // 'day'=>$req->day
-
-
-            $times=Time::where('source_id',$parent_source_id->user_id)
-            ->where('type',$parent_type)
-            ->where('day',$req->day)
-            ->first();
+                    $parent_type="1";
+                    $parent_source_id=Queue::selectRaw('user_id')->where('id',$req->source_id)->first();//return the user_id who control this queue
+                    // 'source_id'=>$req->source_id,
+                    // 'type'=>$req->type,//put by default
+                    // 'start_time'=>$req->start_time,
+                    // 'end_time'=>$req->end_time,
+                    // 'day'=>$req->day
 
 
-            if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
-                {
-                    $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
+                $times=Time::where('source_id',$parent_source_id->user_id)
+                ->where('type',$parent_type)
+                ->where('day',$req->day)
+                ->first();
 
-                    if($obj){
-                    $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$obj->source_id)->get();
-                    $duration_time="00:15:00";
-                    //?? Service::selectRaw('duration_time')->where('id',$service_id)->get();//error
 
-                    if(($req->start_time!=$obj->start_time)||($req->end_time!=$obj->end_time)){
+                if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
+                    {
+                        $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
 
-                            if($req->start_time<strtotime($obj->start_time)-strtotime($duration_time)){
+                        if($obj){
+                        $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$obj->source_id)->get();
+                        $duration_time="00:15:00";
+                        //?? Service::selectRaw('duration_time')->where('id',$service_id)->get();//error
+
+                        if(($req->start_time!=$obj->start_time)||($req->end_time!=$obj->end_time)){
+
+                                if($req->start_time<=(date("H:i:s",strtotime($obj->start_time)-strtotime($duration_time)))){
+
+                                        AppointmentController::createAppointment(new Request([
+                                        'time_id'=>$obj->id,//return the company_id  for this user
+                                        'start_time'=>$req->start_time,
+                                        'end_time'=>$obj->start_time,
+                                        'source_id'=>$obj->source_id,
+
+                                        ]));
+
+                                    }
+                                if($req->end_time>=date("H:i:s",strtotime($obj->end_time)+strtotime($duration_time))){
+
                                     AppointmentController::createAppointment(new Request([
                                     'time_id'=>$obj->id,//return the company_id  for this user
-                                    'start_time'=>$req->start_time,
-                                    'end_time'=>$obj->start_time,
+                                    'start_time'=>$obj->end_time,
+                                    'end_time'=>$req->end_time,
                                     'source_id'=>$obj->source_id,
-
                                     ]));
-
                                 }
-                            if($req->end_time>=strtotime($obj->end_time)+strtotime($duration_time)){
-                                AppointmentController::createAppointment(new Request([
-                                'time_id'=>$obj->id,//return the company_id  for this user
-                                'start_time'=>$obj->end_time,
-                                'end_time'=>$req->end_time,
-                                'source_id'=>$obj->source_id,
-                                ]));
-                            }
 
-                            elseif($req->start_time>=$obj->start_time&&$req->end_time<=$obj->end_time){
-                                        $appointments=Appointment::where('time_id',$obj->id)->where('status',1)->orwhere('status',0)->get();
+                                elseif($req->start_time>=$obj->start_time&&$req->end_time<=$obj->end_time){
 
-                                        if($appointments){
+                                            $appointments=Appointment::where('time_id',$obj->id)->where('status',1)->orwhere('status',0)->get();
 
-                                            for($i=0;$i<sizeOf($appointments);$i++){
-                                                            //any appoitment is out of  new time bounds of the queue will satisfy this if condition
-                                                        if(($appointments[$i]->start_time < $req->start_time &&$appointments[$i]->end_time>$req->start_time)||($appointments[$i]->start_time < $req->start_time &&$appointments[$i]->end_time<$req->start_time)||($appointments[$i]->start_time<$req->end_time&&$appointments[$i]->end_time>$req->end_time)||$appointments[$i]->start_time>$req->end_time)
-                                                        {
-                                                            $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
-                                                            if($booking){
-                                                                $booking->update(['status'=>3]);// set booking status=3 mean this booking is canceled
-                                                                //TODO:send email "your booking cancelled please book anew book in another time"
-                                                                }
-                                                            $appointments[$i]->update(['status'=>-1]);
-                                                        }
+                                            if($appointments){
 
-                                            }
+                                                for($i=0;$i<sizeOf($appointments);$i++){
+                                                                //any appoitment is out of  new time bounds of the queue will satisfy this if condition
+                                                            if(($appointments[$i]->start_time < $req->start_time &&$appointments[$i]->end_time>$req->start_time)||($appointments[$i]->start_time < $req->start_time &&$appointments[$i]->end_time<$req->start_time)||($appointments[$i]->start_time<$req->end_time&&$appointments[$i]->end_time>$req->end_time)||$appointments[$i]->start_time>$req->end_time)
+                                                            {
+                                                                $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
+                                                                if($booking){
+                                                                    $booking->update(['status'=>3]);// set booking status=3 mean this booking is canceled
+                                                                    //TODO:send email "your booking cancelled please book anew book in another time"
+                                                                    }
+                                                                $appointments[$i]->update(['status'=>-1]);
+                                                            }
 
-                                    }}
+                                                }
+
+                                        }}
 
 
-                                $r =$obj->update([
-                                    'start_time'=>$req->start_time,
-                                    'end_time'=>$req->end_time
-                                ]);
+                                    $r =$obj->update([
+                                        'start_time'=>$req->start_time,
+                                        'end_time'=>$req->end_time
+                                    ]);
 
-                                return response()->json([
-                                    'message'=>'Queue updated successfully',
-                                    'b'=>'1']);
+                                    return response()->json([
+                                        'message'=>'Queue updated successfully',
+                                        'b'=>'1']);
 
+
+
+                        }
+                        return response()->json([
+                            'message'=>'These times ​​already exist',
+                            'b'=>'0']);
+                    }
 
 
                     }
+
                     return response()->json([
-                        'message'=>'These times ​​already exist',
+                        'message'=>'Operation faild',
                         'b'=>'0']);
-                }
-
-
-                }
-
-                return response()->json([
-                    'message'=>'Operation faild',
-                    'b'=>'0']);
-    }
-
-
-
-
-        static  public function updateUserTime(Request $req)
-        {   $parent_type="0";
-            $parent_source_id=auth()->user()->company_id;//return the company_id  for this user
-            $times=Time::where('source_id',$parent_source_id)
-            ->where('type',$parent_type)
-            ->where('day',$req->day)
-            ->first();
-
-            if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
-            {
-                $obj= Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->first();
-
-                $obj->update([
-                    'start_time'=>$req->start_time,
-                    'end_time'=>$req->end_time
-                ]);
-
-                $queues=Queue::where('user_id',$req->source_id)->get();
-                for($i=0;$i<count($queues);$i++)
-                {   $request = new Request([
-                        'source_id'=>$queues[$i]->id,//return the company_id  for this user
-                        'start_time'=>$req->start_time,
-                        'end_time'=>$req->end_time,
-                        'day'=>$req->day ]);
-                        $result=TimeController::updateQueueTime($request);
-                }
-
-                return response()->json([
-                    'message'=>'user updated successfully',
-                    'b'=>'1']);
-            }
-            else{
-                return response()->json([
-                    'message'=>'Operation faild ',
-                    'b'=>'1']);
-                }}
-
-
-
-                static public function updateCompanyTime(Request $req)
-                {
-                    $companyTime=Time::where('source_id',auth()->user()->company_id)->where('type',"0")->where('day',$req->day)->first();
-
-                    $companyTime->update([
-                        'start_time'=>$req->start_time,
-                        'end_time'=>$req->end_time
-                    ]);
-
-                    $users=User::where('company_id',auth()->user()->company_id)->get();
-
-
-                    for($i=0;$i<sizeof($users);$i++){
-                        $request=new Request([
-                            'source_id'=>$users[$i]->id,//return the company_id  for this user
-                            'start_time'=>$req->start_time,
-                            'end_time'=>$req->end_time,
-                            'day'=>$req->day
-                        ]);
-
-                        $result = json_decode(TimeController::updateUserTime($request)->getContent(), true);
-
-                        if($result['b']=="0"){
-                            return response()->json([
-                                'message'=>'Operation faild '
-                            ]);
-                            }
-                        }
-                    return response()->json([
-                        'message'=>' company updated successfully' ]);
-
         }
 
 
 
 
+            static  public function updateUserTime(Request $req){
 
-            function setQueueOffDay(Request $req)
-            {
+                $parent_type="0";
+                $parent_source_id=auth()->user()->company_id;//return the company_id  for this user
+                $times=Time::where('source_id',$parent_source_id)
+                ->where('type',$parent_type)
+                ->where('day',$req->day)
+                ->first();
+
+                if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
+                {
+                    $obj= Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->first();
+
+                    $obj->update([
+                        'start_time'=>$req->start_time,
+                        'end_time'=>$req->end_time
+                    ]);
+
+                    $queues=Queue::where('user_id',$req->source_id)->get();
+                    for($i=0;$i<count($queues);$i++)
+                    {   $request = new Request([
+                            'source_id'=>$queues[$i]->id,//return the company_id  for this user
+                            'start_time'=>$req->start_time,
+                            'end_time'=>$req->end_time,
+                            'day'=>$req->day ]);
+                            $result=TimeController::updateQueueTime($request);
+                    }
+
+                    return response()->json([
+                        'message'=>'user updated successfully',
+                        'b'=>'1']);
+                }
+                else{
+                    return response()->json([
+                        'message'=>'Operation faild ',
+                        'b'=>'1']);
+                    }}
+
+
+
+            static public function updateCompanyTime(Request $req){
+
+                $companyTime=Time::where('source_id',auth()->user()->company_id)->where('type',"0")->where('day',$req->day)->first();
+
+                $companyTime->update([
+                    'start_time'=>$req->start_time,
+                    'end_time'=>$req->end_time
+                ]);
+
+                $users=User::where('company_id',auth()->user()->company_id)->get();
+
+
+                for($i=0;$i<sizeof($users);$i++){
+                    $request=new Request([
+                        'source_id'=>$users[$i]->id,//return the company_id  for this user
+                        'start_time'=>$req->start_time,
+                        'end_time'=>$req->end_time,
+                        'day'=>$req->day
+                    ]);
+
+                    $result = json_decode(TimeController::updateUserTime($request)->getContent(), true);
+
+                    if($result['b']=="0"){
+                        return response()->json([
+                            'message'=>'Operation faild '
+                        ]);
+                        }
+                    }
+                return response()->json([
+                    'message'=>' company updated successfully' ]);
+
+            }
+
+
+
+
+
+            function setQueueOffDay(Request $req){
+
                 $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
 
                 if($obj){
@@ -319,49 +322,53 @@ class TimeController extends Controller
 
 
         //need testing
-                function setUserOffDay(Request $req){
-                    $obj=Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->where('status',1)->first();
+            function setUserOffDay(Request $req){
 
-                    if($obj){
-                    $queues=Queue::where('user_id',$req->source_id)->get();
+                $obj=Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->where('status',1)->first();
 
-                        if($queues){
-                        for($i=0;$i<sizeOf($queues);$i++){
-                            $request=new Request([
-                                'source_id'=>$queues[$i]->id,
-                                'day'=>$req->day
+                if($obj){
+                $queues=Queue::where('user_id',$req->source_id)->get();
+
+                    if($queues){
+                    for($i=0;$i<sizeOf($queues);$i++){
+                        $request=new Request([
+                            'source_id'=>$queues[$i]->id,
+                            'day'=>$req->day
+                        ]);
+
+                        $result = json_decode($this->setQueueOffDay( $request)->getContent(), true);
+
+                        if($result['b']=="0"){
+                            return response()->json([
+                                'message'=>'Operation faild '
                             ]);
-
-                            $result = json_decode($this->setQueueOffDay( $request)->getContent(), true);
-
-                            if($result['b']=="0"){
-                                return response()->json([
-                                    'message'=>'Operation faild '
-                                ]);
-                                }
-                            }
-                            $r= $obj->update(['status'=>0]);
-                            if($r){
-                                return response()->json([
-                                    'message'=>'set as user offday successfully',
-                                    'b'=>'1' ]);
-
-                            }
-                            else {
-                                return response()->json([
-                                    'message'=>'operation faild',
-                                    'b'=>'0' ]);
                             }
                         }
-                    }else {
-                        return response()->json([
-                            'message'=>'operation faild beacause this day is already off',
-                            'b'=>'1' ]);
+                        $r= $obj->update(['status'=>0]);
+                        if($r){
+                            return response()->json([
+                                'message'=>'set as user offday successfully',
+                                'b'=>'1' ]);
+
+                        }
+                        else {
+                            return response()->json([
+                                'message'=>'operation faild',
+                                'b'=>'0' ]);
+                        }
                     }
+                }else {
+                    return response()->json([
+                        'message'=>'operation faild beacause this day is already off',
+                        'b'=>'1' ]);
+                }
 
             }
 
+
+
             function setCompanyOffDay(Request $req){
+
                 $obj=Time::where('source_id',$req->source_id)->where('type',"0")->where('status',1)->where('day',$req->day)->first();
 
                 if($obj){
@@ -399,35 +406,32 @@ class TimeController extends Controller
                         'message'=>'operation faild beacause this day is already off',
                         'b'=>'0' ]);
                 }
-
-
-        }
+            }
 
 
 
-                function setQueueOnDay(Request $req)
-                {
+            function setQueueOnDay(Request $req){
+
                     $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',0)->first();
 
                 if($obj){
                     $appointments=Appointment::where('time_id',$obj->id)->where('status',10)->get();
 
                     if($appointments){
-
-                    for($i=0;$i<sizeOf($appointments);$i++){
-                            $appointments[$i]->update(['status'=>0]); //make the appoiintment is available
-                        }
+                            for($i=0;$i<sizeOf($appointments);$i++){
+                                $appointments[$i]->update(['status'=>0]); //make the appoiintment is available
+                            }
                     }
 
-                $obj->update(['status'=>1]);//status=0 mean this time is off day ,status=1 mean this time is on day
-                return  response()->json([ 'message'=>'Set as on day successfully',
-                                            'b'=>'1' ]);
+                    $obj->update(['status'=>1]);//status=0 mean this time is off day ,status=1 mean this time is on day
+                    return  response()->json([ 'message'=>'Set as on day successfully',
+                                                'b'=>'1' ]);
 
                 }else{
                 return  response()->json([ 'message'=>'opration failed  beacause this day is already on',
                                         'b'=>'1' ]);
                 }
-        }
+    }
 
 
 
@@ -441,19 +445,19 @@ class TimeController extends Controller
                     $queues=Queue::where('user_id',$req->source_id)->get();
 
                         if($queues){
-                        for($i=0;$i<sizeOf($queues);$i++){
-                            $request=new Request([
-                                'source_id'=>$queues[$i]->id,
-                                'day'=>$req->day
-                            ]);
-
-                            $result = json_decode($this->setQueueOnDay($request)->getContent(), true);
-
-                            if($result['b']=="0"){
-                                return response()->json([
-                                    'message'=>'Operation faild '
+                            for($i=0;$i<sizeOf($queues);$i++){
+                                $request=new Request([
+                                    'source_id'=>$queues[$i]->id,
+                                    'day'=>$req->day
                                 ]);
-                                }
+
+                                $result = json_decode($this->setQueueOnDay($request)->getContent(), true);
+
+                                if($result['b']=="0"){
+                                    return response()->json([
+                                        'message'=>'Operation faild '
+                                    ]);
+                                    }
                             }
                             $r= $obj->update(['status'=>1]);
                             if($r){
@@ -462,24 +466,25 @@ class TimeController extends Controller
                                     'b'=>'1' ]);
 
                             }
-                            else {
+                            else{
                                 return response()->json([
                                     'message'=>'operation faild',
                                     'b'=>'0' ]);
                             }
                         }
+
                     }else {
-                        return response()->json([
-                            'message'=>'operation faild beacause this day is already on',
-                            'b'=>'1' ]);
+                            return response()->json([
+                                'message'=>'operation faild beacause this day is already on',
+                                'b'=>'1' ]);
                     }
 
         }
 
 
 
-                function setCompanyOnDay(Request $req)
-                {
+                function setCompanyOnDay(Request $req){
+
                     $obj=Time::where('source_id',$req->source_id)->where('type',0)->where('status',0)->where('day',$req->day)->first();
 
                     if($obj){
