@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Service;
+use App\Models\ServiceQueue;
+use App\Models\Appointment;
+use App\Models\Time;
+use App\Http\Controllers\AppointmentController;
 
 use Illuminate\Support\Facades\Validator;
 
@@ -58,14 +62,44 @@ use Illuminate\Support\Facades\Validator;
 
 
                 function updateDetails(Request $req, $id)
-                { $service= Service::find($id);
+                {
+                    $service= Service::find($id);
+                    $old_duration_time=$service->duration_time;
                         $service->update([
                         'name' =>$req->name,
                         'logo'=>$req->logo,
                         'duration_time'=>$req->duration_time,
                         ]);
-                        return response()->json([$service]);
+
+                    if($old_duration_time != $service->duration_time){
+                        $queues=ServiceQueue::selectRaw('queue_id')->where('service_id',$service->id)->get();
+
+                        if($queues){
+                            for($i=0;$i<sizeof($queues);$i++){
+                                $times=Time::where('source_id',$queues[$i]->queue_id)->where('type',"2")->where('status',1)->get();
+                                if($times){
+                                    for($j=0;$j<sizeof($times);$j++){
+                                        $appointments=Appointment::where('time_id',$times[$j]->id)->where('status',1)->orwhere('status',0)->get();
+                                        foreach($appointments as $a){
+                                            $a->update(['status'=>-1]);
+                                            }
+
+                                    AppointmentController::createAppointment(new Request([
+                                        'time_id'=>$times[$j]->id,//return the company_id  for this user
+                                        'start_time'=>$times[$j]->start_time,
+                                        'end_time'=>$times[$j]->end_time,
+                                        'source_id'=>$times[$j]->source_id,
+
+                                        ]));
+                                        return "sss";
+                                    }
+                                }
+                            }
+                        }
+
                 }
+                return response()->json([$service]);
+            }
 
 
 
