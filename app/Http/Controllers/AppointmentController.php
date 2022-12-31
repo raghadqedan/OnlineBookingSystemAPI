@@ -17,8 +17,8 @@ class AppointmentController extends Controller
 
             $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$time->source_id)->first();
 
-            $duration_time="00:15:00";
-            //Service::selectRaw('duration_time')->where('id',$service_id)->first();//error in $service_id because it is null
+            $duration_time="00:15:00";//?? error in $service_id because it is null ,it must be  Service::selectRaw('duration_time')->where('id',$service_id)->first();
+
                 //$repeats=Queue::selectRaw('repeats')->where('id',$time->source_id)->first();
                    // return $repeats;
        // while($current_date<=date("Y-m-d", strtotime('+'.$repeats.'week', strtotime($active_date))))
@@ -61,12 +61,6 @@ class AppointmentController extends Controller
 
 
     }
-
-
-
-                //$appoitments=Appoitments::selectRow(('time_id',$time_id),('start_time'< $start_time)||('end_time'> $end_time));
-                //check if this appoitment is booked then send notification to the customer "your booking cancel"  then delete this appoitment
-                //else only delete it . for serch($appoitmnt_id) this method must but in booking table.
 
 
 
