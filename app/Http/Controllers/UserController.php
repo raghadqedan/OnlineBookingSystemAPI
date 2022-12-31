@@ -20,147 +20,150 @@ class UserController extends Controller
 
 
 
-    function getDetails($id)
-    {
-        $user=User::find($id);
-        return $user;
+            function getDetails($id){
+                $user=User::find($id);
+                return $user;
 
-    }
+            }
 
-    function updateDetails(Request $req, $id)
-        { $user= User::find($id);
-        $user->name=$req->input('name');
-        $user->email=$req->input('email');
-        $user->password=Hash::make($req->input('password'));
-        $user->phone_number=$req->input('phone_number');
-        $user->role_id=$req->input('role_id');
+            function updateDetails(Request $req, $id){
 
-        $user->update();
+                $user= User::find($id);
+                $user->name=$req->input('name');
+                $user->email=$req->input('email');
+                $user->password=Hash::make($req->input('password'));
+                $user->phone_number=$req->input('phone_number');
+                $user->role_id=$req->input('role_id');
 
-        return $user;
+                $user->update();
 
-    }
+                return $user;
 
-    //   {
-    //    "name":"rama",
-    //     "role_id":"2",
-    //     "email":"qqqqqqq@yahoo.com",
-    //     "password":"18888887890",
-    //     "phone_number":"222222222",
-    //     }
+            }
 
-
-
-    function login(Request $req){
-        $user= User::where('email',$req->email)->first();
-        if(!$user||!Hash::check($req->password,$user->password))
-            return response()->json([
-            'status'=>401,
-            'message'=>'Invalid Credentials'
-
-        ]);
-
-        else{
-            $token=$user->createToken('myapptoken')->plainTextToken;
-            $response=[
-                'status'=>200,
-                'message'=>'valid Credentials',
-                'user'=>$user,
-                'token'=>$token,
-                ]; }
-        return $response;}
+            //   {
+            //    "name":"rama",
+            //     "role_id":"2",
+            //     "email":"qqqqqqq@yahoo.com",
+            //     "password":"18888887890",
+            //     "phone_number":"222222222",
+            //     }
 
 
-    function deleteSelected(ArrayList $id){
 
-        for($i=0;$i<sizeof($id);$i++)
-            $result= User::where('id', $id[$i])->delete();
-            if ($result){
-                return ["result"=>"selected users have been delete"];
-            } else {
-                return ["result"=>"Operation faild"];
+            function login(Request $req){
+
+                $user= User::where('email',$req->email)->first();
+                if(!$user||!Hash::check($req->password,$user->password))
+                    return response()->json([
+                    'status'=>401,
+                    'message'=>'Invalid Credentials'
+
+                ]);
+
+                else{
+                    $token=$user->createToken('myapptoken')->plainTextToken;
+                    $response=[
+                        'status'=>200,
+                        'message'=>'valid Credentials',
+                        'user'=>$user,
+                        'token'=>$token,
+                        ]; }
+                return $response;
+
+            }
+
+
+
+            function deleteSelected(ArrayList $id){
+
+                for($i=0;$i<sizeof($id);$i++)
+                    $result= User::where('id', $id[$i])->delete();
+                    if ($result){
+                        return ["result"=>"selected users have been delete"];
+                    } else {
+                        return ["result"=>"Operation faild"];
+                    }
+                }
+
+
+
+
+            public function addUser(request $req){
+                $validator=Validator::make($req->all(),[
+                'name' =>'required',
+                'email' =>'required|email|max:191|unique:users,email',
+                'password' =>'required',
+                'role_id' =>'required',
+                'phone_number'=>'required',
+                ]);
+
+                if($validator->fails()){
+                    return response()->json([
+                        'validation_error'=>$validator->messages(),
+                    ]);}
+
+                else{
+                $user= new User();
+                $user->name =$req->input('name');
+                $user->email =$req->input('email');
+                $user->password =Hash::make($req->input('password'));
+                $user->role_id =$req->input('role_id');
+                $user->company_id =auth()->user()->company_id;
+                $user->phone_number =$req->input('phone_number');
+                $user->save();
+                //create   default scheduleTimes for the user default start,end times  value from companytimes.
+
+                    for($i=0;$i<7;$i++){
+                    $company=Time::where('source_id', $user->company_id)->where('day',$i)->where('type',"0")->first();
+
+
+                    $request = new Request([
+                        'day'=>$i,
+                        'type'=>"1",
+                        'source_id'=>$user->id,
+                        'start_time'=>$company->start_time,
+                        'end_time'=>$company->end_time
+                    ]);
+
+                    TimeController::createTime( $request);
+                    }
+
+                return $user;
             }
         }
 
 
 
-    public function addUser(request $req)
-    {
-        $validator=Validator::make($req->all(),[
-        'name' =>'required',
-        'email' =>'required|email|max:191|unique:users,email',
-        'password' =>'required',
-        'role_id' =>'required',
-        'phone_number'=>'required',
-        ]);
 
-        if($validator->fails()){
-            return response()->json([
-                'validation_error'=>$validator->messages(),
-            ]);}
-
-        else{
-        $user= new User();
-        $user->name =$req->input('name');
-        $user->email =$req->input('email');
-        $user->password =Hash::make($req->input('password'));
-        $user->role_id =$req->input('role_id');
-        $user->company_id =auth()->user()->company_id;
-        $user->phone_number =$req->input('phone_number');
-        $user->save();
-          //create   default scheduleTimes for the user default start,end times  value from companytimes.
-
-            for($i=0;$i<7;$i++){
-            $company=Time::where('source_id', $user->company_id)->where('day',$i)->where('type',"0")->first();
-
-
-            $request = new Request([
-                'day'=>$i,
-                'type'=>"1",
-                'source_id'=>$user->id,
-                'start_time'=>$company->start_time,
-                'end_time'=>$company->end_time
-            ]);
-
-            TimeController::createTime( $request);
+            public function delete($id){
+                $result= User::where('id', $id)->delete();
+                if ($result) {
+                    return ["result"=>"user has been delete"];
+                } else {
+                    return ["result"=>"Operation faild"];
+                }
             }
 
-        return $user;
-    }}
-
-
-
-    public function delete($id)
-    {
-        $result= User::where('id', $id)->delete();
-        if ($result) {
-            return ["result"=>"user has been delete"];
-        } else {
-            return ["result"=>"Operation faild"];
-        }
-    }
 
 
 
 
+            static function getCompanyType(){
+                    return  auth()->user()->company_id;
 
-    static function getCompanyType()
-    {
-            return  auth()->user()->company_id;
-
-    }
+            }
 
 
 
 
 
 
-  public function getUsers()
-  {
-   $user=User::where('id',auth()->user()->company_id)->get();
-   return $user;
+            public function getUsers(){
+                    $user=User::where('id',auth()->user()->company_id)->get();
+                    return $user;
 
-  }
+            }
 
 
 
