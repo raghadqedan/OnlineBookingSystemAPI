@@ -66,17 +66,17 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
         Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
         Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
         Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
-        Route::put('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
-        Route::post('setUserOffDay',[TimeController::class,'setUserOffDay']);//valid
-        Route::post('setUserOnDay',[TimeController::class,'setUserOnDay']);//valid
-        Route::post('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
-        Route::post('setCompanyOnDay',[TimeController::class,'setCompanyOnDay']);//valid
-        Route::post('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//valid
-        Route::post('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
+        Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
+        Route::put('setUserOffDay',[TimeController::class,'setUserOffDay']);//valid
+        Route::put('setUserOnDay',[TimeController::class,'setUserOnDay']);//valid
+        Route::put('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
+        Route::put('setCompanyOnDay',[TimeController::class,'setCompanyOnDay']);//valid
+        Route::put('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//valid
+        Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
 
 
         // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
-       // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
+    // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
     });
 
 
