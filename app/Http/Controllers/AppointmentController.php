@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 
 class AppointmentController extends Controller
 {
-    static function createAppointment($time){
+    static function createAppointment(Request $time){
 
             $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$time->source_id)->first();
 
@@ -29,6 +29,7 @@ class AppointmentController extends Controller
             $end_time=$time->end_time;
                 $bool=1;
                 if($start_time<$end_time){
+
                         $end_time="00:00:00";
                 while($bool&& (date("H:i:s",strtotime($end_time)+strtotime($duration_time))<=$time->end_time)){
 
@@ -39,7 +40,7 @@ class AppointmentController extends Controller
                     'start_time'=>$start_time,
                     'end_time'=>$end_time,
                     'status'=>"1",
-                    'time_id'=>$time->id,
+                    'time_id'=>22,//?? error must $time->id
 
                 ]);
 

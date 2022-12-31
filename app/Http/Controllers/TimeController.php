@@ -29,7 +29,12 @@ class TimeController extends Controller
                 if($obj){
                     if($obj->type=="2"){
 
-                    $result=AppointmentController::createAppointment($obj);
+                    $result=AppointmentController::createAppointment(new Request([
+                        'time_id'=>$obj->id,//return the company_id  for this user
+                        'start_time'=>$obj->start_time,
+                        'end_time'=>$obj->end_time,
+                        'source_id'=>$obj->source_id,
+                    ]   ));
                     if($result=="1") {
                         return response()->json(['b'=>'1',
                                             'time'=>$obj]);
@@ -120,44 +125,78 @@ class TimeController extends Controller
             if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
                 {
                     $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
+
                     if($obj){
-                    $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$obj->id)->first();
-                    $duration_time=Service::selectRaw('duration_time')->where('id',$service_id)->first();
+                    $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$obj->source_id)->get();
+                    $duration_time="00:15:00";
+                    //?? Service::selectRaw('duration_time')->where('id',$service_id)->get();//error
 
-                        $obj->update([
-                            'start_time'=>$req->start_time,
-                            'end_time'=>$req->end_time
-                        ]);
+                    if(($req->start_time!=$obj->start_time)||($req->end_time!=$obj->end_time)){
 
-                        $appointments=Appointment::where('time_id',$obj->id)->where('status',1)->orwhere('status',0)->get();
+                            if($req->start_time<strtotime($obj->start_time)-strtotime($duration_time)){
+                                    AppointmentController::createAppointment(new Request([
+                                    'time_id'=>$obj->id,//return the company_id  for this user
+                                    'start_time'=>$req->start_time,
+                                    'end_time'=>$obj->start_time,
+                                    'source_id'=>$obj->source_id,
 
-                    if($appointments){
+                                    ]));
 
-                        for($i=0;$i<sizeOf($appointments);$i++){
-                                        //any appoitment is out of  new time bounds of the queue will satisfy this if condition
-                                    if(($appointments[$i]->start_time < $obj->start_time &&$appointments[$i]->end_time>$obj->start_time)||($appointments[$i]->start_time < $obj->start_time &&$appointments[$i]->end_time<$obj->start_time)||($appointments[$i]->start_time<$obj->end_time&&$appointments[$i]->end_time>$obj->end_time)||$appointments[$i]->start_time>$obj->end_time)
-                                    {
-                                        $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
-                                        if($booking){
-                                            $booking->update(['status'=>3]);// set booking status=3 mean this booking is canceled
-                                            //TODO:send email "your booking cancelled please book anew book in another time"
+                                }
+                            if($req->end_time>=strtotime($obj->end_time)+strtotime($duration_time)){
+                                AppointmentController::createAppointment(new Request([
+                                'time_id'=>$obj->id,//return the company_id  for this user
+                                'start_time'=>$obj->end_time,
+                                'end_time'=>$req->end_time,
+                                'source_id'=>$obj->source_id,
+                                ]));
+                            }
+
+                            elseif($req->start_time>=$obj->start_time&&$req->end_time<=$obj->end_time){
+                                        $appointments=Appointment::where('time_id',$obj->id)->where('status',1)->orwhere('status',0)->get();
+
+                                        if($appointments){
+
+                                            for($i=0;$i<sizeOf($appointments);$i++){
+                                                            //any appoitment is out of  new time bounds of the queue will satisfy this if condition
+                                                        if(($appointments[$i]->start_time < $req->start_time &&$appointments[$i]->end_time>$req->start_time)||($appointments[$i]->start_time < $req->start_time &&$appointments[$i]->end_time<$req->start_time)||($appointments[$i]->start_time<$req->end_time&&$appointments[$i]->end_time>$req->end_time)||$appointments[$i]->start_time>$req->end_time)
+                                                        {
+                                                            $booking=Booking::where('appointment_id',$appointments[$i]->id)->where('status',0)->orwhere('status',1)->first();
+                                                            if($booking){
+                                                                $booking->update(['status'=>3]);// set booking status=3 mean this booking is canceled
+                                                                //TODO:send email "your booking cancelled please book anew book in another time"
+                                                                }
+                                                            $appointments[$i]->update(['status'=>-1]);
+                                                        }
+
                                             }
-                                        $appointments[$i]->update(['status'=>-1]);
-                                    }
 
-                        }
+                                    }}
+
+
+                                $r =$obj->update([
+                                    'start_time'=>$req->start_time,
+                                    'end_time'=>$req->end_time
+                                ]);
+
+                                return response()->json([
+                                    'message'=>'Queue updated successfully',
+                                    'b'=>'1']);
+
+
 
                     }
+                    return response()->json([
+                        'message'=>'These times ​​already exist',
+                        'b'=>'0']);
+                }
 
-                    return response()->json([
-                        'message'=>'Queue updated successfully',
-                        'b'=>'1']);
-                    }
-                    return response()->json([
-                            'message'=>'Operation faild',
-                            'b'=>'0']);
 
                 }
+
+                return response()->json([
+                    'message'=>'Operation faild',
+                    'b'=>'0']);
     }
 
 
@@ -635,7 +674,6 @@ class TimeController extends Controller
     //                     //status=0 mean the confirmed booking status =1 mean the turned booking status=2 canceled booking status=3 mean checkedout boooking
     //                     if($booking){
     //                         $booking->update(['status'=>3]);
-    //                         //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
     //                         //email   "your booking cancelled please book anew book in another time";
     //                     }
 
