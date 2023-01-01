@@ -8,6 +8,7 @@ use App\Models\ServiceQueue;
 use App\Models\Appointment;
 use App\Models\Time;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ImageController;
 
 use Illuminate\Support\Facades\Validator;
 
@@ -43,7 +44,7 @@ use Illuminate\Support\Facades\Validator;
                                 $service=Service::create([
                                 'name'=>$req->name,
                                 'duration_time'=>$req->duration_time,
-                                'logo'=>$req->logo
+                                'logo'=>ImageController::storeImage($req,"service"),
                                 ]);
                                 return response()->json([$service ]);
                         }
@@ -67,7 +68,7 @@ use Illuminate\Support\Facades\Validator;
                     $old_duration_time=$service->duration_time;
                         $service->update([
                         'name' =>$req->name,
-                        'logo'=>$req->logo,
+                        'logo'=>ImageController::updateImage($req,"service"),
                         'duration_time'=>$req->duration_time,
                         ]);
 

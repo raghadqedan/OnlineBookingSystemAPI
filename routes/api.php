@@ -12,6 +12,7 @@ use App\Http\Controllers\DayController;
 use App\Http\Controllers\TimeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Service_QueueController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AppointmentController;
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ use App\Http\Controllers\AppointmentController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-        Route::post('filter1',[CustomerController::class,'filter1']);
+       // Route::post('filter1',[CustomerController::class,'filter1']);
         Route::post('register',[CompanyController::class,'register']);//valid
         Route::post('user/login',[UserController::class,'login'])->name('login');//valid
 
@@ -33,7 +34,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
    //companies
         Route::get('company/getProfile/{id}',[CompanyController::class,'getDetails']);//valid
-        Route::put('company/updateProfile',[CompanyController::class,'updateDetails']);//valid
+        Route::post('company/updateProfile',[CompanyController::class,'updateDetails']);//valid
         Route::delete('company/delete',[CompanyController::class,'delete']);//valid
         Route::get('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
         //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
@@ -122,6 +123,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
         Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
         Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid
         Route::post('customer/editPassword/{id}',[CustomerController::class,'editPassword']);//not valid
+        Route::post('getImage',[ImageController::class,'getImage']);//valid
 
 // Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 

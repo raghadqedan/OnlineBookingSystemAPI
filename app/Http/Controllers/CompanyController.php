@@ -10,6 +10,7 @@ use App\Models\Company;
 use App\Models\Category;
 use App\Models\Role;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\ImageController;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +27,7 @@ class CompanyController
                 'email' =>'required|email|max:191|unique:users,email',
                 'password' =>'required',
                 'category_id'=>'required',
-                'type'=>'required',
+                'type'=>'required',//company type
             ]);
 
 
@@ -48,7 +49,7 @@ class CompanyController
                         'name'=>$req->name,
                         'phone_number'=>$req->phone_number,
                         'category_id'=>$req->category_id,
-                        'logo'=>$req->logo,
+                        'logo'=>ImageController::storeImage($req,"company"),
                         'description'=>$req->description,
                         'type'=>$req->type,
                         'address_id'=>$address->id,
@@ -188,7 +189,7 @@ class CompanyController
                 'email'=>$req->email,
                 'phone_number'=>$req->phone_number,
                 'category_id'=>$req->category_id,
-                'logo'=>$req->logo,
+                'logo'=>ImageController::updateImage($req,"company"),
                 'description'=>$req->description,
                 'type'=>$req->type,
                 'address_id'=>$address->id,

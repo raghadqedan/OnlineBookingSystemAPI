@@ -14,28 +14,42 @@ class CategoriesSeeder extends Seeder
      * @return void
      */
     public function run()
-    {  DB::table('categories')->insert([[
+    {
+            DB::table('categories')->insert([[
         'name' => 'Banks',
-        'logo' => '', ],
+        'logo' => 'categories\Ministry Of Health.jpg', ],
 
-       ['name' => 'Salons',
-        'logo' => '',
-     ],
+        ['name' => 'Salons',
+        'logo' => 'categories\salon.jpg',
+        ],
 
-       [
-        'name' => 'Ministry Of Health',
-        'logo' => '',
-       ],
+        [
+        'name' => 'The Ministry Of Health',
+        'logo' => 'categories\Ministry Of Health.jpg',
+        ],
 
-       [
+        [
         'name' => 'Barber Salons',
-        'logo' => '',
-       ],]
+        'logo' => 'categories\Barber Salons.jpg',
+        ],
+        [
+        'name' => 'Doctors',
+        'logo' => 'categories\doctor.jpg',
+        ],
+
+        [
+        'name' => 'The ministry of communications',
+        'logo' => 'categories\The ministry of communications.jpg',
+        ],
+
+
+
+        ]
 
 
 
 
 );
-        
+
     }
 }
