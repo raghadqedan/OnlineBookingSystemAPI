@@ -24,17 +24,35 @@ class TimeController extends Controller
                 'day'=>$req->day,
                 'type'=>$req->type,
                 'start_time'=>$req->start_time,
-                'end_time'=>$req->end_time, ]);
+                'end_time'=>$req->end_time,
+                'status'=>$req->status
+                ]);
 
                 if($obj){
                     if($obj->type=="2"){
-
+                        if($obj->status=="1"){
                     $result=AppointmentController::createAppointment(new Request([
                         'time_id'=>$obj->id,//return the company_id  for this user
                         'start_time'=>$obj->start_time,
                         'end_time'=>$obj->end_time,
                         'source_id'=>$obj->source_id,
+                        'status'=>"1"
                     ]   ));
+                    }else{
+                        $result=AppointmentController::createAppointment(new Request([
+                            'time_id'=>$obj->id,//return the company_id  for this user
+                            'start_time'=>$obj->start_time,
+                            'end_time'=>$obj->end_time,
+                            'source_id'=>$obj->source_id,
+                            'status'=>"0"
+                        ]   ));
+
+
+                    }
+
+
+
+
                     if($result=="1") {
                         return response()->json(['b'=>'1',
                                             'time'=>$obj]);

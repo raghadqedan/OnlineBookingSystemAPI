@@ -39,7 +39,7 @@ class AppointmentController extends Controller
                 $obj=Appointment::create([
                     'start_time'=>$start_time,
                     'end_time'=>$end_time,
-                    'status'=>"1",
+                    'status'=>$time->status,
                     'time_id'=>22,//?? error must $time->id
 
                 ]);
@@ -53,7 +53,9 @@ class AppointmentController extends Controller
                 $start_time=$end_time;
 
 
-        } return 1;
+        }
+
+        return 1;
             }
             else{
             return  0;

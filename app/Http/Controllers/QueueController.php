@@ -62,14 +62,27 @@ class QueueController extends Controller
 
                       //create  queues default scheduleTimes for the queue wuth  user start,end times  value.
                         for($i=0;$i<7;$i++){
+
                             $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();
+                            if($obj->status=="1"){
                             $request = new Request([
                                 'day'=>$i,
                                 'type'=>"2",
                                 'source_id'=>$queue->id,
                                 'start_time'=> $obj->start_time,
                                 'end_time'=> $obj->end_time,
-                            ]);
+                                'status'=>"1"
+                            ]);}
+                            else{
+                                $request = new Request([
+                                    'day'=>$i,
+                                    'type'=>"2",
+                                    'source_id'=>$queue->id,
+                                    'start_time'=> $obj->start_time,
+                                    'end_time'=> $obj->end_time,
+                                    'status'=>"0"
+                                ]);
+                            }
                             $result=TimeController::createTime( $request);
                             if($result=="0"){
                                 return  response()->json([

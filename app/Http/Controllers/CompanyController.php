@@ -104,7 +104,8 @@ class CompanyController
                                     'type'=>"0",
                                     'source_id'=>$company->id,
                                     'start_time'=>"08:00:00",
-                                    'end_time'=>"14:00:00"
+                                    'end_time'=>"14:00:00",
+                                    'status'=>"1"
                                 ]);
                                 TimeController::createTime( $request1);
                                 $request2 = new Request([
@@ -112,7 +113,9 @@ class CompanyController
                                     'type'=>"1",
                                     'source_id'=>$user->id,
                                     'start_time'=>"08:00:00",
-                                    'end_time'=>"14:00:00"
+                                    'end_time'=>"14:00:00",
+                                    'status'=>"1"
+
                                 ]);
                                 TimeController::createTime( $request2);
                         }

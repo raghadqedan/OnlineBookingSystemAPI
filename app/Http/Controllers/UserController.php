@@ -116,15 +116,26 @@ class UserController extends Controller
 
                     for($i=0;$i<7;$i++){
                     $company=Time::where('source_id', $user->company_id)->where('day',$i)->where('type',"0")->first();
+                            if($company->status=="1"){
 
-
-                    $request = new Request([
-                        'day'=>$i,
-                        'type'=>"1",
-                        'source_id'=>$user->id,
-                        'start_time'=>$company->start_time,
-                        'end_time'=>$company->end_time
-                    ]);
+                                $request = new Request([
+                                    'day'=>$i,
+                                    'type'=>"1",
+                                    'source_id'=>$user->id,
+                                    'start_time'=>$company->start_time,
+                                    'end_time'=>$company->end_time,
+                                    'status'=>"1"
+                                ]);
+                            }else{
+                                $request = new Request([
+                                    'day'=>$i,
+                                    'type'=>"1",
+                                    'source_id'=>$user->id,
+                                    'start_time'=>$company->start_time,
+                                    'end_time'=>$company->end_time,
+                                    'status'=>"0"
+                                ]);
+                            }
 
                     TimeController::createTime( $request);
                     }
