@@ -14,6 +14,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Service_QueueController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\BookingController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,64 +26,60 @@ use App\Http\Controllers\AppointmentController;
 |
 */
        // Route::post('filter1',[CustomerController::class,'filter1']);
-        Route::post('register',[CompanyController::class,'register']);//valid
-        Route::post('user/login',[UserController::class,'login'])->name('login');//valid
+            Route::post('register',[CompanyController::class,'register']);//valid
+            Route::post('user/login',[UserController::class,'login'])->name('login');//valid
 
 
 
 Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
    //companies
-        Route::get('company/getProfile/{id}',[CompanyController::class,'getDetails']);//valid
-        Route::post('company/updateProfile',[CompanyController::class,'updateDetails']);//valid
-        Route::delete('company/delete',[CompanyController::class,'delete']);//valid
-        Route::get('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
-        //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
+            Route::get('company/getProfile/{id}',[CompanyController::class,'getDetails']);//valid
+            Route::post('company/updateProfile',[CompanyController::class,'updateDetails']);//valid
+            Route::delete('company/delete',[CompanyController::class,'delete']);//valid
+            Route::get('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
+            //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
 
 
 
    //services
-        Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);//valid
-        Route::put('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
-        Route::post('service/add',[ServiceController::class,'addService']);//valid
-        Route::delete('service/delete/{id}',[ServiceController::class,'delete']);//valid
+            Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);//valid
+            Route::put('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
+            Route::post('service/add',[ServiceController::class,'addService']);//valid
+            Route::delete('service/delete/{id}',[ServiceController::class,'delete']);//valid
 
   //users
-        Route::post('user/add',[UserController::class,'addUser']);//valid
-        Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
-        Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
+            Route::post('user/add',[UserController::class,'addUser']);//valid
+            Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
+            Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
 
   //Queues
 
-        Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
-        Route::post('queue/add',[QueueController::class,'addQueue']);//valid
-        Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
-        Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
+            Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
+            Route::post('queue/add',[QueueController::class,'addQueue']);//valid
+            Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
+            Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
 
 
 
 
   //Times
-        Route::post('createTime',[TimeController::class,'createTime']);// valid
-        Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
-        Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
-        Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
-        Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
-        Route::put('setUserOffDay',[TimeController::class,'setUserOffDay']);//valid
-        Route::put('setUserOnDay',[TimeController::class,'setUserOnDay']);//valid
-        Route::put('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
-        Route::put('setCompanyOnDay',[TimeController::class,'setCompanyOnDay']);//valid
-        Route::put('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//valid
-        Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
+            Route::post('createTime',[TimeController::class,'createTime']);// valid
+            Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
+            Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
+            Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
+            Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
+            Route::put('setUserOffDay',[TimeController::class,'setUserOffDay']);//valid
+            Route::put('setUserOnDay',[TimeController::class,'setUserOnDay']);//valid
+            Route::put('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
+            Route::put('setCompanyOnDay',[TimeController::class,'setCompanyOnDay']);//valid
+            Route::put('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//valid
+            Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
 
 
         // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
     // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
-    });
-
-
-
-
+      });
 
 
 
@@ -91,10 +88,16 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
    //users
 
-        Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
-        Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
-        //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
-    });
+            Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
+            Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
+            //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
+      });
+
+
+
+
+
+
 
 
 
@@ -116,14 +119,15 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
    //Customer mobile
 
-        Route::post('customer/signUp',[CustomerController::class,'signUp']);//valid
-        Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
-        Route::get('getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid
-        Route::post('customer/login',[CustomerController::class,'login']);//valid
-        Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
-        Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid
-        Route::post('customer/editPassword/{id}',[CustomerController::class,'editPassword']);//not valid
-        Route::post('getImage',[ImageController::class,'getImage']);//valid
+            Route::post('customer/signUp',[CustomerController::class,'signUp']);//valid
+            Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
+            Route::get('getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid
+            Route::post('customer/login',[CustomerController::class,'login']);//valid
+            Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
+            Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid
+            Route::post('customer/editPassword/{id}',[CustomerController::class,'editPassword']);//not valid
+            Route::post('getImage',[ImageController::class,'getImage']);//valid
+            Route::get('createBooking',[BookingController::class,'createBook']);//valid
 
 // Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
@@ -154,5 +158,5 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 // Route::get('getonDays/{source_id}/{type}',[DayController::class,'getonDays']);
 // Route::get('setonDay/{source_id}/{type}/{day}',[DayController::class,'setonDay']);
 // Route::get('setOffDay/{source_id}/{type}/{day}',[DayController::class,'setOffDay']);
-// //Route::delete('deleteDays/{source_id}/{type})',[DayController::class,'deleteDays']);
+ //Route::delete('deleteDays/{source_id}/{type})',[DayController::class,'deleteDays']);
 // Route::get('isOffDay/{source_id}/{type}/{day}',[DayController::class,'isOffDay']);

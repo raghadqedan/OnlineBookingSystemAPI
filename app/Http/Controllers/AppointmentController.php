@@ -82,7 +82,25 @@ class AppointmentController extends Controller
                 }
 
 
-            }
+
+
+
+                }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -108,7 +126,7 @@ class AppointmentController extends Controller
 
 
 
-}
+
 
 
 
