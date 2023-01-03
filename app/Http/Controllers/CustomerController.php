@@ -104,30 +104,73 @@ class CustomerController extends Controller
 
 
 
-// public function filter1(Request $req){
-// $name=$phone_number=$email="";
-// $name =$req->name;
-// $phone_number = $req->phone_number;
-// $email = $req->email;
+
+    function getAllCompany($category_id){
+
+
+    }
+
+
+    function getOnDays($company_id){
 
 
 
-// if (!empty($email)) {
-//     $customer= Customer::where('email', $email)
-//     ->get();}
+    }
 
 
-// elseif(!empty($name)&&!empty($phone_number)){
-//     $customer=Customer::where('first_name', 'LIKE', "%{$name}%")
-//     ->orwhere('last_name', 'LIKE', "%{$name}%")
-//     ->orWhereRaw("concat(first_name,' ', last_name) like '%" . $name . "%' ")
-//     ->get();}
-
-//     return response()->json(['customer'=>$customer]);
-
-// }
+    function getAllAvailableAppointment(){
 
 
+
+
+    }
+
+
+    function getServices($company_id){
+
+
+
+
+    }
+
+
+    function getcompanyDetails($company_id){
+
+        //description ,address
+
+
+
+    }
+
+
+    function getOnTimes($company_id){
+
+            //get all times from time table  for this source_id where status==1
+
+    }
+
+
+
+    function getTotalCustomer($queue_id){
+        //get all times from time table  for this source_id where status==1
+
+    }
+
+
+    function getExpectedWaitingTime($queue_id){
+    //get all times from time table  for this source_id where status==1
+
+    }
+
+
+    function takeNumber($queue_id){
+    //get all times from time table  for this source_id where status==1
+
+    }
+
+
+
+
+    /// monitor screen , notification api
 
 }
-
