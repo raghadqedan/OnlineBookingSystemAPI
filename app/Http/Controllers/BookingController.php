@@ -18,14 +18,12 @@ class BookingController extends Controller{
 
                 // this appointment is available
                 $time=Time::where('id',$appointment->time_id)->where('status',1)->first();
-
                 $sq=ServiceQueue::where('queue_id',$time->source_id)->first();
 
                 $appointmentdayname =jddayofweek($time->day,1);
                 $nextday = strtotime('next '. $appointmentdayname.'');
                 $weekNoNextDay = date('W',$nextday);
                 $weekNo = date('W');
-                // $daynum = date("w", strtotime( date('l')));//sunday==0 .....
                 if ($weekNoNextDay != $weekNo) {
                     //customer want to book  appointment for this day
                     $date= date("y-m-d");//currentdate
@@ -33,8 +31,6 @@ class BookingController extends Controller{
                 }else{
                         $date=date("y-m-d",$nextday);;
                     }
-
-
             // $queue_id=DB::table('appointments')
             //     ->join('times', 'appointments.time_id', '=', 'times.id')
             //     ->where('appointments.id',$req->appointment_id)->get(['source_id']);
@@ -53,16 +49,19 @@ class BookingController extends Controller{
                 ]);
 
         }else{
-            response()->json([
+
+            return  response()->json([
                 'message'=>'operation failed'
 
             ]);
-        }}
+        }
+    }
 
         // {
         //     "appointment_id":"168",
         //      "customer_id":"1"
         // }
+
 
 
     function getAllBooking($customer_id){
