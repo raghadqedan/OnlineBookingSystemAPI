@@ -56,10 +56,114 @@ class BookingController extends Controller{
                 'message'=>'operation failed'
 
             ]);
-        }
+        }}
+
+
+
+    function getAllBooking($customer_id){
+
+           //get all booking to the customer
 
 
     }
+
+    function getBooking($booking_id){
+          //get one booking to the summary page
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+    function getOnDays($company_id){
+
+
+
+    }
+
+
+    function getAllAvailableAppointment(){
+
+
+
+
+    }
+
+
+    function getServices($company_id){
+
+
+
+
+    }
+
+
+    function getcompanyDetails($company_id){
+
+          //description ,address
+
+
+
+    }
+
+
+    function getOnTimes($company_id){
+
+            //get all times from time table  for this source_id where status==1
+
+    }
+
+
+
+    function getTotalCustomer($queue_id){
+        //get all times from time table  for this source_id where status==1
+
+}
+
+
+function getExpectedWaitingTime($queue_id){
+    //get all times from time table  for this source_id where status==1
+
+}
+
+
+function takeNumber($queue_id){
+    //get all times from time table  for this source_id where status==1
+
+}
+
+
+/// monitor screen , notification apis
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 //date = date("Y-m-d", strtotime('+'.$day.'day', strtotime($active_date)))
