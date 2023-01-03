@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller{
     function createBooking(Request $req){
-           //todo::create book and set data of  the selected appoitment day as number  ,
+
             $appointment=Appointment::where('id',$req->appointment_id)->where('status',0)->first();
 
             if($appointment){
@@ -140,7 +140,7 @@ function takeNumber($queue_id){
 }
 
 
-/// monitor screen , notification apis
+/// monitor screen , notification api
 
 
 
