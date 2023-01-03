@@ -9,6 +9,7 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller{
+
     function createBooking(Request $req){
 
             $appointment=Appointment::where('id',$req->appointment_id)->where('status',0)->first();
@@ -58,11 +59,14 @@ class BookingController extends Controller{
             ]);
         }}
 
+        // {
+        //     "appointment_id":"168",
+        //      "customer_id":"1"
+        // }
 
 
     function getAllBooking($customer_id){
-
-           //get all booking to the customer
+      //get all booking to the customer
 
 
     }
