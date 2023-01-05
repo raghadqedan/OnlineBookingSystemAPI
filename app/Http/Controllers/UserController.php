@@ -26,6 +26,17 @@ class UserController extends Controller
 
             }
 
+
+            function getAllUsers()
+            {
+                $users=User::where('company_id',auth()->user()->company_id)->get();
+                return response()->json(['users'=>$users]);
+            }
+
+
+
+
+
             function updateDetails(Request $req, $id){
 
                 $user= User::find($id);

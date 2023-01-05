@@ -43,23 +43,25 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
 
    //services
+            Route::get('service/getAllServices',[ServiceController::class,'getAllServices']);//not valid
             Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);//valid
             Route::put('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
             Route::post('service/add',[ServiceController::class,'addService']);//valid
             Route::delete('service/delete/{id}',[ServiceController::class,'delete']);//valid
 
   //users
+            Route::get('user/getAllUsers',[UserController::class,'getAllUsers']);//valid
             Route::post('user/add',[UserController::class,'addUser']);//valid
             Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
             Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
 
   //Queues
-
+            Route::get('queue/getAllQueue',[QueueController::class,'getAllQueue']);// valid
             Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
             Route::post('queue/add',[QueueController::class,'addQueue']);//valid
             Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
             Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
-
+            Route::delete('queue/deleteQueue/{id}',[QueueController::class,'deleteQueue']);//valid
 
 
 

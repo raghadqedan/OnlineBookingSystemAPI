@@ -26,7 +26,7 @@ class AddressController extends Controller
 
         return $address;}
 
-//to do
+//todo::
    //function to update the address with using the new location from map take location and the company_id as parameter
 //   public function resetAddressFromLocation($id,Request $req){
 //   $company=Company::find('id');

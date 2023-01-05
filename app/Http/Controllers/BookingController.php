@@ -29,7 +29,7 @@ class BookingController extends Controller{
                     $date= date("y-m-d");//currentdate
 
                 }else{
-                        $date=date("y-m-d",$nextday);;
+                        $date=date("y-m-d",$nextday);
                     }
             // $queue_id=DB::table('appointments')
             //     ->join('times', 'appointments.time_id', '=', 'times.id')
@@ -83,67 +83,6 @@ class BookingController extends Controller{
 
     }
 
-
-
-    function getOnDays($company_id){
-
-
-
-    }
-
-
-    function getAllAvailableAppointment(){
-
-
-
-
-    }
-
-
-    function getServices($company_id){
-
-
-
-
-    }
-
-
-    function getcompanyDetails($company_id){
-
-          //description ,address
-
-
-
-    }
-
-
-    function getOnTimes($company_id){
-
-            //get all times from time table  for this source_id where status==1
-
-    }
-
-
-
-    function getTotalCustomer($queue_id){
-        //get all times from time table  for this source_id where status==1
-
-}
-
-
-function getExpectedWaitingTime($queue_id){
-    //get all times from time table  for this source_id where status==1
-
-}
-
-
-function takeNumber($queue_id){
-    //get all times from time table  for this source_id where status==1
-
-}
-
-
-/// monitor screen , notification api
 
 
 

@@ -15,7 +15,7 @@ class AppointmentController extends Controller
 {
     static function createAppointment(Request $time){
 
-            $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$time->source_id)->first();
+            $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$time->source_id)->first();//pluck('service_id)
 
             $duration_time="00:15:00";//?? error in $service_id because it is null ,it must be  Service::selectRaw('duration_time')->where('id',$service_id)->first();
 
@@ -40,7 +40,7 @@ class AppointmentController extends Controller
                     'start_time'=>$start_time,
                     'end_time'=>$end_time,
                     'status'=>$time->status,
-                    'time_id'=>22,//?? error must $time->id
+                    'time_id'=>55,//?? error must $time->id
 
                 ]);
 

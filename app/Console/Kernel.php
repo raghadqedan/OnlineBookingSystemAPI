@@ -1,21 +1,25 @@
 <?php
 
 namespace App\Console;
-
+use App\Models\Queue;
+use App\Console\Commands\DeathQueue;
+use App\Console\Commands\ActiveQueue;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
-     */
+
+
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
+     {
+        //$schedule->call(function () {
+    //     $q= Queue::where('id',4)->first();
+    //             $q->update(['active'=>10]);
+
+    // })->everyMinute();
+        $schedule->command('Death:Queue')->everyMinute();
+        $schedule->command('Active:Queue')->everyMinute();
     }
 
     /**

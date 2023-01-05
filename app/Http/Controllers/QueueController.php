@@ -7,12 +7,16 @@ use App\Models\Queue;
 use App\Models\Company;
 use App\Models\User;
 use App\Models\Time;
+use App\Models\Appointment;
+use App\Models\Booking;
 use Auth;
+use DB;
 use App\Http\Controllers\TimeController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\TrustProxies as MiddleWare;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ServiceQueueController;
+use App\Jobs\ActiveQueue;
 
 
 
@@ -25,6 +29,17 @@ class QueueController extends Controller
 
         return$queue;
     }
+
+
+    function getAllQueue()
+    {
+            $queues=DB::table('users')
+                ->join('queues', 'users.id', '=', 'queues.user_id')
+                ->where('company_id',auth()->user()->company_id)->get(['queues.id','queues.name']);
+                return response()->json(['queues'=>$queues]);
+    }
+
+
 
 
     public function addQueue(request $req)
@@ -122,8 +137,7 @@ class QueueController extends Controller
             $queue->update([
                 'name'=>$req->name,
                 'start_regesteration'=>$req->start_regesteration,
-                're
-                peats'=>$req->repeats,
+                'repeats'=>$req->repeats,
                 'user_id'=>$req->user_id,
             ]);
 
@@ -141,7 +155,7 @@ class QueueController extends Controller
 
 
 
-    public function delete($id)
+    static  public function delete($id)
     {
             $r1=Queue::where('id', $id)->delete();
             if ($r1) {
@@ -150,13 +164,48 @@ class QueueController extends Controller
                 return ["result"=>"Operation faild"];
             }
     }
+//errors
+    function deleteQueue($queue_id){
 
+        $queue= Queue::where('id',$queue_id)->first();
+        if($queue){
+            $obj=Time::where('source_id',$queue_id)->where('type',2)->whereIn('status', [0,1])->get();//return all children times for this queue
 
+            if($obj){
+                    foreach($obj as $time){//$time->id
+                            $appointments=Appointment::where('time_id',55)->whereIn('status', [0,1,10])->get();
 
+                            if($appointments){
 
+                                foreach($appointments as $appointment){
 
+                                    $booking=Booking::where('appointment_id',$appointment->id)->whereIn('status', [0,1,10])->get();
 
+                                    if($booking){
+                                            foreach ($booking as $book){
+                                                if($book->status==1 ||$book->status==0){
+                                                    //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
+                                                   //email   "your booking cancelled please book anew book in another time";
+                                                }
+                                                $book->update(['status'=>-1],);
+                                                }
 
+                                            }
+                                            $appointment->update(['status'=>-1]);//make the appointment is deleted
+                                }
+                            }
+
+                        }
+
+                }
+        $obj->update(['status'=>-1]);
+        $queue->update(['status'=>-1]);
+        return  response()->json([ 'message'=>'Queue deleted successfully' ]);
+
+        }else{
+            return  response()->json([ 'message'=>'opration failed ' ]);
+        }
+    }
 
 
 

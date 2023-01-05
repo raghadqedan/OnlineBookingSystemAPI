@@ -112,7 +112,7 @@ class CustomerController extends Controller
 
 
     function getOnDays($company_id){
-
+           //get company on daynames
 
 
     }

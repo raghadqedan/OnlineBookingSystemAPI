@@ -20,6 +20,14 @@ use Illuminate\Support\Facades\Validator;
                 $service=Service::find($id);
                 return $service;
                 }
+                  //todo:: need to add the company_id in the services table
+
+                // function getAllServices()
+                // {
+                //         $services_id=Services::where('company_id',auth()->user()->company_id)->get();
+                // }
+
+
 
 
                 public function addService(request $req)
