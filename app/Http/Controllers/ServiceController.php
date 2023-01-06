@@ -74,6 +74,7 @@ use Illuminate\Support\Facades\Validator;
                 {
                     $service= Service::find($id);
                     $old_duration_time=$service->duration_time;
+
                         $service->update([
                         'name' =>$req->name,
                         'logo'=>ImageController::updateImage($req,"service"),
@@ -98,6 +99,7 @@ use Illuminate\Support\Facades\Validator;
                                         'start_time'=>$times[$j]->start_time,
                                         'end_time'=>$times[$j]->end_time,
                                         'source_id'=>$times[$j]->source_id,
+                                        'status'=>0
 
                                         ]));
 

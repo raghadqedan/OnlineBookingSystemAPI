@@ -45,7 +45,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
    //services
             Route::get('service/getAllServices',[ServiceController::class,'getAllServices']);//not valid
             Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);//valid
-            Route::put('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
+            Route::post('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
             Route::post('service/add',[ServiceController::class,'addService']);//valid
             Route::delete('service/delete/{id}',[ServiceController::class,'delete']);//valid
 
@@ -79,7 +79,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
 
 
-        // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
+         Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
     // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
       });
 
