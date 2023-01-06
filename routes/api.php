@@ -60,8 +60,8 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
             Route::post('queue/add',[QueueController::class,'addQueue']);//valid
             Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
-            Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
-            Route::delete('queue/deleteQueue/{id}',[QueueController::class,'deleteQueue']);//valid
+           // Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
+            Route::delete('queue/delete/{id}',[QueueController::class,'deleteQueue']);//valid
 
 
 
@@ -81,7 +81,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
         // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
     // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
-      });
+        });
 
 
 
@@ -93,7 +93,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
             //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
-      });
+        });
 
 
 
@@ -131,6 +131,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
             Route::post('getImage',[ImageController::class,'getImage']);//valid
             Route::post('customer/createBooking',[BookingController::class,'createBooking']);//valid
 
+            Route::get('getbooking/{id}',[BookingController::class,'getBooking']);//valid
 // Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
 

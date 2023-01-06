@@ -64,34 +64,11 @@ class BookingController extends Controller{
 
 
 
-    function getAllBooking($customer_id){
-      //get all booking to the customer
-
-
-    }
-
-    function getBooking($booking_id){
-          //get one booking to the summary page
-
-
-
-
-
-
-
-
+    function getBooking($id){
+        $booking = Booking::where('id', $id)->get();
+        return response()->json(['booking' => $booking]);
 
     }
-
-
-
-
-
-
-
-
-
-
 
 
 

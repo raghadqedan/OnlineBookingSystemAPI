@@ -36,7 +36,7 @@ class TimeController extends Controller
                         'start_time'=>$obj->start_time,
                         'end_time'=>$obj->end_time,
                         'source_id'=>$obj->source_id,
-                        'status'=>"1"
+                        'status'=>"0"
                     ]   ));
                     }else{
                         $result=AppointmentController::createAppointment(new Request([
@@ -44,11 +44,12 @@ class TimeController extends Controller
                             'start_time'=>$obj->start_time,
                             'end_time'=>$obj->end_time,
                             'source_id'=>$obj->source_id,
-                            'status'=>"0"
+                            'status'=>"10"
                         ]   ));
 
 
-                    }
+
+                }
 
 
 

@@ -79,25 +79,26 @@ class QueueController extends Controller
                         for($i=0;$i<7;$i++){
 
                             $obj=Time::where('source_id',$queue->user_id)->where('day',$i)->where('type',"1")->first();
-                            if($obj->status=="1"){
+                          //  if($obj->status=="1"){
                             $request = new Request([
                                 'day'=>$i,
                                 'type'=>"2",
                                 'source_id'=>$queue->id,
                                 'start_time'=> $obj->start_time,
                                 'end_time'=> $obj->end_time,
-                                'status'=>"1"
-                            ]);}
-                            else{
-                                $request = new Request([
-                                    'day'=>$i,
-                                    'type'=>"2",
-                                    'source_id'=>$queue->id,
-                                    'start_time'=> $obj->start_time,
-                                    'end_time'=> $obj->end_time,
-                                    'status'=>"0"
-                                ]);
-                            }
+                                'status'=>$obj->status
+                            ]);
+                        // }
+                        //     else{
+                        //         $request = new Request([
+                        //             'day'=>$i,
+                        //             'type'=>"2",
+                        //             'source_id'=>$queue->id,
+                        //             'start_time'=> $obj->start_time,
+                        //             'end_time'=> $obj->end_time,
+                        //             'status'=>"0"
+                        //         ]);
+
                             $result=TimeController::createTime( $request);
                             if($result=="0"){
                                 return  response()->json([
@@ -167,14 +168,14 @@ class QueueController extends Controller
 //errors
     function deleteQueue($queue_id){
 
-        $queue= Queue::where('id',$queue_id)->first();
+        $queue= Queue::where('id',$queue_id)->whereIn('active',[0,1])->first();
         if($queue){
             $obj=Time::where('source_id',$queue_id)->where('type',2)->whereIn('status', [0,1])->get();//return all children times for this queue
 
             if($obj){
                     foreach($obj as $time){
                             $appointments=Appointment::where('time_id',$time->id)->whereIn('status', [0,1,10])->get();
-return $appointments;
+
                             if($appointments){
 
                                 foreach($appointments as $appointment){
@@ -184,6 +185,7 @@ return $appointments;
                                     if($booking){
                                             foreach ($booking as $book){
                                                 if($book->status==1 ||$book->status==0){
+
                                                     //TODO:send email "your booking cancelled please book anew book in another time"//because company put this day as off day
                                                    //email   "your booking cancelled please book anew book in another time";
                                                 }
@@ -194,17 +196,17 @@ return $appointments;
                                             $appointment->update(['status'=>-1]);//make the appointment is deleted
                                 }
                             }
-
+                            $time->update(['status'=>-1]);
                         }
 
-                }
-        $obj->update(['status'=>-1]);
-        $queue->update(['status'=>-1]);
-        return  response()->json([ 'message'=>'Queue deleted successfully' ]);
 
-        }else{
-            return  response()->json([ 'message'=>'opration failed ' ]);
+
         }
+
+        $queue->update(['active'=>-1]);
+        return  response()->json([ 'message'=>'Queue deleted successfully' ]);
+        }
+        return  response()->json([ 'message'=>'opration failed ,This queue does not exist' ]);
     }
 
 
