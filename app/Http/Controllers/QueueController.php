@@ -172,9 +172,9 @@ class QueueController extends Controller
             $obj=Time::where('source_id',$queue_id)->where('type',2)->whereIn('status', [0,1])->get();//return all children times for this queue
 
             if($obj){
-                    foreach($obj as $time){//$time->id
-                            $appointments=Appointment::where('time_id',55)->whereIn('status', [0,1,10])->get();
-
+                    foreach($obj as $time){
+                            $appointments=Appointment::where('time_id',$time->id)->whereIn('status', [0,1,10])->get();
+return $appointments;
                             if($appointments){
 
                                 foreach($appointments as $appointment){

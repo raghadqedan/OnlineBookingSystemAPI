@@ -11,6 +11,7 @@ class ImageController extends Controller
     static function storeImage(Request $req,$foldarName,){
         if($req->hasFile('logo')){
             $file_path =$req->file('logo')->getClientOriginalName();//return the orignal name for photo
+            return $file_path;
             $path=$req->file('logo')->store($foldarName,['disk'=>'public']);
             return $path;
 

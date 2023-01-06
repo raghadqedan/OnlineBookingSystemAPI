@@ -66,7 +66,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
 
   //Times
-            Route::post('createTime',[TimeController::class,'createTime']);// valid
+           // Route::post('createTime',[TimeController::class,'createTime']);// valid
             Route::put('updateQueueTime',[TimeController::class,'updateQueueTime']);// valid
             Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
             Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
@@ -79,7 +79,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
 
 
-         Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
+        // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
     // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
       });
 

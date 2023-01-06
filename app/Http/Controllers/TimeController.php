@@ -141,16 +141,16 @@ class TimeController extends Controller
 
                 if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
                     {
-                        $obj= Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
+                        $obj= Time::where('source_id',$req->source_id)->where('type',2)->where('day',$req->day)->where('status',1)->first();
 
                         if($obj){
-                        $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$obj->source_id)->get();
-                        $duration_time="00:15:00";
-                        //?? Service::selectRaw('duration_time')->where('id',$service_id)->get();//error
+                        $service_id=ServiceQueue::selectRaw('service_id')->where('queue_id',$obj->source_id)->first();
+                        $duration_time= Service::selectRaw('duration_time')->where('id',$service_id->service_id)->first();//error
+                              ////
 
                         if(($req->start_time!=$obj->start_time)||($req->end_time!=$obj->end_time)){
 
-                                if($req->start_time<=(date("H:i:s",strtotime($obj->start_time)-strtotime($duration_time)))){
+                                if($req->start_time<=(date("H:i:s",strtotime($obj->start_time)-strtotime($duration_time->duration_time)))){
 
                                         AppointmentController::createAppointment(new Request([
                                         'time_id'=>$obj->id,//return the company_id  for this user
