@@ -129,7 +129,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
             Route::post('customer/editPassword/{id}',[CustomerController::class,'editPassword']);//not valid
             Route::post('getImage',[ImageController::class,'getImage']);//valid
             Route::post('customer/createBooking',[BookingController::class,'createBooking']);//valid
-
             Route::get('getbooking/{id}',[BookingController::class,'getBooking']);//valid
 // Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
