@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Validator;
                         'name' =>'required|string|max:200',
                         'duration_time' =>'required',
                         'logo'=>'required',
+
                                 ]);
 
 
@@ -53,6 +54,7 @@ use Illuminate\Support\Facades\Validator;
                                 'name'=>$req->name,
                                 'duration_time'=>$req->duration_time,
                                 'logo'=>ImageController::storeImage($req,"service"),
+                                'company_id'=>auth()->user()->company_id,
                                 ]);
                                 return response()->json([$service ]);
                         }
@@ -79,6 +81,7 @@ use Illuminate\Support\Facades\Validator;
                         'name' =>$req->name,
                         'logo'=>ImageController::updateImage($req,"service"),
                         'duration_time'=>$req->duration_time,
+                        'company_id'=>auth()->user()->company_id
                         ]);
 
                     if($old_duration_time != $service->duration_time){

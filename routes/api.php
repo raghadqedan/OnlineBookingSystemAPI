@@ -142,7 +142,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
-
+Route::get('c',[BookingController::class,'c']);//valid
 
 
 

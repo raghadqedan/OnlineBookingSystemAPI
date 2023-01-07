@@ -29,23 +29,23 @@ class DeathQueue extends Command
      * @return int
      */
     public function handle()
-    {//todo::
-        // $q= Queue::where('id',4)->first();
-        // $q->update(['active'=>3]);
+    {
 
-            $currentDate= Carbon::now()->format('y-m-d');
-            $allActiveQueue=Queue::where('active',1)->get();
-            foreach($allActiveQueue as $q){
-                // $repeats=Queue::selectRaw('repeats')->where('id',$q->id)->first();//error
-                // $queueDeathDate=new Carbon('Y-m-d', strtotime('+'.$repeats->repeats.'week', strtotime($q->start_regesteration)));
-                //     if($currentDate==$queueDeathDate)
-                    QueueController::deleteQueue($q->id);
-            }
+        $currentDate=date("y-m-d");
+        $allActiveQueue=Queue::where('active',1)->get();
+        if($allActiveQueue){
+        foreach($allActiveQueue as $q){
+                $repeats=Queue::selectRaw('repeats')->where('id',$q->id)->first();
+                $queueDeathDate= date('y-m-d', strtotime('+'.$repeats->repeats.'week', strtotime($q->start_regesteration)));
+                    if($currentDate==$queueDeathDate)
+                                QueueController::deleteQueue($q->id);
+        }
+
+        }
+
+    }
 
 
-
-
-            }
 
 
 }

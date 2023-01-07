@@ -19,7 +19,7 @@ class ActiveQueue extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Active the   Queue when the current day equal the queue  death  time';
 
     /**
      * Execute the console command.
@@ -28,14 +28,24 @@ class ActiveQueue extends Command
      */
     public function handle()
     {
-            $currentDate= Carbon::now()->format('y-m-d');
-            $allInActiveQueue=Queue::where('active',0)->get();
-            foreach( $allInActiveQueue as $q){
-                $activeDate=Queue::selectRaw('start_regesteration')->where('id',$q->id)->first();
-                    if($currentDate==$activeDate){
-                        $q->update(['active'=>1]);
-                    }
 
-            }
+        $currentDate=date("y-m-d");
+        $allInActiveQueue=Queue::where('active',0)->get();
+        foreach( $allInActiveQueue as $q){
+                $activeDate=Queue::selectRaw('start_regesteration')->where('id',$q->id)->first();
+                $date=date('y-m-d',strtotime($activeDate->start_regesteration));
+                    if($currentDate==$date){
+                            $q->update(['active'=>1]);
+                }
+        }
     }
-}
+
+
+
+
+
+
+
+
+    }
+

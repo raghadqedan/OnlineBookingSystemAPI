@@ -7,7 +7,8 @@ use App\Models\Booking;
 use App\Models\Time;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Carbon;
+use App\Models\Queue;
 class BookingController extends Controller{
 
     function createBooking(Request $req){
@@ -72,16 +73,22 @@ class BookingController extends Controller{
 
 
 
+    function c(){
 
+        $currentDate=date("y-m-d");
+        $allActiveQueue=Queue::where('active',1)->get();
+        if($allActiveQueue){
+        foreach($allActiveQueue as $q){
+                $repeats=Queue::selectRaw('repeats')->where('id',$q->id)->first();
 
+                $queueDeathDate= date('y-m-d', strtotime('+'.$repeats->repeats.'week', strtotime($q->start_regesteration)));
 
+                    if("23-01-14"==$queueDeathDate)
+                            QueueController::deleteQueue($q->id);
+        }
 
-
-
-
-
-
-
+    }
+        }
 
 
 }
@@ -90,3 +97,13 @@ class BookingController extends Controller{
     // $numericDay = "1";
     // $newDate = date('l', strtotime("Sunday +{$numericDay} days"));
 
+//     $allInActiveQueue=Queue::where('active',0)->get();
+//     foreach( $allInActiveQueue as $q){
+//         $activeDate=Queue::selectRaw('start_regesteration')->where('id',$q->id)->first();
+
+//         $date1=Carbon::createFromFormat('d-m-Y',Carbon::parse(date('d-m-Y',strtotime($activeDate->start_regesteration)))->format('d-m-Y'));
+// return $date1;
+//             if($currentDate==$activeDate){
+//                   //  $q->update(['active'=>1]);
+//                   return "sss";
+//             }   $currentDate= Carbon::now()->format('d-m-Y');
