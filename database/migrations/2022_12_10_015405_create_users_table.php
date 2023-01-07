@@ -21,7 +21,8 @@ return new class extends Migration
         $table->string('password');
         $table->foreignId('role_id')->constrained('roles');
         $table->string('phone_number')->nullable();
-        $table->foreignId('company_id')->constrained('companies')->onDelete('cascade')->onUpdate('cascade');
+        $table->foreignId('company_id')->constrained('companies')->onUpdate('cascade')->onDelete('cascade');
+        $table->integer('status')->default(1);//if user deleted set status -1
         $table->timestamps();
 
         });

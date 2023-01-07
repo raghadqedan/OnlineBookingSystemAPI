@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 
@@ -21,8 +20,12 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             CompanySeeder::class,
             UserSeeder::class,
-            ServiceSeeder::class,
-            QueueSeeder::class
+            QueueSeeder::class,
+            ServiceSeeder::class
+
+
+
+            //
 
         ]);
 

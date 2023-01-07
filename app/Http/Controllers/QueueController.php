@@ -156,17 +156,8 @@ class QueueController extends Controller
 
 
 
-    static  public function delete($id)
-    {
-            $r1=Queue::where('id', $id)->delete();
-            if ($r1) {
-                return ["result"=>"Queue deleted"];
-            } else {
-                return ["result"=>"Operation faild"];
-            }
-    }
-//errors
-    function deleteQueue($queue_id){
+
+    static function deleteQueue($queue_id){
 
         $queue= Queue::where('id',$queue_id)->whereIn('active',[0,1])->first();
         if($queue){
@@ -195,8 +186,9 @@ class QueueController extends Controller
                                             }
                                             $appointment->update(['status'=>-1]);//make the appointment is deleted
                                 }
+                                $time->update(['status'=>-1]);
                             }
-                            $time->update(['status'=>-1]);
+
                         }
 
 
@@ -229,3 +221,21 @@ class QueueController extends Controller
 
 
 }
+
+
+
+
+
+
+
+
+
+ // static  public function delete($id)
+    // {
+    //         $r1=Queue::where('id', $id)->delete();
+    //         if ($r1) {
+    //             return ["result"=>"Queue deleted"];
+    //         } else {
+    //             return ["result"=>"Operation faild"];
+    //         }
+    // }

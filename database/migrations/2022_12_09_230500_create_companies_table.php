@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('description')->nullable();
             $table->integer('type');
+            $table->integer('status')->default(1);//if company deleted set status -1
             $table->timestamps();
         });
 

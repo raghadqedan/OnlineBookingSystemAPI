@@ -36,7 +36,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
    //companies
             Route::get('company/getProfile/{id}',[CompanyController::class,'getDetails']);//valid
             Route::post('company/updateProfile',[CompanyController::class,'updateDetails']);//valid
-            Route::delete('company/delete',[CompanyController::class,'delete']);//valid
+            Route::delete('company/delete',[CompanyController::class,'deleteCompany']);//valid
             Route::get('getCompanyType',[CompanyController::class,'getCompanyType']);//valid
             //Route::post('resetAddressFromLocation/{id}',[AddressController::class,'resetAddressFromLocation']);
 
@@ -52,7 +52,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
   //users
             Route::get('user/getAllUsers',[UserController::class,'getAllUsers']);//valid
             Route::post('user/add',[UserController::class,'addUser']);//valid
-            Route::delete('user/delete/{id}',[UserController::class,'delete']);//valid
+            Route::delete('user/delete/{id}',[UserController::class,'deleteUser']);//valid
             Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
 
   //Queues
@@ -60,7 +60,6 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
             Route::post('queue/add',[QueueController::class,'addQueue']);//valid
             Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
-           // Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
             Route::delete('queue/delete/{id}',[QueueController::class,'deleteQueue']);//valid
 
 
@@ -163,3 +162,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 // Route::get('setOffDay/{source_id}/{type}/{day}',[DayController::class,'setOffDay']);
  //Route::delete('deleteDays/{source_id}/{type})',[DayController::class,'deleteDays']);
 // Route::get('isOffDay/{source_id}/{type}/{day}',[DayController::class,'isOffDay']);
+
+
+// Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid

@@ -33,9 +33,9 @@ class ActiveQueue extends Command
             foreach( $allInActiveQueue as $q){
                 $activeDate=Queue::selectRaw('start_regesteration')->where('id',$q->id)->first();
                     if($currentDate==$activeDate){
-
+                        $q->update(['active'=>1]);
                     }
-                    $q->update(['active'=>1]);
+
             }
     }
 }

@@ -18,7 +18,8 @@ class ServiceSeeder extends Seeder
 
             'name'=>'makeup',
             'logo'=>'image',
-            'duration_time'=>"01:00:00",
+            'duration_time'=>'01:00:00',
+            'company_id'=>'1',
         ]);
     }
 }

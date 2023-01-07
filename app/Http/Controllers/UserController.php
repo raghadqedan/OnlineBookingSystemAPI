@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Time;
+use App\Models\Queue;
 use App\Http\Controllers\TimeController;
+use App\Http\Controllers\QueueController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use League\CommonMark\Extension\CommonMark\Node\Block\ListItem;
@@ -158,14 +160,6 @@ class UserController extends Controller
 
 
 
-            public function delete($id){
-                $result= User::where('id', $id)->delete();
-                if ($result) {
-                    return ["result"=>"user has been delete"];
-                } else {
-                    return ["result"=>"Operation faild"];
-                }
-            }
 
 
 
@@ -186,6 +180,47 @@ class UserController extends Controller
                     return $user;
 
             }
+
+
+
+            static function deleteUser($user_id){
+
+                $user= User::where('id',$user_id)->where('status',1)->first();
+
+                if($user){
+
+                    $obj=Time::where('source_id',$user_id)->where('type',1)->whereIn('status', [0,1])->get();//return all children times for this queue
+
+                    if($obj){//update all times for this user
+                            foreach($obj as $time){
+                                        $time->update(['status'=>-1]);
+
+                                }
+                    }
+                    $queues=Queue::where('user_id',$user_id)->whereIn('active', [0,1])->get();//return all children queue
+
+                if($queues){//update all queues for this user
+                    foreach($queues as $q){
+
+                                QueueController::deleteQueue($q->id);
+                        }
+                    }
+
+                    $user->update(['status'=>-1]);
+                    return  response()->json([ 'message'=>'user deleted successfully' ]);
+                }
+                return  response()->json([ 'message'=>'opration failed ,This user does not exist' ]);
+            }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -213,3 +248,12 @@ class UserController extends Controller
     //     "password":"1234567890",
     //     "phone_number":"0599932123"}
 
+
+    // public function delete($id){
+    //     $result= User::where('id', $id)->delete();
+    //     if ($result) {
+    //         return ["result"=>"user has been delete"];
+    //     } else {
+    //         return ["result"=>"Operation faild"];
+    //     }
+    // }

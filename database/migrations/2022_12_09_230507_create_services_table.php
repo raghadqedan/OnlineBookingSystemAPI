@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->time('duration_time');
             $table->timestamps();
+            $table->foreignId('company_id')->constrained('companies')->onUpdate('cascade')->onDelete('cascade');
 
         });
     }

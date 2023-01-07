@@ -17,9 +17,10 @@ class Company extends Model
         'logo',
         'description',
         'type',
-       
-        
+        'status',
+
+
     ];
     public $timestamps=false;
-  
+
 }

@@ -11,7 +11,9 @@ use App\Models\Category;
 use App\Models\Role;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\UserController;
 use App\Models\User;
+use App\Models\Time;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -221,17 +223,6 @@ class CompanyController
 
 
 
-        public function delete()
-        {
-        $result= Company::where('id', auth()-user()->company_id)->delete();
-        if ($result) {
-        return ["result"=>"Company account has been delete"];
-        } else {
-        return ["result"=>"Operation faild"];
-        }
-
-
-        }
 
         static public function getCompanyType()
         {
@@ -239,6 +230,57 @@ class CompanyController
             return $type;
 
         }
+
+
+
+
+        static function deleteCompany(){
+
+            $company= Company::where('id',auth()->user()->company_id)->where('status',1)->first();
+
+            if($company){
+
+                $obj=Time::where('source_id',$company->id)->where('type',0)->whereIn('status', [0,1])->get();//return all children times for this queue
+
+                if($obj){//update all times for this user
+                        foreach($obj as $time){
+                                    $time->update(['status'=>-1]);
+
+                            }
+                }
+                $users=User::where('company_id',$company->id)->where('status',1)->get();//return all children queue
+
+            if($users){//update all queues for this user
+                foreach($users as $u){
+
+                           UserController::deleteUser($u->id);
+                    }
+                }
+
+                $company->update(['status'=>-1]);
+                return  response()->json([ 'message'=>'company deleted successfully' ]);
+            }
+            return  response()->json([ 'message'=>'opration failed ,This company does not exist' ]);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         }
