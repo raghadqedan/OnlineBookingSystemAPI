@@ -65,8 +65,8 @@ class BookingController extends Controller{
 
 
 
-    function getBooking($id){
-        $booking = Booking::where('id', $id)->get();
+    function getBooking($customer_id){
+        $booking = Booking::where('id',$customer_id)->get();
         return response()->json(['booking' => $booking]);
 
     }
