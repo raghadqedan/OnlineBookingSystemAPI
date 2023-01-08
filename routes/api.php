@@ -15,6 +15,7 @@ use App\Http\Controllers\Service_QueueController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ControlQueues;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -91,6 +92,16 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
+            Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);
+
+
+
+
+
+
+
+
+
         });
 
 
@@ -136,22 +147,30 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
    //******************************Customer mobile********8***
 
-   Route::post('customer/signUp',[CustomerController::class,'signUp']);//valid
-   Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
-   Route::get('getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid
-   Route::post('customer/login',[CustomerController::class,'login']);//valid
-   Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
-   Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid
-   Route::post('customer/editPassword/{id}',[CustomerController::class,'editPassword']);//not valid
-   Route::post('getImage',[ImageController::class,'getImage']);//valid
-   Route::post('customer/createBooking',[BookingController::class,'createBooking']);//valid
-   Route::get('customer/getbooking/{customer_id}',[BookingController::class,'getBooking']);//valid
+    Route::post('customer/signUp',['App\Http\Controllers\MobileController\CustomerController'::class,'signUp']);//valid
+    Route::post('customer/login',['App\Http\Controllers\MobileController\CustomerController'::class,'login']);//valid
+    Route::get('customer/get/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'getCustomer']);//valid
+    Route::put('customer/updateProfile/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'updateProfile']);//valid
+    Route::post('customer/editPassword/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'editPassword']);//not valid
+    Route::post('getImage',[ImageController::class,'getImage']);//valid
+
+
+    Route::get('getAllCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getAllCategories']);//valid
+    Route::get('getLimitCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getLimitCategories']);//valid
 
 
 
 
+    Route::post('customer/createBooking',['App\Http\Controllers\MobileController\BookingrController'::class,'createBooking']);//valid
+    Route::get('customer/getallbooking/{customer_id}', ['App\Http\Controllers\MobileController\BookingrController'::class, 'getAllBooking']);
+    Route::get('customer/getbooking/{id}', ['App\Http\Controllers\MobileController\BookingrController'::class, 'getBooking']);
 
 
+
+    Route::get('customer/getallservices/{company_id}', ['App\Http\Controllers\MobileController\ServiceController'::class, 'getAllServices']);
+    Route::post('customer/searchForService', ['App\Http\Controllers\MobileController\ServiceController'::class, 'searchForService']);
+    Route::post('customer/searchForCompany', ['App\Http\Controllers\MobileController\CompanyController'::class, 'searchForCompany']);
+    Route::post('customer/searchForCategory', ['App\Http\Controllers\MobileController\CategoryController'::class, 'searchForCategory']);
 
 
 

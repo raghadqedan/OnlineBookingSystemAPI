@@ -64,34 +64,39 @@ class BookingController extends Controller{
         // }
 
 
+        public function getAllBooking($customer_id)
+        {
+            //   get all booking to the customer
 
-    function getBooking($customer_id){
-        $booking = Booking::where('id',$customer_id)->get();
-        return response()->json(['booking' => $booking]);
+            $booking = Booking::where('customer_id', $customer_id)->get();
+            return response()->json(['booking' => $booking]);
 
-    }
+        }
 
+        public function getBooking($id)
+        {
+            $booking = Booking::where('id', $id)->get();
+            return response()->json(['booking' => $booking]);
 
-
-    function g(){
-    $currentDate=date("y-m-d");
-    $allActiveQueue=Queue::where('active',1)->get();
-    if($allActiveQueue){
-    foreach($allActiveQueue as $q){
-            $repeats=Queue::selectRaw('repeats')->where('id',$q->id)->first();
-
-            if($repeats->repeats!="all days"){
-
-              $queueDeathDate= date('y-m-d', strtotime('+'.$repeats->repeats.'', strtotime($q->start_regesteration)));
-              return $queueDeathDate;
-                if($currentDate==$queueDeathDate)
-                            QueueController::deleteQueue($q->id);
-    }}
+        }
 
 
 
 
-    }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
