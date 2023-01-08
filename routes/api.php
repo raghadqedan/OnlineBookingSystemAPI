@@ -25,7 +25,7 @@ use App\Http\Controllers\BookingController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-       // Route::post('filter1',[CustomerController::class,'filter1']);
+
             Route::post('register',[CompanyController::class,'register']);//valid
             Route::post('user/login',[UserController::class,'login'])->name('login');//valid
 
@@ -43,7 +43,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
 
    //services
-            Route::get('service/getAllServices',[ServiceController::class,'getAllServices']);//not valid
+            Route::get('service/getAllServices',[ServiceController::class,'getAllServices']);//valid
             Route::get('service/getDetails/{id}',[ServiceController::class,'getDetails']);//valid
             Route::post('service/updateDetails/{id}',[ServiceController::class,'updateDetails']);//valid
             Route::post('service/add',[ServiceController::class,'addService']);//valid
@@ -78,8 +78,8 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
 
 
-        // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
-    // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
+             // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
+            // Route::put('getTimes',[TimeController::class,'getTimes']);//valid
         });
 
 
@@ -91,10 +91,16 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
-            //Route::delete('user/deleteSelected',[UserController::class,'deleteSelected']);
         });
 
 
+
+// Route::group(['middleware'=>['auth:sanctum','employee']],function () {
+
+
+
+
+// });
 
 
 
@@ -111,6 +117,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
       //  Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
      //    Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
 
+ // Route::post('filter1',[CustomerController::class,'filter1']);
 
 
 
@@ -118,24 +125,46 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
-   //Customer mobile
-
-            Route::post('customer/signUp',[CustomerController::class,'signUp']);//valid
-            Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
-            Route::get('getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid
-            Route::post('customer/login',[CustomerController::class,'login']);//valid
-            Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
-            Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid
-            Route::post('customer/editPassword/{id}',[CustomerController::class,'editPassword']);//not valid
-            Route::post('getImage',[ImageController::class,'getImage']);//valid
-            Route::post('customer/createBooking',[BookingController::class,'createBooking']);//valid
-            Route::get('getbooking/{id}',[BookingController::class,'getBooking']);//valid
-// Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
 
 
 
-// });
+
+
+
+
+
+   //******************************Customer mobile********8***
+
+   Route::post('customer/signUp',[CustomerController::class,'signUp']);//valid
+   Route::get('getAllCategories',[CategoryController::class,'getAllCategories']);//valid
+   Route::get('getLimitCategories',[CategoryController::class,'getLimitCategories']);//valid
+   Route::post('customer/login',[CustomerController::class,'login']);//valid
+   Route::get('customer/get/{id}',[CustomerController::class,'getCustomer']);//valid
+   Route::put('customer/updateProfile/{id}',[CustomerController::class,'updateProfile']);//valid
+   Route::post('customer/editPassword/{id}',[CustomerController::class,'editPassword']);//not valid
+   Route::post('getImage',[ImageController::class,'getImage']);//valid
+   Route::post('customer/createBooking',[BookingController::class,'createBooking']);//valid
+   Route::get('getbooking/{id}',[BookingController::class,'getBooking']);//valid
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

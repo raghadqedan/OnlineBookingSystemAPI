@@ -22,10 +22,13 @@ use Illuminate\Support\Facades\Validator;
                 }
                   //todo:: need to add the company_id in the services table
 
-                // function getAllServices()
-                // {
-                //         $services_id=Services::where('company_id',auth()->user()->company_id)->get();
-                // }
+                function getAllServices()
+                {
+                        $services=Service::where('company_id',auth()->user()->company_id)->get();
+                        return  response()->json([
+                            'services'=>$services
+                        ]);
+                }
 
 
 
