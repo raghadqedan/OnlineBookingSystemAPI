@@ -71,4 +71,30 @@ class BookingController extends Controller{
 
     }
 
+
+
+    function g(){
+    $currentDate=date("y-m-d");
+    $allActiveQueue=Queue::where('active',1)->get();
+    if($allActiveQueue){
+    foreach($allActiveQueue as $q){
+            $repeats=Queue::selectRaw('repeats')->where('id',$q->id)->first();
+
+            if($repeats->repeats!="all days"){
+
+              $queueDeathDate= date('y-m-d', strtotime('+'.$repeats->repeats.'', strtotime($q->start_regesteration)));
+              return $queueDeathDate;
+                if($currentDate==$queueDeathDate)
+                            QueueController::deleteQueue($q->id);
+    }}
+
+
+
+
+    }}
+
+
+
+
+
 }

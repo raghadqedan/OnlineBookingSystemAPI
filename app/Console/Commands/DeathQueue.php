@@ -36,10 +36,17 @@ class DeathQueue extends Command
         if($allActiveQueue){
         foreach($allActiveQueue as $q){
                 $repeats=Queue::selectRaw('repeats')->where('id',$q->id)->first();
-                $queueDeathDate= date('y-m-d', strtotime('+'.$repeats->repeats.'week', strtotime($q->start_regesteration)));
+
+                if($repeats->repeats!="all days"){
+
+                    $queueDeathDate= date('y-m-d', strtotime('+'.$repeats->repeats.'', strtotime($q->start_regesteration)));
+                    return $queueDeathDate;
                     if($currentDate==$queueDeathDate)
                                 QueueController::deleteQueue($q->id);
-        }
+        }}
+
+
+
 
         }
 
