@@ -33,33 +33,29 @@ class BookingrController extends Controller
                 //customer want to book  appointment for this day
                 $date = date("y-m-d"); //currentdate
 
-            } else {
+            }else {
                 $date = date("y-m-d", $nextday);
             }
-            // $queue_id=DB::table('appointments')
-            //     ->join('times', 'appointments.time_id', '=', 'times.id')
-            //     ->where('appointments.id',$req->appointment_id)->get(['source_id']);
 
-            $booking = Booking::create([
-                'customer_id' => $req->customer_id,
-                'appointment_id' => $req->appointment_id,
-                'status' => '1',
-                'queue_id' => $time->source_id,
-                'service_id' => $sq->service_id,
-                'date' => $date,
-            ]);
-            return response()->json([
-                'booking' => $booking,
+            if(count(Booking::where('customer_id',$req->customer_id)->where('service_id',$sq->service_id)
+            ->whereIn('status',[0,1])->get())<=3){//customer can book only 3 valid booking in the same service only
+                if(count(Booking::where('customer_id',$req->customer_id)->where('service_id',$sq->service_id)
+                ->whereIn('status',[0,1])->where('date',$date)->get())==0){
+                        $booking = Booking::create([
+                            'customer_id' => $req->customer_id,
+                            'appointment_id' => $req->appointment_id,
+                            'status' => '1',
+                            'queue_id' => $time->source_id,
+                            'service_id' => $sq->service_id,
+                            'date' => $date,
+                        ]);
+                        return response()->json([ 'booking' => $booking,]);
+                    }else {return  response()->json(['message'=>'sorry,you can not book a anew appointment because you have book in the same date ']);
 
-            ]);
+                    }
+                }else {return  response()->json(['message'=>'sorry,you can not book a anew appointment because you have  three valid booking']);}
 
-        } else {
-
-            return response()->json([
-                'message' => 'operation failed',
-
-            ]);
-        }
+        }return response()->json(['message' => 'operation failed',]);
     }
 
     // {
@@ -88,3 +84,32 @@ class BookingrController extends Controller
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // $queue_id=DB::table('appointments')
+            //     ->join('times', 'appointments.time_id', '=', 'times.id')
+            //     ->where('appointments.id',$req->appointment_id)->get(['source_id']);

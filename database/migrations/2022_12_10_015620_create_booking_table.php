@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('service_id')->constrained('services');
             $table->foreignId('queue_id')->constrained('queues');
             $table->date('date')->nullable();
+            $table->integer('priority')->default(0);
             $table->timestamps();
         });
     }

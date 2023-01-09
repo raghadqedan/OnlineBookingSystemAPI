@@ -93,8 +93,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
             Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);
-
-
+            Route::post('turnCustomer/{booking_id}/{service_id}',[ControlQueues::class,'turnCustomer']);//valid
 
 
 
@@ -132,7 +131,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
- Route::get('g',[BookingController::class,'g']);//vali
+
 
 
 
