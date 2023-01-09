@@ -305,7 +305,7 @@ class TimeController extends Controller
                 $obj=Time::where('source_id',$req->source_id)->where('type',"2")->where('day',$req->day)->where('status',1)->first();
 
                 if($obj){
-                        $appointments=Appointment::where('time_id',$obj->id)->where('status',1)->orwhere('status',0)->get();
+                        $appointments=Appointment::where('time_id',$obj->id)->whereIn('status',[1,0])->get();
 
                     if($appointments){
 

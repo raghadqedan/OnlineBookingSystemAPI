@@ -76,7 +76,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::put('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
             Route::put('setCompanyOnDay',[TimeController::class,'setCompanyOnDay']);//valid
             Route::put('setQueueOnDay',[TimeController::class,'setQueueOnDay']);//valid
-            Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//
+            Route::put('setQueueOffDay',[TimeController::class,'setQueueOffDay']);//valid
 
 
              // Route::post('createAppointment/{time_id}',[AppointmentController::class,'createAppointment']);// valid
@@ -92,9 +92,9 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
-            Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);
-            Route::post('turnCustomer/{booking_id}/{service_id}',[ControlQueues::class,'turnCustomer']);//valid
-
+            Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);//not valid
+            Route::post('turnCustomer/{booking_id}/{service_id}',[ControlQueues::class,'turnCustomer']);//not valid
+            Route::post('CheckOut/{booking_id}',[ControlQueues::class,'CheckOut']);//not valid
 
 
 
