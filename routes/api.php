@@ -144,7 +144,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
-   //******************************Customer mobile********8***
+   //******************************Customer mobile************
 
     Route::post('customer/signUp',['App\Http\Controllers\MobileController\CustomerController'::class,'signUp']);//valid
     Route::post('customer/login',['App\Http\Controllers\MobileController\CustomerController'::class,'login']);//valid
