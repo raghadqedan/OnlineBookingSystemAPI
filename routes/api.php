@@ -157,9 +157,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
     Route::get('getAllCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getAllCategories']);//valid
     Route::get('getLimitCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getLimitCategories']);//valid
 
-
-
-
     Route::post('customer/createBooking',['App\Http\Controllers\MobileController\BookingrController'::class,'createBooking']);//valid
     Route::get('customer/getallbooking/{customer_id}', ['App\Http\Controllers\MobileController\BookingrController'::class, 'getAllBooking']);
     Route::get('customer/getbooking/{id}', ['App\Http\Controllers\MobileController\BookingrController'::class, 'getBooking']);
