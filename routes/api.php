@@ -151,8 +151,8 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
     Route::get('customer/get/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'getCustomer']);//valid
     Route::put('customer/updateProfile/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'updateProfile']);//valid
     Route::post('customer/editPassword/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'editPassword']);//not valid
-    Route::post('getImage',[ImageController::class,'getImage']);//valid
 
+    Route::post('getImage',[ImageController::class,'getImage']);//valid
 
     Route::get('getAllCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getAllCategories']);//valid
     Route::get('getLimitCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getLimitCategories']);//valid
@@ -161,15 +161,10 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
     Route::get('customer/getallbooking/{customer_id}', ['App\Http\Controllers\MobileController\BookingrController'::class, 'getAllBooking']);
     Route::get('customer/getbooking/{id}', ['App\Http\Controllers\MobileController\BookingrController'::class, 'getBooking']);
 
-
-
     Route::get('customer/getallservices/{company_id}', ['App\Http\Controllers\MobileController\ServiceController'::class, 'getAllServices']);
     Route::post('customer/searchForService', ['App\Http\Controllers\MobileController\ServiceController'::class, 'searchForService']);
     Route::post('customer/searchForCompany', ['App\Http\Controllers\MobileController\CompanyController'::class, 'searchForCompany']);
     Route::post('customer/searchForCategory', ['App\Http\Controllers\MobileController\CategoryController'::class, 'searchForCategory']);
-
-
-
     Route::get('customer/getServices/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getServices']);
     Route::get('customer/getcompanydetails/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getcompanyDetails']);
     Route::get('customer/getontimes/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getOnTimes']);
