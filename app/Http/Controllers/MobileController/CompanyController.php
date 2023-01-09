@@ -7,10 +7,22 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 class CompanyController extends Controller
 {
-    public function searchForCompany(Request $req)
-               {
-                   $name = $req->name;
-                   $company = Company::where('name','like',"%$name%")->get();
-                   return $company;
-               }
+    public function searchForCompany(Request $req) {
+            $name = $req->name;
+            $company = Company::where('name','like',"%$name%")->get();
+            return  response()->json(['company' => $company]);
+                }
+
+
+                public function getAllCompany($category_id)
+                {
+                    $company = Company::where('category_id', $category_id)->get();
+                    return response()->json(['company' => $company]);
+
+                }
+
+
+
+
+
 }

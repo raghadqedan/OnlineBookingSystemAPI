@@ -5,6 +5,9 @@ namespace App\Http\Controllers\MobileController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use App\Models\Service;
+use App\Models\Company;
+use App\Models\Address;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use \Date;
@@ -77,11 +80,35 @@ class CustomerController extends Controller
 
     return response()->json(["customer"=>$customer]);
 
-}
+    }
 
 
 
+    public function getServices($company_id)
+    {
 
+        $service = Service::where('company_id', $company_id)->get();
+        return response()->json(['service' => $service]);
+    }
+
+    public function getcompanyDetails($id)
+    { //description ,address
+
+        $company = Company::where('id', $id)->first();
+
+        $address = Address::where('id',$company->address_id)->first();
+        return response()->json(['description' => $company->description, 'address' => $address]);
+
+    }
+
+    public function getOnTimes($company_id)
+    { //get all times from time table  for this source_id where status==1
+        $time = Time::where('source_id', $company_id)
+            ->where('type', 0)
+            ->where('status', 1)->get();
+        return response()->json(['time' => $time]);
+
+    }
 
 
 

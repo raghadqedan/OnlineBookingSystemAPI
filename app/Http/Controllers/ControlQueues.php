@@ -39,55 +39,52 @@ class ControlQueues extends Controller
 
 
 
-                    function turnCustomer($booking_id,$service_id)
-                    {  $customer_id=Booking::selectRaw('customer_id')->where('id',$booking_id)->first();
-                        $sq=ServiceQueue::selectRaw('queue_id')->where('service_id',$service_id)->get();
+            function turnCustomer($booking_id,$service_id)
+            {  $customer_id=Booking::selectRaw('customer_id')->where('id',$booking_id)->first();
+                $sq=ServiceQueue::selectRaw('queue_id')->where('service_id',$service_id)->get();
 
-                        if(count($sq)){
-                                            $min_count;
-                                            $min_queue;
-                                            $lock=1;
+                if(count($sq)){
+                                    $min_count;
+                                    $min_queue;
+                                    $lock=1;
 
-                                    foreach($sq as $obj){
-                                            $booking=Booking::where('queue_id',$obj->queue_id)->where('status',0)->get();
+                            foreach($sq as $obj){
+                                    $booking=Booking::where('queue_id',$obj->queue_id)->where('status',0)->get();
 
-                                            if($booking){
-                                                    if($lock){
-                                                            $min_count=count($booking);
-                                                            $queue_id=$obj->queue_id;
-                                                            $lock=0;
-                                                    }
-                                                if(count($booking)<=$min_count){
+                                    if($booking){
+                                            if($lock){
                                                     $min_count=count($booking);
-                                                    $min_queue=$obj->queue_id;
-                                                }
-
-
+                                                    $queue_id=$obj->queue_id;
+                                                    $lock=0;
                                             }
+                                        if(count($booking)<=$min_count){
+                                            $min_count=count($booking);
+                                            $min_queue=$obj->queue_id;
+                                        }
+
 
                                     }
 
-                                    Booking::create([
-                                        'service_id'=>$service_id,
-                                        'queue_id'=>$min_queue,
-                                        'customer_id'=>$customer_id->customer_id,
-                                        'status'=>"0",
-                                        'priority'=>"100",
-                                        'date'=>date('y-m-d')
+                            }
+
+                            Booking::create([
+                                'service_id'=>$service_id,
+                                'queue_id'=>$min_queue,
+                                'customer_id'=>$customer_id->customer_id,
+                                'status'=>"0",
+                                'priority'=>"100",
+                                'date'=>date('y-m-d')
 
 
-                                    ]);
+                            ]);
 
-                                    return  response()->json(['message'=>"Turned customer successfully" ]);
+                            return  response()->json(['message'=>"Turned customer successfully" ]);
 
-                        }
+                }
 
-                        return  response()->json(['message'=>"operation failed" ]);
+                return  response()->json(['message'=>"operation failed" ]);
 
-
-
-
-                                }
+            }
 
 
 

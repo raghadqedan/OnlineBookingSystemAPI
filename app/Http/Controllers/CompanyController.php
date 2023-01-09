@@ -253,7 +253,7 @@ class CompanyController
             if($users){//update all queues for this user
                 foreach($users as $u){
 
-                           UserController::deleteUser($u->id);
+                            UserController::deleteUser($u->id);
                     }
                 }
 
@@ -262,9 +262,6 @@ class CompanyController
             }
             return  response()->json([ 'message'=>'opration failed ,This company does not exist' ]);
         }
-
-
-
 
 
 

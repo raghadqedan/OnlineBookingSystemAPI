@@ -173,7 +173,10 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
-
+    Route::get('customer/getServices/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getServices']);
+    Route::get('customer/getcompanydetails/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getcompanyDetails']);
+    Route::get('customer/getontimes/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getOnTimes']);
+    Route::get('customer/getallcompany/{category_id}', ['App\Http\Controllers\MobileController\CompanyController'::class, 'getAllCompany']);
 
 
 
