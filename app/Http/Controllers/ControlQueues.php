@@ -8,9 +8,24 @@ use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\ServiceQueue;
 use App\Models\Appointment;
+use App\Models\Queue;
+use App\Models\Time;
+use DB;
 class ControlQueues extends Controller
 {
+    public function getCurrentQueue(){
+        $queues= Queue::where('user_id',auth()->user()->id)->where('active',1)->get();
+        foreach($queues as $q){
+                $time=Time::where('source_id',$q->id)->where('type',2)->where('status',1)->where('day', date('N', strtotime(date('l')))-1)->where('start_time','<=',date('H:i:s'))->where('end_time','>=',date('H:i:s'))->first();
+                if($time){
+                    return $time->source_id;
+                }
+        }
+                return  response()->json(['message'=>"operation failed" ]);
 
+
+
+    }
     public function getCurrentCustomer($queue_id){
 
             $company_type=Company::selectRaw('type')->where('id',auth()->user()->company_id)->where('status',1)->first();

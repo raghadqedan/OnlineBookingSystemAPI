@@ -116,6 +116,6 @@ class BookingrController extends Controller
 
 
 
- // $queue_id=DB::table('appointments')
-            //     ->join('times', 'appointments.time_id', '=', 'times.id')
-            //     ->where('appointments.id',$req->appointment_id)->get(['source_id']);
+//  $queue_id=DB::table('appointments')
+//                 ->join('times', 'appointments.time_id', '=', 'times.id')
+//                 ->where('appointments.id',$req->appointment_id)->get(['source_id']);
