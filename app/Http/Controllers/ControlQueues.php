@@ -154,6 +154,7 @@ class ControlQueues extends Controller
                 if( $company_type->type==1){
                 $appointment=Appointment::where('id',$booking->appointment_id)->where('status',1)->first();
                 $appointment->update(['status'=>0]);}
+
                 $b=Booking::where('customer_id',$booking->customer_id)->where('appointment_id',$booking->appointment_id)->whereIn('status',[0,1])->where('date',$booking->date)->get();
                 foreach($b as $s){
                     $s->update(['status'=>3]);

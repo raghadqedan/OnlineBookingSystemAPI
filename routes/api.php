@@ -134,7 +134,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
     Route::get('customer/get/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'getCustomer']);//valid
     Route::put('customer/updateProfile/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'updateProfile']);//valid
     Route::post('customer/editPassword/{id}',['App\Http\Controllers\MobileController\CustomerController'::class,'editPassword']);//not valid
-
     Route::post('getImage',[ImageController::class,'getImage']);//valid
 
     Route::get('getLimitCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getLimitCategories']);//valid
