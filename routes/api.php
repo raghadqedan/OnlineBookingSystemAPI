@@ -98,10 +98,12 @@ Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
 Route::group(['middleware'=>['auth:sanctum']],function () {
 
-    //users
-
+//users
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
+
+            Route::get('getUpComingBooking',[BookingController::class,'getUpComingBooking']);//valid
+            Route::get('getRecentlyBooking',[BookingController::class,'getRecentlyBooking']);//valid
 
         });
 
