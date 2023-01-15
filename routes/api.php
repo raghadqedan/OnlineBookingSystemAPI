@@ -91,9 +91,7 @@ Route::group(['middleware'=>['auth:sanctum','employee']],function () {
             Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);//valid
             Route::post('turnCustomer/{booking_id}/{destination_service_id}',[ControlQueues::class,'turnCustomer']);// valid
             Route::post('CheckOut/{booking_id}',[ControlQueues::class,'CheckOut']);//valid
-
-
-
+            Route::put('takeExtraTime/{booking_id}/{dealy_Time}',[ControlQueues::class,'takeExtraTime']);//valid
         });
 
 

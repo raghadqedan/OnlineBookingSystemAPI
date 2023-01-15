@@ -166,7 +166,22 @@ class ControlQueues extends Controller
                     return  response()->json(['message'=>"Checkout  customer successfully" ]);
 
             }
-    }
+
+    function takeExtraTime($booking_id,$delay_Time){
+
+        $booking=Booking::where('id',$booking_id)->where('status',0)->first();
+
+        if($booking){
+
+                $booking->update(['delay_time'=>$delay_Time]);
+                return  response()->json(['message'=>"customer take extra time  successfully" ]);
+
+            }
+                return  response()->json(['message'=>"operation failed" ]);
+
+        }
+}
+
 
 
 
