@@ -263,44 +263,7 @@ class CompanyController
             return  response()->json([ 'message'=>'opration failed ,This company does not exist' ]);
         }
 
-        static function bookingReport(Request $req){
-            $created_from=$req->created_from;
-            $created_to=$req->created_to;
-            $date_from=$req->date_from;
-            $date_to=$req->date_to;
-            $service=$req->service;
-            $employee=$req->employee;
-            $client=$req->client;
-            $status=$req->status;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
 
         }
 
