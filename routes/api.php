@@ -86,48 +86,31 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
 
 
-Route::group(['middleware'=>['auth:sanctum']],function () {
+Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
-   //users
-
-            Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
-            Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
-            Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);//not valid
-            Route::post('turnCustomer/{booking_id}/{service_id}',[ControlQueues::class,'turnCustomer']);//not valid
-            Route::post('CheckOut/{booking_id}',[ControlQueues::class,'CheckOut']);//not valid
-
-
-
+            Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);//valid
+            Route::post('turnCustomer/{booking_id}/{destination_service_id}',[ControlQueues::class,'turnCustomer']);// valid
+            Route::post('CheckOut/{booking_id}',[ControlQueues::class,'CheckOut']);//valid
 
 
 
         });
 
 
+Route::group(['middleware'=>['auth:sanctum']],function () {
 
-// Route::group(['middleware'=>['auth:sanctum','employee']],function () {
+    //users
 
+            Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
+            Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
 
-
-
-// });
-
-
-
+        });
 
 
 
 
+            Route::get('getAllCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getAllCategories']);//valid
 
-   //times
-
-     //    Route::put('updateTime/{source_id}/{type}/{day}',[TimeController::class,'updateTime']);
-     //    Route::post('setEndTime/{source_id}/{type}/{day}/{end_time}',[TimeController::class,'setEndTime']);
-     //   Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);
-      //  Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
-     //    Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
-
- // Route::post('filter1',[CustomerController::class,'filter1']);
 
 
 
@@ -154,7 +137,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
     Route::post('getImage',[ImageController::class,'getImage']);//valid
 
-    Route::get('getAllCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getAllCategories']);//valid
     Route::get('getLimitCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getLimitCategories']);//valid
 
     Route::post('customer/createBooking',['App\Http\Controllers\MobileController\BookingrController'::class,'createBooking']);//valid
@@ -195,6 +177,16 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 
+
+
+
+
+
+
+
+
+
+
 //days
 // Route::post('createDay/{source_id}',[DayController::class,'createDay']);
 // Route::get('getOffDays/{source_id}/{type}',[DayController::class,'getOffDays']);
@@ -206,3 +198,16 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
 // Route::delete('queue/delete/{id}',[QueueController::class,'delete']);//valid
+
+
+
+   //times
+
+     //    Route::put('updateTime/{source_id}/{type}/{day}',[TimeController::class,'updateTime']);
+     //    Route::post('setEndTime/{source_id}/{type}/{day}/{end_time}',[TimeController::class,'setEndTime']);
+     //   Route::post('setStartTime/{source_id}/{type}/{day}/{start_time}',[TimeController::class,'setStartTime']);
+      //  Route::get('getEndTime/{source_id}/{type}/{day}',[TimeController::class,'getEndTime']);
+     //    Route::get('getStartTime/{source_id}/{type}/{day}',[TimeController::class,'getStartTime']);
+
+ // Route::post('filter1',[CustomerController::class,'filter1']);
+

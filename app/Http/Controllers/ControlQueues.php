@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\ServiceQueue;
+use App\Models\Appointment;
 class ControlQueues extends Controller
 {
 
@@ -16,8 +17,7 @@ class ControlQueues extends Controller
                 if( $company_type->type==0){//if companytype is number
                 //return the turned customer id to this queue if exist
 
-                        $currentCustomerId=Booking::selectRaw('customer_id')->where('date',date('Y-m-d'))->where('queue_id',$queue_id)->where('status',0)->orderBy('number', 'asc')->first();
-
+                        $currentCustomerId=Booking::selectRaw('customer_id')->where('date',date('Y-m-d'))->where('queue_id',$queue_id)->where('status',0)->where('priority',100)->orderBy('number', 'asc')->first();
                         if($currentCustomerId){
                                 $customer= Customer::where('id',$currentCustomerId->customer_id)->first();
                                 return response()->json(['customer'=>$customer ]);
@@ -42,19 +42,18 @@ class ControlQueues extends Controller
                                                             $lock=0; }
 
                                                         if($appointment->start_time<=$min_start_time_appointment->start_time){
-                                                                    $min_start_time_appointment=$appointment;}
+                                                                    $min_start_time_appointment_id=$appointment->id;}
 
-
-                                                }return  response()->json(['message'=>"operation failed" ]);
+                                                }else {return  response()->json(['message'=>"operation failed" ]);}
                                             }
-                                        $customer_id=Booking::selectRaw('customer_id')->where('appointment',$min_start_time_appointment->id)->where('date',date('Y-m-d'))->first();
-                                        return response()->json(['customer'=>$customer=Customer::where('id',$customer_id->id)->first()]);
+                                        $customer_id=Booking::selectRaw('customer_id')->where('appointment_id',$min_start_time_appointment->id)->where('date',date('Y-m-d'))->first();
+                                        return response()->json(['customer'=>$customer=Customer::where('id',$customer_id->customer_id)->first()]);
 
                             }
                             else{
                                 $allAppointment_id=Booking::selectRaw('appointment_id')->where('queue_id',$queue_id)->where('date',date('Y-m-d'))->where('status',0)->get();
                                 if(count($allAppointment_id)){
-                                        $min_start_time_appointment_id;
+                                        $min_start_time_appointment;
                                         $lock=1;
                                         foreach($allAppointment_id as $obj){
                                                     $appointment=Appointment::where('id',$obj->appointment_id)->where('status',1)->first();
@@ -64,15 +63,15 @@ class ControlQueues extends Controller
                                                                     $lock=0;
                                                                 }
                                                             if($appointment->start_time<=$min_start_time_appointment->start_time&&$appointment->start_time<= date("h:i:sa")){
-                                                                $min_start_time_appointment=$appointment;
+                                                                $min_start_time_appointment_id=$appointment;
                                                                 }
 
 
-                                                    }return   response()->json(['message'=>"operation failed" ]);
+                                                    }else return   response()->json(['message'=>"operation failed" ]);
 
                                             }
-                                        $customer_id=Booking::selectRaw('customer_id')->where('appointment',$min_start_time_appointment->id)->where('date',date('Y-m-d'))->first();
-                                        return response()->json(['customer'=>$customer=Customer::where('id',$customer_id->id)->first()]);
+                                        $customer_id=Booking::selectRaw('customer_id')->where('appointment_id',$min_start_time_appointment->id)->where('date',date('Y-m-d'))->first();
+                                        return response()->json(['customer'=>$customer=Customer::where('id',$customer_id->customer_id)->first()]);
                                     }
                                 }
 
@@ -86,10 +85,10 @@ class ControlQueues extends Controller
 
 
 
-    function turnCustomer($booking_id,$service_id){
+    function turnCustomer($booking_id,$destination_service_id){
 
-            $customer_id=Booking::selectRaw('customer_id')->where('id',$booking_id)->first();
-            $sq=ServiceQueue::selectRaw('queue_id')->where('service_id',$service_id)->get();
+            $b=Booking::where('id',$booking_id)->first();
+            $sq=ServiceQueue::selectRaw('queue_id')->where('service_id',$destination_service_id)->get();
 
             if(count($sq)){
                                 $min_count;
@@ -116,12 +115,13 @@ class ControlQueues extends Controller
                         }
 
                         $result=Booking::create([
-                            'service_id'=>$service_id,
+                            'service_id'=>$destination_service_id,
                             'queue_id'=>$min_queue,
-                            'customer_id'=>$customer_id->customer_id,
+                            'customer_id'=>$b->customer_id,
                             'status'=>"0",
                             'priority'=>"100",
-                            'date'=>date('y-m-d')
+                            'date'=>date('y-m-d'),
+                            'appointment_id'=>$b->appointment_id,
 
 
                         ]);
@@ -148,12 +148,23 @@ class ControlQueues extends Controller
     function CheckOut($booking_id){
             //when check out customer set appointment atatus=0,booking status=2
             $booking=Booking::where('id',$booking_id)->where('status',0)->first();
-            if($booking){
-                    $booking->update(['status'=>3]);
-                    $appointment=Appointment::where('id',$booking->appointment_id)->where('status',1)->first();
-                    $appointment->update(['status'=>0]);
-            }
 
+            if($booking){
+                $company_type=Company::selectRaw('type')->where('id',auth()->user()->company_id)->where('status',1)->first();
+                if( $company_type->type==1){
+                $appointment=Appointment::where('id',$booking->appointment_id)->where('status',1)->first();
+                $appointment->update(['status'=>0]);}
+                $b=Booking::where('customer_id',$booking->customer_id)->where('appointment_id',$booking->appointment_id)->whereIn('status',[0,1])->where('date',$booking->date)->get();
+                foreach($b as $s){
+                    $s->update(['status'=>3]);
+                    }
+                }else{
+                    return  response()->json(['message'=>"operation failed" ]);
+                }
+
+                    return  response()->json(['message'=>"Checkout  customer successfully" ]);
+
+            }
     }
 
 
@@ -171,4 +182,4 @@ class ControlQueues extends Controller
 
 
 
-}
+

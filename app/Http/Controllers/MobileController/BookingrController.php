@@ -23,34 +23,40 @@ class BookingrController extends Controller
 
             // this appointment is available
             $time = Time::where('id', $appointment->time_id)->where('status', 1)->first();
+
             $sq = ServiceQueue::where('queue_id', $time->source_id)->first();
 
             $appointmentdayname = jddayofweek($time->day, 1);
+
             $nextday = strtotime('next ' . $appointmentdayname . '');
             $weekNoNextDay = date('W', $nextday);
+
             $weekNo = date('W');
+
             if ($weekNoNextDay != $weekNo) {
                 //customer want to book  appointment for this day
-                $date = date("y-m-d"); //currentdate
+                $date =  date('y-m-d',$nextday);
 
             }else {
                 $date = date("y-m-d", $nextday);
             }
 
             if(count(Booking::where('customer_id',$req->customer_id)->where('service_id',$sq->service_id)
-            ->whereIn('status',[0,1])->get())<=3){//customer can book only 3 valid booking in the same service only
+            ->whereIn('status',[0,1])->get())<3){//customer can book only 3 valid booking in the same service only
                 if(count(Booking::where('customer_id',$req->customer_id)->where('service_id',$sq->service_id)
                 ->whereIn('status',[0,1])->where('date',$date)->get())==0){
                         $booking = Booking::create([
                             'customer_id' => $req->customer_id,
                             'appointment_id' => $req->appointment_id,
-                            'status' => '1',
+                            'status' => '0',
                             'queue_id' => $time->source_id,
                             'service_id' => $sq->service_id,
                             'date' => $date,
                         ]);
+
+                        $appointment->update(['status'=>1]);
                         return response()->json([ 'booking' => $booking,]);
-                    }else {return  response()->json(['message'=>'sorry,you can not book a anew appointment because you have book in the same date ']);
+                    }else{return  response()->json(['message'=>'sorry,you can not book a anew appointment because you have book in the same date ']);
 
                     }
                 }else {return  response()->json(['message'=>'sorry,you can not book a anew appointment because you have  three valid booking']);}
@@ -86,7 +92,7 @@ class BookingrController extends Controller
 }
 
 
-
+ //status=0 mean the confirmed booking status =1 mean the turned booking status=2 canceled booking status=3 mean checkedout boooking
 
 
 
