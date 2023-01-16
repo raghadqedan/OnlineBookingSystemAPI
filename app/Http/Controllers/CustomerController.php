@@ -105,49 +105,36 @@ class CustomerController extends Controller
 
 
 
-    function getAllCompany($category_id){
+    // function getAllCompany($category_id){
 
 
-    }
-
-
-    function getOnDays($company_id){
-           //get company on daynames
-
-
-    }
-
-
-    function getAllAvailableAppointment(){
+    // }
 
 
 
 
-    }
-
-
-    function getServices($company_id){
+    // function getServices($company_id){
 
 
 
 
-    }
+    // }
 
 
-    function getcompanyDetails($company_id){
+    // function getcompanyDetails($company_id){
 
-        //description ,address
-
-
-
-    }
+    //     //description ,address
 
 
-    function getOnTimes($company_id){
 
-            //get all times from time table  for this source_id where status==1
+    // }
 
-    }
+
+    // function getOnTimes($company_id){
+
+    //         //get all times from time table  for this source_id where status==1
+
+    // }
 
 
 
@@ -169,6 +156,19 @@ class CustomerController extends Controller
     }
 
 
+    function getOnDays($company_id){
+        //get company on daynames
+
+
+ }
+
+
+ function getAllAvailableAppointment(){
+
+
+
+
+ }
 
 
     /// monitor screen , notification api

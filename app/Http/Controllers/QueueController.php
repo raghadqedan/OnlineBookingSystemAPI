@@ -43,7 +43,7 @@ class QueueController extends Controller
 
 
     public function addQueue(request $req)
-    {
+    {//todo::prevent add anew queue with auser time interval assigned to other queue
             $validator=Validator::make($req->all(),[
             'services' =>'required',
             'name' =>'required',

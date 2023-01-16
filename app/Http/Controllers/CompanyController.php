@@ -176,9 +176,12 @@ class CompanyController
                 $id=Company::where('id', $id)->get('address_id');
 
                 $address=AddressController::getAddress($id);
+                $category=Category::where('id',$company->category_id)->get();
 
                 return response()->json([
-                    $company,$address
+                    "company"=> $company,
+                    "address"=>$address,
+                    "category"=>$category
                     ]);
             }
 
