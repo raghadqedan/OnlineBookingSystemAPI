@@ -29,6 +29,7 @@ class BookingController extends Controller{
                     if(count($q)>0){
                         foreach($q as $w){
                         $queues[++$count]= response()->json([
+                            "date"=>(Customer::selectRaw('name')->where('id',$w->date)->first())->name,
                             "client_name"=>(Customer::selectRaw('name')->where('id',$w->customer_id)->first())->name,
                             "service_name"=>(Service::selectRaw('name')->where('id',$w->service_id)->first())->name,
                             "service_duration_time"=>(Service::selectRaw('duration_time')->where('id',$w->service_id)->first())->duration_time,
@@ -50,6 +51,7 @@ class BookingController extends Controller{
                             if(count($queue)>0){
                                 foreach($queue as $w){
                                 $queues[++$count]= response()->json([
+                                    "date"=>(Customer::selectRaw('name')->where('id',$w->date)->first())->name,
                                     "client_name"=>(Customer::selectRaw('name')->where('id',$w->customer_id)->first())->name,
                                     "service_name"=>(Service::selectRaw('name')->where('id',$w->service_id)->first())->name,
                                     "service_duration_time"=>(Service::selectRaw('duration_time')->where('id',$w->service_id)->first())->duration_time,
@@ -80,6 +82,7 @@ class BookingController extends Controller{
                             if(count($q)>0){
                                 foreach($q as $w){
                                 $queues[++$count]= response()->json([
+                                    "date"=>(Customer::selectRaw('name')->where('id',$w->date)->first())->name,
                                     "client_name"=>(Customer::selectRaw('name')->where('id',$w->customer_id)->first())->name,
                                     "service_name"=>(Service::selectRaw('name')->where('id',$w->service_id)->first())->name,
                                     "service_duration_time"=>(Service::selectRaw('duration_time')->where('id',$w->service_id)->first())->duration_time,
@@ -101,6 +104,7 @@ class BookingController extends Controller{
                                     if(count($queue)>0){
                                         foreach($queue as $w){
                                         $queues[++$count]= response()->json([
+                                            "date"=>(Customer::selectRaw('name')->where('id',$w->date)->first())->name,
                                             "client_name"=>(Customer::selectRaw('name')->where('id',$w->customer_id)->first())->name,
                                             "service_name"=>(Service::selectRaw('name')->where('id',$w->service_id)->first())->name,
                                             "service_duration_time"=>(Service::selectRaw('duration_time')->where('id',$w->service_id)->first())->duration_time,

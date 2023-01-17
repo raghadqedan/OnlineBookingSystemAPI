@@ -194,8 +194,6 @@ class CompanyController
 
             $company->update([
                 'name' =>$req->name,
-                'email'=>$req->email,
-                'phone_number'=>$req->phone_number,
                 'category_id'=>$req->category_id,
                 'logo'=>ImageController::updateImage($req,"company"),
                 'description'=>$req->description,
