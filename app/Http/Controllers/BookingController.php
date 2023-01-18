@@ -70,7 +70,7 @@ class BookingController extends Controller{
 
 
 
-                function getRecentlyBooking(){
+                function expiredBooking(){
                     $count=0;
                     if(auth()->user()->role_id==1){
                         $users= User::where('company_id',auth()->user()->company_id)->get();
