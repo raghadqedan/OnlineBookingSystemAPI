@@ -265,6 +265,76 @@ class CompanyController
         }
 
 
+        public function filterClient(Request $req)
+        {
+            $name=$phone_number=$email="";
+            $name =$req->name;
+            $phone_number = $req->phone_number;
+            $email = $req->email;
+
+
+
+            if (!empty($email)) {
+                $customer= Customer::where('email', $email)
+                ->get();
+            } elseif (!empty($name) && !empty($phone_number)) {
+                $customer = Customer::where('first_name', 'LIKE', "%{$name}%")
+                    ->orwhere('last_name', 'LIKE', "%{$name}%")
+                    ->orWhereRaw("concat(first_name,' ', last_name) like '%" . $name . "%' ")
+                    ->where('phone_number', $phone_number)
+                    ->get();
+            }
+
+            return response()->json(['customer'=>$customer]);
+        }
+
+
+
+
+        public function filterEmployee(Request $req)
+        {
+            $name=$phone_number=$email="";
+            $name =$req->name;
+            $phone_number = $req->phone_number;
+            $email = $req->email;
+            $role = $req->role;
+            $id = $req->id;
+
+            if (!empty($email)) {
+                $user= User::where('email', $email)
+                ->get();
+            } elseif (!empty($name)) {
+                $user = User::where('name', $name)
+                    ->get();
+            } elseif (!empty($phone_number)) {
+                $user = User::where('phone_number', $phone_number)
+                    ->get();
+            } elseif (!empty($name) && !empty($phone_number)) {
+                $user = User::where('name', $name)
+                    ->where('phone_number', $phone_number)
+                    ->get();
+            } elseif (!empty($role)) {
+                $role = Role::where('name', $role)->first();
+                $user= User::where('role_id', $role->id)->get();
+            }
+
+            return response()->json(['user'=>$user]);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
 
