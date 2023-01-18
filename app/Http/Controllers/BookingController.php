@@ -92,7 +92,7 @@ class BookingController extends Controller{
                                     "user_name"=>(User::selectRaw('name')->where('id',$u->id)->first())->name,
                                 ]);
                             }
-                            return $queues;}
+                            return json_decode($this->setQueueOffDay( $queues)->getContent(), true);}
                             }
                             }else{return  response()->json(["message"=>"No booking yet" ]);}
 
