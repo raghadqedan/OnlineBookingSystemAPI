@@ -37,8 +37,8 @@ use App\Http\Controllers\RoleController;
 
 Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
-    Route::post('filter1',[CompanyController::class,'filterClient']);
-    Route::post('filter3',[CompanyController::class,'filterEmployee']);
+            Route::post('filter1',[CompanyController::class,'filterClient']);
+            Route::post('filter3',[CompanyController::class,'filterEmployee']);
 
 
    //companies

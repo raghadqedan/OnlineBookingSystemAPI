@@ -35,7 +35,7 @@ class BookingController extends Controller{
                             "date"=>(Booking::selectRaw('date')->where('id',$w->date)->first()),
                             "client_name"=>(Customer::selectRaw('name')->where('id',$w->customer_id)->first())->name,
                             "service_name"=>(Service::selectRaw('name')->where('id',$w->service_id)->first())->name,
-                            "service_time/number"=>(Company::selectRaw('type')->where('id',auth()->user()->company_id))?$w->number:Appointment::selectRaw('start_time','end_time')->where('id',$w->appointment_id)->get(),
+                            "service_time/number"=>(Company::selectRaw('type')->where('id',auth()->user()->company_id)->first())->type?$w->number:(Appointment::where('id',$w->appointment_id))->get(['start_time','end_time']),
                             "user_name"=>(User::selectRaw('name')->where('id',$u->id)->first())->name,
                         ]);
                     }}
