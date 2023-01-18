@@ -632,12 +632,12 @@ class TimeController extends Controller
 
 
  //createTime or update Queue,user,company times send this  jsonfile $req
-            //    {"type":"0",//tis need only in setOnDay,SetOffDay
-            //     "source_id":"1",
-            //     "start_time":"07:55:34",
-            //     "end_time":"07:55:34",
-            //       "day":"1"
-            //     }
+              // {"type":"0",//tis need only in setOnDay,SetOffDay
+                // "source_id":"1",
+                // "start_time":"07:55:34",
+                // "end_time":"07:55:34",
+                //   "day":"1"
+             //   }
 
 
 

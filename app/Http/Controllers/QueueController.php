@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Time;
 use App\Models\Appointment;
 use App\Models\Booking;
+use App\Models\ServiceQueue;
+use App\Models\Service;
 use Auth;
 use DB;
 use App\Http\Controllers\TimeController;
@@ -26,8 +28,18 @@ class QueueController extends Controller
     function getDetails($id)
     {
     $queue=Queue::find($id);
+    $sq=ServiceQueue::selectRaw('service_id')->where('queue_id',$queue->id)->get();
+    foreach($sq as $s_id){
+        $services[]=Service::where('id',$s_id->service_id)->first();
 
-        return$queue;
+    }
+
+    return response()->json([
+        'Employee_name'=>User::selectRaw('name')->where('id',$queue->id)->first(),
+        'service_name'=> $services,
+        'queue'=>$queue
+
+]);
     }
 
 
@@ -62,7 +74,7 @@ class QueueController extends Controller
                 $company_type=CompanyController::getCompanyType();
 
                   //timeQueue
-                if($company_type&&(count($req->services)>1))
+                if($company_type=="0"&&(count($req->services)>1))
                     return response()->json(['message'=>'select only one service Becaus your company system type is time']);
                     else{
                         $queue=Queue::create([
