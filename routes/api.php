@@ -16,7 +16,10 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ControlQueues;
+use App\Http\Controllers\RoleController;
+
 /*
+
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
@@ -55,6 +58,8 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::post('user/add',[UserController::class,'addUser']);//valid
             Route::delete('user/delete/{id}',[UserController::class,'deleteUser']);//valid
             Route::get('user/getUsers',[UserController::class,'getUsers']);//valid this api get all users in the auth company
+            Route::get('getAllRoles',[RoleController::class,'getAllRoles']);//valid
+
 
   //Queues
             Route::get('queue/getAllQueue',[QueueController::class,'getAllQueue']);// valid
@@ -71,6 +76,8 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
             Route::put('updateUserTime',[TimeController::class,'updateUserTime']);// valid
             Route::put('updateCompanyTime',[TimeController::class,'updateCompanyTime']);// valid
             Route::get('getscheduleTime/{source_id}/{type}',[TimeController::class,'getscheduleTime']); //valid get schedule times for the source_id (return array )
+            // company:type =0 ,user:type=1,queue:type=2
+
             Route::put('setUserOffDay',[TimeController::class,'setUserOffDay']);//valid
             Route::put('setUserOnDay',[TimeController::class,'setUserOnDay']);//valid
             Route::put('setCompanyOffDay',[TimeController::class,'setCompanyOffDay']);//valid
