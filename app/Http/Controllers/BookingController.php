@@ -16,7 +16,7 @@ use App\Models\Queue;
 class BookingController extends Controller{
 
 
-         function getUpComingBooking(){
+        function getUpComingBooking(){
             $count=0;
             if(auth()->user()->role_id==1){
                 $users= User::where('company_id',auth()->user()->company_id)->get();
