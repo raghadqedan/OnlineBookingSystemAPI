@@ -4,11 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use App\Models\Service;
+use App\Models\Booking;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use \Date;
 class CustomerController extends Controller
 {
+    function getAllClient()
+        {
+            $services=Service::where('company_id',auth()->user()->company_id)->get();//return all services in this company
+            if(count($services)>0){
+                foreach($services as $s){
+                    $books=Booking::where('service_id',$s->id)->get();
+                    if(count($books)>0){
+                    foreach($books as $b ){
+                            $customers[]=Customer::where('id',$b->customer_id)->first();
+                    }
+                    return   response()->json(["customer"=>$customers]);
+                    }else{
+                    return   response()->json(["message"=>'opration failed ']);}
+                    }
+                }
+            return   response()->json(["message"=>'opration failed ']);
+
+
+
+    }
 
     function signUp(Request $req)
     {

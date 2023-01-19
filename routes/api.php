@@ -39,6 +39,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
             Route::post('filter1',[CompanyController::class,'filterClient']);
             Route::post('filter3',[CompanyController::class,'filterEmployee']);
+            Route::get('getAllClient',[CustomerController::class,'getAllClient']);//valid
 
 
    //companies
@@ -122,7 +123,6 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
 
 
             Route::get('getAllCategories',['App\Http\Controllers\MobileController\CategoryController'::class,'getAllCategories']);//valid
-
 
 
 
