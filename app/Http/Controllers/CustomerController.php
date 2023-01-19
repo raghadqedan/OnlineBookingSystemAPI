@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use \Date;
 class CustomerController extends Controller
 {
+    //return all clients in the auth company
     function getAllClient()
         {
             $services=Service::where('company_id',auth()->user()->company_id)->get();//return all services in this company
