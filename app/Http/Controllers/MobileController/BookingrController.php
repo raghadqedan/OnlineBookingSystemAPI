@@ -85,7 +85,59 @@ class BookingrController extends Controller
 
     }
 
-/// monitor screen , notification api
+
+
+
+
+
+    function getTotalCustomer($service_id)
+    {
+        $sq = ServiceQueue::selectRaw('queue_id')->where('service_id', $service_id)->get();
+
+        if (count($sq) > 0) {
+            $min_count=0;
+            $min_queue;
+            $lock = 1;
+
+            foreach($sq as $obj) {
+                $booking = Booking::where('queue_id', $obj->queue_id)->where('date',date('Y-m-d'))->where('status', 0)->get();
+
+
+                if (count($booking) > 0) {
+
+                    if ($lock) {
+                        $min_count = count($booking);
+                        $queue_id = $obj->queue_id;
+                        $lock = 0;
+                    }
+                    if (count($booking) <= $min_count) {
+                        $min_count = count($booking);
+                        $min_queue = $obj->queue_id;
+                    }
+                }
+            }
+            return response()->json(['total customer'=>$min_count]);
+        }else   return response()->json(['message'=>'operation failed']);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
