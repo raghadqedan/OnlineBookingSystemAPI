@@ -116,8 +116,86 @@ class BookingrController extends Controller
                     }
                 }
             }
-            return response()->json(['total customer'=>$min_count]);
+            return response()->json(['total customer'=>$min_count,
+                                        'queue_id'=>$min_queue   ] );
         }else   return response()->json(['message'=>'operation failed']);
+
+    }
+
+
+
+
+    public function getAllAvailableAppointment($service_id,$day)
+    {
+                    $counter=1;
+        $queue= ServiceQueue::where('service_id', $service_id)->get();
+
+        //$q_id = array();
+
+        foreach ($queue as $q) {
+            $queue = Queue::where('id', $q->queue_id)
+                ->where('active', 1)
+                ->first();
+                if($queue){
+        $time = Time::where('source_id', $q->queue_id)
+            ->where('type',2)
+            ->where('day', $day)
+            ->where('status',1)
+            ->first();
+
+        $appointment[$counter++]= Appointment::where('time_id', $time->id)->where('status',0)->orderBy('start_time', 'asc')->get();//return all appointment in the queue
+
+
+        }}
+            return  $appointment;
+
+
+
+// $remaped = array();
+// foreach ($appointment as $row) {
+//     $remaped[$row["0"]['start_time']] = $row;
+// }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public function getExpectedWaitingTime($queue_id)
+    {
+        $service = ServiceQueue::where('queue_id', $queue_id)
+            ->selectRaw('service_id')
+            ->first();
+
+        $durationTime = Service::where('id', $service->service_id)
+            ->selectRaw('duration_time')
+            ->first();
+
+        $delayTime = Booking::where('queue_id', $queue_id)
+            ->selectRaw('delay_time')
+            ->first();
+        if ($delayTime) {
+
+            $waitingTime = ($durationTime * $this->getTotalCustomer($service->service_id)) + $delayTime;
+
+        } else {
+            $waitingTime = ($durationTime * $this->getTotalCustomer($service->service_id));
+        }
+        return response()->json(['The Expected Waiting Time :' => $waitingTime]);
 
     }
 
@@ -134,14 +212,10 @@ class BookingrController extends Controller
 
 
 
-
-
-
-
-
-
-
 }
+
+
+
 
 
  //status=0 mean the confirmed booking status =1 mean the turned booking status=2 canceled booking status=3 mean checkedout boooking
@@ -170,4 +244,87 @@ class BookingrController extends Controller
 
 //  $queue_id=DB::table('appointments')
 //                 ->join('times', 'appointments.time_id', '=', 'times.id')
-//                 ->where('appointments.id',$req->appointment_id)->get(['source_id']);
+// //                 ->where('appointments.id',$req->appointment_id)->get(['source_id']);
+// if (count($sq) > 0) {
+//     $min_count=0;
+//     $min_queue;
+//     $lock = 1;
+
+//     foreach($sq as $obj) {
+//         $booking = Booking::where('queue_id', $obj->queue_id)->where('date',date('Y-m-d'))->where('status', 0)->get();
+
+
+//         if (count($booking) > 0) {
+
+//             if ($lock) {
+//                 $min_count = count($booking);
+//                 $queue_id = $obj->queue_id;
+//                 $lock = 0;
+//             }
+//             if (count($booking) <= $min_count) {
+//                 $min_count = count($booking);
+//                 $min_queue = $obj->queue_id;
+//             }
+//         }
+//     }
+//     return response()->json(['total customer'=>$min_count,
+//                                 'queue_id'=>$min_queue   ] );
+// }else   return response()->json(['message'=>'operation failed']);
+// for($i=1;$i<count($appointment);$i++){
+
+
+//     if (count($appointment) > 0) {
+//         $t1 = Time::where('id', $appointment[$i][]->time_id)->where('status', 1)->first();
+//         return $t1;
+//         $q1= Queue::where('id', $t1->source_id)->where('active', 1)->first();
+//         $min_count=0;
+//         $trueAppointment=$appointment[$i];
+//         if($q1){
+//         $booking = Booking::where('queue_id',$q1->queue_id)->where('day',$day)->where('status', 0)->get();
+//               if(count($booking)>0){
+//                         $min_count = count($booking);
+//                         $min_queue_id = $q1->queue_id;
+//               }else{ $min_count=0;
+//                             $min_queue = $q1; }
+
+
+
+//     }else{
+// return "aaa";
+
+//     }}
+
+// else{
+//      return response()->json(['message'=>'operation failed']);
+// }
+//     for($j=$i+1;$i<count($appointment);$j++){
+
+
+//     if(($appointment[$i]->start_time==$appointment[$j]->start_time)&&($appointment[$i]->end_time==$appointment[$j]->end_time)){
+//         $t2 = Time::where('id', $appointment[$j]->time_id)->where('status', 1)->first();
+//         $q2= Queue::where('id', $t1->source_id)->where('active', 1)->first();
+//         if($q2){
+//             $booking = Booking::where('queue_id',$q2->queue_id)->where('day',$day)->where('status', 0)->get();
+//                     if(count($booking)<$min_count)  {
+//                     $min_count=count($booking);
+//                     $trueAppointment=$appointment[$j];
+//                     }
+
+
+
+//     }
+//             }
+
+//         }
+//         $array[]=$trueAppointment;
+
+
+
+
+
+
+
+
+
+// return  collect($appointment)->sortBy('start_time','ASC');
+//         }

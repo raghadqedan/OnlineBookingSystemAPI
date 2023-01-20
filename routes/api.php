@@ -164,7 +164,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
         Route::get('customer/getallcompany/{category_id}', ['App\Http\Controllers\MobileController\CompanyController'::class, 'getAllCompany']);
         Route::get('getOnDays/{company_id}',['App\Http\Controllers\MobileController\CompanyController'::class,'getOnDays']);//valid
         Route::get('getTotalCustomer/{service_id}',['App\Http\Controllers\MobileController\BookingrController'::class,'getTotalCustomer']);// valid
-
+        Route::get('getAllAvailableAppointment/{service_id}/{day}', ['App\Http\Controllers\MobileController\BookingrController'::class, 'getAllAvailableAppointment']);
 
 
 
