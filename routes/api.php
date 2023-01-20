@@ -107,7 +107,7 @@ Route::group(['middleware'=>['auth:sanctum','employee']],function () {
             Route::put('takeExtraTime/{booking_id}/{dealy_Time}',[ControlQueues::class,'takeExtraTime']);//valid
         });
 
-
+        Route::get('getTotalCustomer/{service_id}',[ControlQueues::class,'getTotalCustomer']);// valid
 Route::group(['middleware'=>['auth:sanctum']],function () {
 
 //users
@@ -162,6 +162,7 @@ Route::group(['middleware'=>['auth:sanctum']],function () {
         Route::get('customer/getcompanydetails/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getcompanyDetails']);
         Route::get('customer/getontimes/{company_id}', ['App\Http\Controllers\MobileController\CustomerController'::class, 'getOnTimes']);
         Route::get('customer/getallcompany/{category_id}', ['App\Http\Controllers\MobileController\CompanyController'::class, 'getAllCompany']);
+        Route::get('getOnDays/{company_id}',['App\Http\Controllers\MobileController\CompanyController'::class,'getOnDays']);//valid
 
 
 
