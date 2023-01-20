@@ -235,7 +235,7 @@ class TimeController extends Controller
                 if(($req->start_time >= $times->start_time)&&($req->end_time <= $times->end_time)&&($req->start_time <= $req->end_time))
                 {
                     $obj= Time::where('source_id',$req->source_id)->where('type',"1")->where('day',$req->day)->first();
-
+return $obj;
                     $obj->update([
                         'start_time'=>$req->start_time,
                         'end_time'=>$req->end_time

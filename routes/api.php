@@ -97,10 +97,10 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
 
 
-
 Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 
-            Route::get('getCurrentQueue',[ControlQueues::class,'getCurrentQueue']);//valid
+
+    Route::get('getCurrentQueue',[ControlQueues::class,'getCurrentQueue']);//valid
             Route::get('getCurrentCustomer/{queue_id}',[ControlQueues::class,'getCurrentCustomer']);//valid
             Route::post('turnCustomer/{booking_id}/{destination_service_id}',[ControlQueues::class,'turnCustomer']);// valid
             Route::post('CheckOut/{booking_id}',[ControlQueues::class,'CheckOut']);//valid

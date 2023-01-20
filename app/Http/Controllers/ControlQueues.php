@@ -14,11 +14,13 @@ use DB;
 class ControlQueues extends Controller
 {
     public function getCurrentQueue(){
+
         $queues= Queue::where('user_id',auth()->user()->id)->where('active',1)->get();
+
         foreach($queues as $q){
                 $time=Time::where('source_id',$q->id)->where('type',2)->where('status',1)->where('day', date('N', strtotime(date('l')))-1)->where('start_time','<=',date('H:i:s'))->where('end_time','>=',date('H:i:s'))->first();
                 if($time){
-                    return $time->source_id;
+                    return response()->json(['active_queue_id'=>$time->source_id ]);
                 }
         }
                 return  response()->json(['message'=>"operation failed" ]);
