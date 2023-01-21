@@ -65,7 +65,6 @@ class BookingController extends Controller{
                             return  response()->json(["message"=>"no booking " ]);}
                             }
 
-                }
 
 
 
@@ -120,7 +119,7 @@ class BookingController extends Controller{
                         }
 
 
-
+                    }
 
 
 

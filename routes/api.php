@@ -68,7 +68,7 @@ Route::group(['middleware'=>['auth:sanctum','admin']],function () {
 
   //Queues
             Route::get('queue/getAllQueue',[QueueController::class,'getAllQueue']);// valid
-            Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
+
             Route::post('queue/add',[QueueController::class,'addQueue']);//valid
             Route::put('queue/updateDetails/{id}',[QueueController::class,'updateDetails']);//valid
             Route::delete('queue/delete/{id}',[QueueController::class,'deleteQueue']);//valid
@@ -111,6 +111,7 @@ Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 Route::group(['middleware'=>['auth:sanctum']],function () {
 
 //users
+Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
 
