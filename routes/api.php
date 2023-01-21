@@ -111,7 +111,7 @@ Route::group(['middleware'=>['auth:sanctum','employee']],function () {
 Route::group(['middleware'=>['auth:sanctum']],function () {
 
 //users
-Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
+            Route::get('queue/getDetails/{id}',[QueueController::class,'getDetails']);//valid
             Route::get('user/getDetails/{id}',[UserController::class,'getDetails']);//valid
             Route::put('user/updateDetails/{id}',[UserController::class,'updateDetails']);//valid
 
