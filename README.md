@@ -31,7 +31,7 @@
    - Barbershops
    - Ministry of Interior Affairs
 
- # Technologies 
+ # Backend Technologies 
  -Laravel Framework
  
    ![image](https://github.com/user-attachments/assets/b69b9487-e8e7-4b3a-9bdf-d0a897a43544)
