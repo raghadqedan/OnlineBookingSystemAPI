@@ -7,7 +7,7 @@
  lists, and he will have clients who book through the Mobile application at any
  available time.
  
- # Design
+ # Designs
  ## Web Design
   https://www.figma.com/file/rtgRkvagCzmjyQ2NI5li9D/Untitled?type=design&node-id=0-1&mode=design&t=iI50jsbWh14GRo5X-0
   ## Mobile Design
@@ -22,7 +22,7 @@
         
         •	Type of booking system (time/number): The user can book either by specifying the time of the appointment or by taking a number depending on the type of company.
         
- # Targetس
+ # TargetS
    
    - Health clinics
    - The doctor
