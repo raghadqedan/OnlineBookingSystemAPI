@@ -32,8 +32,10 @@
    - Ministry of Interior Affairs
 
  # Technologies 
- -Laravel Framework ![image](https://github.com/user-attachments/assets/e5bfc1ed-62df-45ae-9b79-0c38b35ec73e)
- -My Sql ![image](https://github.com/user-attachments/assets/ed7ddc4c-cabe-4e2a-ba3f-a35abee1b977)
+ -Laravel Framework ![image](https://github.com/user-attachments/assets/b69b9487-e8e7-4b3a-9bdf-d0a897a43544)
+
+ -My Sql ![image](https://github.com/user-attachments/assets/dfd91877-0b86-44d7-a79e-826d531db7f6)
+
 
 
 
