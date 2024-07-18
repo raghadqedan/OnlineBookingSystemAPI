@@ -12,7 +12,7 @@
   ## Mobile Design
   https://www.figma.com/proto/Yu3DveOda9y8gmamEvS9HS/new-new-design?node-id=0%3A1037&scaling=min-zoom&page-id=0%3A1&starting-point-node-id=0%
 # Features
-# our application provides the following three features
+### our application provides the following three features
         •	Keeping appointments by sending notification and monitoring screen: The application sends a notification to the user before the appointment with a certain period of time as a reminder, and monitoring 
            screen that allows the user to keep abreast of the remaining time for his appointment and any delay time .
         
