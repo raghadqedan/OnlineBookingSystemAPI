@@ -22,7 +22,7 @@
         
         •	Type of booking system (time/number): The user can book either by specifying the time of the appointment or by taking a number depending on the type of company.
         
- # Target
+ # Targetس
    
    - Health clinics
    - The doctor
